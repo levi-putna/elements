@@ -50,6 +50,7 @@ const components = [
     items: [
       { href: "/components/section", label: "Section" },
       { href: "/components/bento", label: "Bento" },
+      { href: "/components/testimonial", label: "Testimonial" },
     ],
   },
 ];
