@@ -82,7 +82,7 @@ export function TableOfContents() {
 
   return (
     <div
-      className="fixed right-5 top-1/2 -translate-y-1/2 z-30 hidden xl:flex items-center gap-3"
+      className="fixed right-5 top-20 z-30 hidden xl:flex items-start gap-3"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

@@ -1,4 +1,5 @@
 import { ComponentPreview } from "@/components/docs/component-preview";
+import { DocsPage } from "@/components/docs/docs-page";
 
 /* ─── Specimen text ───────────────────────────────────── */
 const ALPHABET = "Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz";
@@ -6,18 +7,18 @@ const NUMERALS = "0 1 2 3 4 5 6 7 8 9";
 
 export default function TypographyPage() {
   return (
-    <div className="max-w-prose mx-auto px-8 py-14 space-y-20">
+    <DocsPage className="space-y-20">
 
       {/* ── Page header ───────────────────────────────── */}
       <div>
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
           Foundation
         </p>
-        <h1 className="font-display font-bold text-4xl text-foreground mb-4 leading-tight">
+        <h1 className="font-display text-4xl text-foreground mb-4 leading-tight">
           Typography
         </h1>
         <p className="text-base text-ink-muted leading-relaxed">
-          Two typefaces. Grenette for display headings — authority and warmth at scale.
+          Two typefaces. Young Serif for display headings — authority and warmth at scale.
           Inter for everything else — clean, legible, neutral. JetBrains Mono for code.
         </p>
       </div>
@@ -30,16 +31,16 @@ export default function TypographyPage() {
           Typefaces
         </p>
 
-        {/* Grenette */}
+        {/* Young Serif */}
         <div className="mb-10 rounded-sm border border-border overflow-hidden">
           <div className="px-8 pt-10 pb-8 bg-white">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-6">
-              Grenette · Display &amp; Headings
+              Young Serif · Display &amp; Headings
             </p>
-            <p className="font-display font-bold text-6xl text-foreground leading-none mb-6">
+            <p className="font-display text-6xl text-foreground leading-none mb-6">
               Strata
             </p>
-            <p className="font-display font-bold text-2xl text-foreground mb-2 leading-snug">
+            <p className="font-display text-2xl text-foreground mb-2 leading-snug">
               Strata management, simplified.
             </p>
             <p className="font-display text-base font-normal text-ink-muted italic mb-8">
@@ -53,10 +54,10 @@ export default function TypographyPage() {
             </p>
           </div>
           <div className="px-8 py-3 bg-secondary border-t border-border flex items-center gap-6">
-            <span className="text-xs text-ink-muted">Grilli Type · Commercial licence</span>
-            <span className="text-xs text-ink-muted">Weights used: Regular · Medium · Bold</span>
-            <a href="https://www.grillitype.com/typeface/gt-grenette" target="_blank" rel="noopener noreferrer" className="text-xs ml-auto">
-              grillitype.com →
+            <span className="text-xs text-ink-muted">Google Fonts · Free</span>
+            <span className="text-xs text-ink-muted">Weight used: Regular (400)</span>
+            <a href="https://fonts.google.com/specimen/Young+Serif" target="_blank" rel="noopener noreferrer" className="text-xs ml-auto">
+              fonts.google.com →
             </a>
           </div>
         </div>
@@ -75,7 +76,7 @@ export default function TypographyPage() {
             </p>
             <p className="font-sans text-base text-ink-muted leading-relaxed mb-8">
               Clear, neutral, and legible at every size. Inter handles UI labels, body copy,
-              captions, and any context where Grenette would feel too heavy.
+              captions, and any context where Young Serif would feel too heavy.
             </p>
             <p className="font-sans text-sm text-foreground/50 tracking-wide">
               {ALPHABET}
@@ -130,9 +131,9 @@ export default function TypographyPage() {
           <div className="px-8 py-10 bg-white">
             <div className="flex items-start justify-between gap-4 mb-4">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-1">Display</span>
-              <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Grenette · 700 · 64px · −0.02em</span>
+              <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Young Serif · 400 · 64px · −0.02em</span>
             </div>
-            <p className="font-display font-bold text-[64px] text-foreground leading-none">
+            <p className="font-display text-[64px] text-foreground leading-none">
               Strata
             </p>
           </div>
@@ -141,9 +142,9 @@ export default function TypographyPage() {
           <div className="px-8 py-8 bg-white">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">H1</span>
-              <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Grenette · 700 · 48px</span>
+              <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Young Serif · 400 · 48px</span>
             </div>
-            <h1 className="font-display font-bold text-5xl text-foreground leading-tight">
+            <h1 className="font-display text-5xl text-foreground leading-tight">
               Everything in one place
             </h1>
           </div>
@@ -152,9 +153,9 @@ export default function TypographyPage() {
           <div className="px-8 py-7 bg-white">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">H2</span>
-              <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Grenette · 500 · 36px</span>
+              <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Young Serif · 400 · 36px</span>
             </div>
-            <h2 className="font-display font-bold text-4xl text-foreground leading-snug">
+            <h2 className="font-display text-4xl text-foreground leading-snug">
               Simplify your strata management
             </h2>
           </div>
@@ -248,7 +249,7 @@ export default function TypographyPage() {
         </p>
         <ComponentPreview label="Light section">
           <div className="w-full max-w-[640px] mx-auto space-y-4 py-4">
-            <h2 className="font-display font-bold text-3xl text-foreground leading-snug">
+            <h2 className="font-display text-3xl text-foreground leading-snug">
               One platform for every strata task
             </h2>
             <p className="font-sans text-base text-ink-muted leading-[1.65]">
@@ -297,7 +298,7 @@ export default function TypographyPage() {
                 {/* Oversized quotation mark — graphic device */}
                 <div
                   aria-hidden="true"
-                  className="absolute -bottom-5 -left-3 font-display font-bold text-[120px] leading-none text-[#C8F169]/30 select-none z-0 translate-y-2"
+                  className="absolute -bottom-5 -left-3 font-display text-[120px] leading-none text-[#C8F169]/30 select-none z-0 translate-y-2"
                 >
                   ,,
                 </div>
@@ -380,7 +381,7 @@ export default function TypographyPage() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-ink-muted mb-3">
                 For strata managers
               </p>
-              <h2 className="font-display font-bold text-3xl text-foreground leading-tight">
+              <h2 className="font-display text-3xl text-foreground leading-tight">
                 Everything in one place
               </h2>
             </div>
@@ -389,7 +390,7 @@ export default function TypographyPage() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#C8F169] mb-3">
                 What owners love
               </p>
-              <h2 className="font-display font-bold text-3xl text-white leading-tight bg-[#043F2E] -mx-8 -mb-6 px-8 pt-6 pb-8 rounded-b-sm">
+              <h2 className="font-display text-3xl text-white leading-tight bg-[#043F2E] -mx-8 -mb-6 px-8 pt-6 pb-8 rounded-b-sm">
                 Always in the loop
               </h2>
             </div>
@@ -397,6 +398,6 @@ export default function TypographyPage() {
         </ComponentPreview>
       </section>
 
-    </div>
+    </DocsPage>
   );
 }

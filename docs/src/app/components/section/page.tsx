@@ -1,7 +1,8 @@
 import { CodeBlock } from "@/components/docs/code-block";
 import { ComponentPreview } from "@/components/docs/component-preview";
+import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
-import { Section } from "@/components/ui/section";
+import { Section, Container } from "@/components/ui/section";
 
 const INSTALL = `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/section/registry.json`;
 
@@ -55,12 +56,37 @@ const AS_PROP = `{/* Semantic HTML via the as prop */}
   {children}
 </Section>`;
 
+const CONTAINER_CODE = `import { Section, Container } from "@/components/ui/section"
+
+{/* The colour band is full-bleed; Container manages width.
+    Use them separately when one band needs both a full-bleed
+    visual and a constrained text column. */}
+<Section type="primary" spacing="lg">
+  <FullBleedVisual />
+  <Container width="prose">
+    <h2>Constrained reading column inside a full-bleed band</h2>
+  </Container>
+</Section>
+
+{/* Or let Section wrap children for you. contained accepts a
+    width name: "prose" | "default" | "wide" | "full". */}
+<Section type="secondary" contained="wide">
+  <BentoGrid>…</BentoGrid>
+</Section>`;
+
 const PROPS = [
   { name: "type", type: '"default" | "white" | "secondary" | "primary" | "alternative"', default: '"default"', description: 'Background style. "default" and "white" are identical (white bg, forest text). "secondary" uses off-white. "primary" uses forest green with white text. "alternative" uses lime-soft.' },
+  { name: "spacing", type: '"none" | "sm" | "md" | "lg"', default: '"lg"', description: "Vertical padding of the band. lg = py-24 md:py-32, md = py-20 md:py-28, sm = py-12 md:py-16." },
   { name: "as", type: '"section" | "div" | "article" | "header" | "footer" | "main"', default: '"section"', description: "The HTML element to render. Choose semantically: use header for page headers, footer for footers, main for the primary content area." },
-  { name: "contained", type: "boolean", default: "false", description: "When true, wraps children in a max-w-[1200px] container with px-6 py-24 md:px-12 md:py-32 padding." },
+  { name: "contained", type: 'boolean | "prose" | "default" | "wide" | "full"', default: "false", description: "Convenience: wrap children in a Container of this width. true maps to \"default\" (1200px). Pass false to manage the Container yourself." },
   { name: "className", type: "string", description: "Additional classes applied to the outer element. The type's background and text classes are always included." },
   { name: "children", type: "ReactNode", description: "Section content." },
+];
+
+const CONTAINER_PROPS = [
+  { name: "width", type: '"prose" | "default" | "wide" | "full"', default: '"default"', description: "Max content width. prose = 740px, default = 1200px, wide = 1360px, full = no limit (gutter only)." },
+  { name: "gutter", type: "boolean", default: "true", description: "Apply the responsive horizontal gutter (px-6 md:px-12)." },
+  { name: "className", type: "string", description: "Additional classes on the container." },
 ];
 
 const TYPES = [
@@ -72,7 +98,7 @@ const TYPES = [
 
 export default function SectionPage() {
   return (
-    <div className="max-w-prose mx-auto px-8 py-14">
+    <DocsPage width="wide">
 
       <div className="mb-10">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
@@ -155,14 +181,42 @@ export default function SectionPage() {
             <CodeBlock code={AS_PROP} language="tsx" />
           </div>
 
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-1">Width system — Section + Container</p>
+            <p className="text-sm text-ink-muted mb-3 leading-relaxed">
+              The colour band is full-bleed; <code className="font-mono text-xs bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">Container</code> is
+              the single source of truth for content width. Use them together when a band needs both
+              a full-bleed visual and a constrained text column.
+            </p>
+            <ComponentPreview label="Container widths">
+              <div className="w-full space-y-2">
+                {(["prose", "default", "wide", "full"] as const).map((w) => (
+                  <div key={w} className="bg-secondary rounded-sm py-2">
+                    <Container width={w} gutter={false} className="bg-[#043F2E] rounded-sm py-2 text-center">
+                      <span className="text-xs font-mono text-white/80">width=&quot;{w}&quot;</span>
+                    </Container>
+                  </div>
+                ))}
+              </div>
+            </ComponentPreview>
+            <div className="mt-3">
+              <CodeBlock code={CONTAINER_CODE} language="tsx" />
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <section className="pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">Props</h2>
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">Section Props</h2>
         <PropTable props={PROPS} />
       </section>
 
-    </div>
+      <section className="pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">Container Props</h2>
+        <PropTable props={CONTAINER_PROPS} />
+      </section>
+
+    </DocsPage>
   );
 }

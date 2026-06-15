@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DocsPage } from "@/components/docs/docs-page";
 
 const components = [
   {
@@ -32,7 +33,7 @@ const components = [
 
 export default function HomePage() {
   return (
-    <div className="max-w-prose mx-auto px-8 py-14">
+    <DocsPage>
 
       {/* Page header */}
       <div className="mb-12">
@@ -137,6 +138,6 @@ export default function HomePage() {
         </div>
       </section>
 
-    </div>
+    </DocsPage>
   );
 }

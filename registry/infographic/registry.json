@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "infographic",
+  "type": "registry:ui",
+  "description": "Flat UI mock infographics for Instant Strata marketing sections. Twenty-three themed illustrations across feed, metric, kanban, calendar, timeline, and stepper layouts. Includes InfographicRow, InfographicStack, and InfographicGrid composition helpers.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/infographic/infographic.tsx",
+      "target": "components/ui/infographic.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

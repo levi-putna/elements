@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "testimonial",
   "type": "registry:ui",
-  "description": "Two testimonial layouts. Testimonial: floating card + independent portrait + ,,  marks bleeding below (Mode ad-hoc analysis style). TestimonialBlock: full-width centred card with decorative mark behind (dark-section style).",
+  "description": "Mode-inspired testimonial layouts. Stepped lime card with bottom-left quote cutout, optional square portrait, and attribution row. TestimonialBlock is the same card without a portrait.",
   "dependencies": [],
   "registryDependencies": ["utils"],
   "files": [

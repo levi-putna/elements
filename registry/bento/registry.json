@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "bento",
   "type": "registry:ui",
-  "description": "Composable bento grid system. BentoGrid outer container + BentoCell for raw layout, BentoFeatureCell for icon/label cards (Mode-style), BentoContentCell for text sections, BentoVisualCell for image/screenshot fills.",
+  "description": "Composable bento grid system. BentoGrid + BentoCell for raw layout, BentoFeatureCell for icon/label cards, BentoContentCell for text, BentoVisualCell for image fills, plus BentoSplit (two-column interlocking overlap), BentoSplitPanel, BentoBleed (cross-seam media) and BentoNotch (concave interlock corners).",
   "dependencies": [],
   "registryDependencies": ["utils"],
   "files": [

@@ -2,39 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* ── Grenette (Grilli Type) ─────────────────────────────
-   Place purchased font files in docs/public/fonts/.
-   https://www.grillitype.com/typeface/gt-grenette
-   Georgia is used as a fallback until files are in place.
-   ──────────────────────────────────────────────────── */
-@font-face {
-  font-family: "Grenette";
-  src: url("/elements/fonts/Grenette-Regular.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Grenette";
-  src: url("/elements/fonts/Grenette-RegularItalic.woff2") format("woff2");
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Grenette";
-  src: url("/elements/fonts/Grenette-Medium.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Grenette";
-  src: url("/elements/fonts/Grenette-Bold.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+/* Young Serif — loaded via next/font/google, no @font-face needed. */
 
 /* Shared sweep used by Button (loading overlay) and Skeleton */
 @keyframes shimmer {
@@ -53,7 +21,8 @@
 @theme inline {
   /* Fonts */
   --font-sans:    var(--font-inter);
-  --font-display: "Grenette", "Georgia", serif;
+  --font-display: var(--font-young-serif);
+  --font-heading: var(--font-young-serif);
   --font-mono:    var(--font-jetbrains-mono);
 
   /* Colour aliases into Tailwind utilities */
@@ -177,15 +146,17 @@
 /* Docs-specific typography helpers */
 @layer components {
   .docs-prose h1 {
+    font-family: var(--font-display), Georgia, serif;
     font-size: 1.875rem;
-    font-weight: 700;
+    font-weight: 400;
     letter-spacing: -0.02em;
     color: var(--foreground);
     margin-bottom: 0.5rem;
   }
   .docs-prose h2 {
+    font-family: var(--font-display), Georgia, serif;
     font-size: 1.25rem;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--foreground);
     margin-top: 2.5rem;
     margin-bottom: 0.75rem;

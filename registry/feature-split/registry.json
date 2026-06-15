@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "feature-split",
+  "type": "registry:ui",
+  "description": "Stepped two-column interlock layout. A 2×2 grid where column ratios flip between rows so the cream ↔ lime seam steps horizontally — a signature feature section pattern. Visual slots use Infographic pairs.",
+  "dependencies": [],
+  "registryDependencies": ["utils", "infographic"],
+  "files": [
+    {
+      "path": "registry/feature-split/feature-split.tsx",
+      "target": "components/ui/feature-split.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -205,7 +205,7 @@ export function BentoCellFooter({
 // ─────────────────────────────────────────────────────────
 // BentoFeatureCell  —  opinionated icon-top / label-bottom cell
 //
-// The canonical Mode-style feature cell:
+// The canonical feature cell:
 //   icon (top-left)  ──  empty visual fill area  ──  label (bottom-left)
 // ─────────────────────────────────────────────────────────
 
@@ -315,7 +315,7 @@ export function BentoContentCell({
         )}
         <h3
           className={cn(
-            "font-display font-bold text-2xl leading-snug mb-3",
+            "font-display text-2xl leading-snug mb-3",
             type === "primary" || type === "dark-card" ? "text-white" : "text-[#043F2E]"
           )}
         >
@@ -366,5 +366,182 @@ export function BentoVisualCell({
     >
       {children}
     </BentoCell>
+  )
+}
+
+// ─────────────────────────────────────────────────────────
+// BentoNotch  —  concave (inverted-radius) corner piece
+//
+// The signature interlock detail. Drop one at a panel corner
+// to carve a rounded "bite" in the seam colour, so adjacent
+// panels appear to lock together rather than just sit in a grid.
+//
+// `corner` names which corner of the *parent panel* is rounded.
+// `seam` is the colour of the gap the notch lives in.
+// ─────────────────────────────────────────────────────────
+
+interface BentoNotchProps {
+  corner: "tl" | "tr" | "bl" | "br"
+  /** Gap / seam colour the notch fills (defaults to white). */
+  seam?: string
+  /** Notch radius in pixels. */
+  size?: number
+  className?: string
+}
+
+const notchPos: Record<BentoNotchProps["corner"], string> = {
+  tl: "top-0 left-0",
+  tr: "top-0 right-0",
+  bl: "bottom-0 left-0",
+  br: "bottom-0 right-0",
+}
+
+// Centre of the carved quarter-disc — the corner of the square
+// nearest the panel body, so the transparent area opens inward.
+const notchCarve: Record<BentoNotchProps["corner"], string> = {
+  tl: "100% 100%",
+  tr: "0% 100%",
+  bl: "100% 0%",
+  br: "0% 0%",
+}
+
+export function BentoNotch({
+  corner,
+  seam = "#FFFFFF",
+  size = 20,
+  className,
+}: BentoNotchProps) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn("pointer-events-none absolute z-10", notchPos[corner], className)}
+      style={{
+        width: size,
+        height: size,
+        background: `radial-gradient(circle ${size}px at ${notchCarve[corner]}, transparent ${size - 0.5}px, ${seam} ${size}px)`,
+      }}
+    />
+  )
+}
+
+// ─────────────────────────────────────────────────────────
+// BentoSplit  —  two-column interlocking overlap layout
+//
+// The key Instant Strata brand element. Two columns
+// of stacked panels where:
+//   • the right column is staggered DOWN by `stagger`, creating
+//     the woven, interlocking rhythm,
+//   • the gap (= seam colour) is uniform so corners read as notches,
+//   • media can bleed across the seam via <BentoBleed> for depth.
+//
+// Pass panels as the `left` and `right` arrays. They share the
+// same column gap so opposite-colour panels appear to interlock.
+// ─────────────────────────────────────────────────────────
+
+interface BentoSplitProps extends HTMLAttributes<HTMLDivElement> {
+  left: ReactNodeList
+  right: ReactNodeList
+  /** Vertical offset applied to the right column (px). */
+  stagger?: number
+  /** Gap between all panels (also the seam width). */
+  gap?: "sm" | "md" | "lg"
+}
+
+type ReactNodeList = React.ReactNode[] | React.ReactNode
+
+const splitGap = { sm: "gap-3", md: "gap-4", lg: "gap-6" }
+
+export function BentoSplit({
+  left,
+  right,
+  stagger = 64,
+  gap = "md",
+  className,
+  ...props
+}: BentoSplitProps) {
+  return (
+    <div
+      className={cn("grid grid-cols-1 md:grid-cols-2 items-start", splitGap[gap], className)}
+      {...props}
+    >
+      <div className={cn("flex flex-col", splitGap[gap])}>{left}</div>
+      <div
+        className={cn("flex flex-col", splitGap[gap])}
+        style={{ marginTop: `var(--bento-stagger, ${stagger}px)` }}
+      >
+        {right}
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────
+// BentoSplitPanel  —  a single panel inside a BentoSplit
+// ─────────────────────────────────────────────────────────
+
+interface BentoSplitPanelProps extends Omit<BentoCellProps, "colSpan" | "rowSpan"> {
+  padding?: "sm" | "md" | "lg" | "none"
+}
+
+const splitPanelPad = { none: "", sm: "p-6", md: "p-8", lg: "p-10" }
+
+export function BentoSplitPanel({
+  type = "secondary",
+  padding = "lg",
+  minH,
+  className,
+  children,
+  ...props
+}: BentoSplitPanelProps) {
+  return (
+    <div
+      className={cn(
+        cellBg[type],
+        "relative rounded-2xl",
+        splitPanelPad[padding],
+        minH,
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────
+// BentoBleed  —  wrapper for media that overhangs a panel edge
+//
+// Negative margin + raised z-index so a mockup/screenshot spills
+// across the seam onto the neighbouring panel, breaking the grid.
+// ─────────────────────────────────────────────────────────
+
+interface BentoBleedProps extends HTMLAttributes<HTMLDivElement> {
+  /** Which edge(s) to bleed past, in pixels. */
+  bleed?: { top?: number; right?: number; bottom?: number; left?: number }
+}
+
+export function BentoBleed({
+  bleed = {},
+  className,
+  style,
+  children,
+  ...props
+}: BentoBleedProps) {
+  const { top, right, bottom, left } = bleed
+  return (
+    <div
+      className={cn("relative z-20", className)}
+      style={{
+        marginTop: top != null ? -top : undefined,
+        marginRight: right != null ? -right : undefined,
+        marginBottom: bottom != null ? -bottom : undefined,
+        marginLeft: left != null ? -left : undefined,
+        ...style,
+      }}
+      {...props}
+    >
+      {children}
+    </div>
   )
 }

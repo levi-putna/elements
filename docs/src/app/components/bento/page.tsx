@@ -1,5 +1,6 @@
 import { CodeBlock } from "@/components/docs/code-block";
 import { ComponentPreview } from "@/components/docs/component-preview";
+import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
 import {
   BentoGrid,
@@ -7,6 +8,9 @@ import {
   BentoFeatureCell,
   BentoContentCell,
   BentoVisualCell,
+  BentoSplit,
+  BentoSplitPanel,
+  BentoBleed,
 } from "@/components/ui/bento";
 import {
   BarChart3,
@@ -30,7 +34,7 @@ const FEATURE_GRID_CODE = `import {
 } from "@/components/ui/bento"
 import { BarChart3, FileText, Globe, LayoutGrid, MessageSquare, Shield } from "lucide-react"
 
-// Mode-style feature grid — icon top-left, label bottom-left
+// Feature grid — icon top-left, label bottom-left
 // Outer: lime-soft. Cells: forest green.
 <BentoGrid type="alternative" cols={3}>
   <BentoFeatureCell
@@ -95,6 +99,47 @@ const DARK_FEATURE_CODE = `// Forest background — cells use lime-soft (alterna
   <BentoFeatureCell icon={<Search />} label="Global search"    type="dark-card" colSpan={2} />
 </BentoGrid>`;
 
+const SPLIT_CODE = `import {
+  BentoSplit,
+  BentoSplitPanel,
+  BentoBleed,
+} from "@/components/ui/bento"
+
+// Two-column interlocking overlap — the signature brand element.
+// Right column staggers down; media bleeds across the seam.
+<BentoSplit
+  stagger={56}
+  left={[
+    <BentoSplitPanel type="secondary">
+      <h3 className="font-display text-2xl">Made for your data team</h3>
+      <p>SQL, R, Python and data viz, all connected.</p>
+    </BentoSplitPanel>,
+    <BentoSplitPanel type="secondary" padding="none" className="overflow-visible">
+      <BentoBleed bleed={{ right: 40, bottom: 24 }} className="p-6">
+        {/* dark mockup card that overhangs onto the next panel */}
+      </BentoBleed>
+    </BentoSplitPanel>,
+  ]}
+  right={[
+    <BentoSplitPanel type="alternative">{/* chart */}</BentoSplitPanel>,
+    <BentoSplitPanel type="alternative">
+      <h3 className="font-display text-2xl">And the teams you work with</h3>
+      <p>Easy, trusted self-service for everyone.</p>
+    </BentoSplitPanel>,
+  ]}
+/>`;
+
+const SPLIT_PROPS = [
+  { name: "left", type: "ReactNode[]", description: "Panels stacked in the left column. Typically BentoSplitPanel elements." },
+  { name: "right", type: "ReactNode[]", description: "Panels stacked in the right column. Offset downward by stagger to create the interlocking rhythm." },
+  { name: "stagger", type: "number", default: "64", description: "Vertical offset (px) applied to the right column. This downward shift is what makes the columns appear to interlock." },
+  { name: "gap", type: '"sm" | "md" | "lg"', default: '"md"', description: "Gap between all panels — also the visual seam width between columns." },
+];
+
+const BLEED_PROPS = [
+  { name: "bleed", type: "{ top?, right?, bottom?, left? }", description: "Pixels each edge overhangs its panel via negative margin. The wrapper is raised with z-index so media spills across the seam onto the neighbouring panel." },
+];
+
 const GRID_PROPS = [
   { name: "type", type: '"default" | "secondary" | "primary" | "alternative"', default: '"secondary"', description: "Background of the outer container. Also sets the gap and padding colour, creating the notch effect where cell corners meet." },
   { name: "cols", type: "2 | 3 | 4", default: "3", description: "Number of equal-width columns." },
@@ -118,7 +163,7 @@ const FEATURE_PROPS = [
 
 const CONTENT_PROPS = [
   { name: "eyebrow", type: "string", description: "Small all-caps label above the heading. Colour adapts to cell type (lime on dark, muted on light)." },
-  { name: "heading", type: "string", description: "Section heading in Grenette display font." },
+  { name: "heading", type: "string", description: "Section heading in the Young Serif display font." },
   { name: "body", type: "string", description: "Supporting paragraph text." },
   { name: "footer", type: "ReactNode", description: "Optional slot for a CTA button or link below the body copy." },
   { name: "padding", type: '"sm" | "md" | "lg"', default: '"md"', description: "Internal padding of the cell." },
@@ -126,7 +171,7 @@ const CONTENT_PROPS = [
 
 export default function BentoPage() {
   return (
-    <div className="max-w-prose mx-auto px-8 py-14">
+    <DocsPage width="wide">
 
       <div className="mb-10">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
@@ -235,7 +280,7 @@ export default function BentoPage() {
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Content grid</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
           Alternating text and visual cells. The <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoContentCell</code> handles
-          eyebrow + Grenette heading + body copy. The <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoVisualCell</code> is a
+          eyebrow + Young Serif heading + body copy. The <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoVisualCell</code> is a
           fill container for screenshots, illustrations, or UI previews.
         </p>
 
@@ -285,6 +330,71 @@ export default function BentoPage() {
         </ComponentPreview>
         <div className="mt-4">
           <CodeBlock code={CONTENT_GRID_CODE} language="tsx" />
+        </div>
+      </section>
+
+      {/* ── Split overlap — the signature brand element ── */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Split overlap</h2>
+        <p className="text-sm text-ink-muted mb-5 leading-relaxed">
+          The signature interlocking layout. Two columns of stacked panels where the right
+          column is <strong className="font-semibold text-foreground">staggered down</strong> to
+          create a woven rhythm, panels alternate off-white ↔ lime, and media can{" "}
+          <strong className="font-semibold text-foreground">bleed across the seam</strong> with{" "}
+          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoBleed</code> for depth.
+        </p>
+
+        <ComponentPreview label="BentoSplit · staggered columns with cross-seam bleed">
+          <div className="w-full">
+            <BentoSplit
+              stagger={56}
+              left={[
+                <BentoSplitPanel key="a" type="secondary">
+                  <h3 className="font-display text-2xl text-[#043F2E] mb-3">Made for your data team</h3>
+                  <p className="text-sm text-[#4A7A62] leading-relaxed">
+                    SQL, R, Python and data viz, all connected to help you deliver insights faster.
+                    No rigid data model stands in the way of the analysis you need.
+                  </p>
+                </BentoSplitPanel>,
+                <BentoSplitPanel key="b" type="secondary" padding="none" className="overflow-visible">
+                  <BentoBleed bleed={{ right: 40, bottom: 24 }} className="p-6">
+                    <div className="rounded-xl bg-[#043F2E] p-4 shadow-lg">
+                      <p className="text-[10px] font-mono text-white/40 mb-2">SQL Editor</p>
+                      <div className="space-y-1.5">
+                        <div className="h-1.5 w-3/4 rounded-full bg-[#C8F169]/40" />
+                        <div className="h-1.5 w-1/2 rounded-full bg-white/15" />
+                        <div className="h-1.5 w-2/3 rounded-full bg-white/15" />
+                      </div>
+                      <div className="mt-3 h-8 rounded-sm bg-[#C8F169]" />
+                    </div>
+                  </BentoBleed>
+                </BentoSplitPanel>,
+              ]}
+              right={[
+                <BentoSplitPanel key="c" type="alternative" minH="min-h-44">
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-[10px] font-mono text-[#043F2E]/50">Faceted Combo</p>
+                    <span className="rounded-sm bg-[#043F2E] px-2 py-1 text-[10px] text-white">Share</span>
+                  </div>
+                  <div className="grid grid-cols-6 gap-1.5 items-end h-20">
+                    {[50, 70, 45, 85, 60, 75].map((h, i) => (
+                      <div key={i} className="rounded-sm bg-[#043F2E]/70" style={{ height: `${h}%` }} />
+                    ))}
+                  </div>
+                </BentoSplitPanel>,
+                <BentoSplitPanel key="d" type="alternative">
+                  <h3 className="font-display text-2xl text-[#043F2E] mb-3">And the teams you work with</h3>
+                  <p className="text-sm text-[#043F2E]/70 leading-relaxed">
+                    Deliver tools for easy, trusted self-service. Everyone&apos;s analytical tools live
+                    in one place, without long implementation times or tedious maintenance.
+                  </p>
+                </BentoSplitPanel>,
+              ]}
+            />
+          </div>
+        </ComponentPreview>
+        <div className="mt-4">
+          <CodeBlock code={SPLIT_CODE} language="tsx" />
         </div>
       </section>
 
@@ -359,12 +469,23 @@ export default function BentoPage() {
         <PropTable props={FEATURE_PROPS} />
       </section>
 
-      <section className="pt-10 border-t border-border">
+      <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoContentCell Props</h2>
         <p className="text-xs text-ink-muted mb-3">Extends BentoCell props.</p>
         <PropTable props={CONTENT_PROPS} />
       </section>
 
-    </div>
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoSplit Props</h2>
+        <PropTable props={SPLIT_PROPS} />
+      </section>
+
+      <section className="pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoBleed Props</h2>
+        <p className="text-xs text-ink-muted mb-3">BentoSplitPanel extends BentoCell props with a padding prop.</p>
+        <PropTable props={BLEED_PROPS} />
+      </section>
+
+    </DocsPage>
   );
 }

@@ -1,4 +1,5 @@
 import { CodeBlock } from "@/components/docs/code-block";
+import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
 
 const INSTALL = `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/conversation/registry.json`;
@@ -117,7 +118,7 @@ const DOWNLOAD_PROPS = [
 
 export default function ConversationPage() {
   return (
-    <div className="max-w-prose mx-auto px-8 py-14">
+    <DocsPage>
 
       <div className="mb-10">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
@@ -193,6 +194,6 @@ export default function ConversationPage() {
         <PropTable props={DOWNLOAD_PROPS} />
       </section>
 
-    </div>
+    </DocsPage>
   );
 }

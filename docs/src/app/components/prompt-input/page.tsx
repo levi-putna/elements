@@ -2,6 +2,7 @@
 
 import { CodeBlock } from "@/components/docs/code-block";
 import { ComponentPreview } from "@/components/docs/component-preview";
+import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
 
 const INSTALL = `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/prompt-input/registry.json`;
@@ -101,7 +102,7 @@ const SPEECH_PROPS = [
 
 export default function PromptInputPage() {
   return (
-    <div className="max-w-prose mx-auto px-8 py-14">
+    <DocsPage>
 
       <div className="mb-10">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
@@ -187,6 +188,6 @@ export default function PromptInputPage() {
         <PropTable props={SPEECH_PROPS} />
       </section>
 
-    </div>
+    </DocsPage>
   );
 }

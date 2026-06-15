@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CodeBlock } from "@/components/docs/code-block";
 import { ComponentPreview } from "@/components/docs/component-preview";
+import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
 
 const INSTALL_CODE = `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/button/registry.json`;
@@ -64,7 +65,7 @@ export default function ButtonPage() {
   }
 
   return (
-    <div className="max-w-prose mx-auto px-8 py-14">
+    <DocsPage>
 
       {/* Page header */}
       <div className="mb-10">
@@ -175,6 +176,6 @@ export default function ButtonPage() {
         <PropTable props={PROPS} />
       </section>
 
-    </div>
+    </DocsPage>
   );
 }

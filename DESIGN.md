@@ -110,19 +110,19 @@ A refined serif for display headings signals expertise and trust. Inter handles 
 
 | Role | Typeface | Source |
 |---|---|---|
-| **Display / Headings** | Grenette | [Grilli Type](https://www.grillitype.com/typeface/gt-grenette) — commercial licence |
+| **Display / Headings** | Young Serif | [Google Fonts](https://fonts.google.com/specimen/Young+Serif) — free |
 | **UI / Body / Labels** | Inter | Google Fonts — free |
 | **Code** | JetBrains Mono | Google Fonts — free |
 
-Grenette's ink-trap details and warm proportions give headings authority without coldness. Georgia is the fallback until font files are in place.
+Young Serif's elegant serifs and high contrast give headings authority and warmth. Weight 400 only — never use bold or medium with this font.
 
 ### Type Scale
 
 | Role | Font | Weight | Desktop | Mobile |
 |---|---|---|---|---|
-| **Display** | Grenette | 700 | 60–72px | 40–48px |
-| **H1** | Grenette | 700 | 48px | 32px |
-| **H2** | Grenette | 500 | 36px | 26px |
+| **Display** | Young Serif | 400 | 60–72px | 40–48px |
+| **H1** | Young Serif | 400 | 48px | 32px |
+| **H2** | Young Serif | 400 | 36px | 26px |
 | **H3** | Inter | 600 | 22px | 18px |
 | **H4** | Inter | 600 | 18px | 16px |
 | **Eyebrow** | Inter | 600 | 11px · ALL CAPS · 0.1em tracking | — |
@@ -133,29 +133,26 @@ Grenette's ink-trap details and warm proportions give headings authority without
 
 ### Font Setup
 
-Grenette is loaded via CSS `@font-face` in `globals.css`. Place purchased `.woff2` files in `docs/public/fonts/`:
-
-```
-docs/public/fonts/
-  Grenette-Regular.woff2
-  Grenette-RegularItalic.woff2
-  Grenette-Medium.woff2
-  Grenette-Bold.woff2
-```
-
-Inter and JetBrains Mono are loaded via `next/font/google`:
+All three typefaces are loaded via `next/font/google` in `docs/src/app/layout.tsx`:
 
 ```tsx
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Young_Serif } from "next/font/google";
 
+const youngSerif = Young_Serif({
+  variable: "--font-young-serif",
+  subsets: ["latin"],
+  weight: "400",
+});
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
-const mono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"] });
+const mono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"], weight: ["400", "500"] });
 ```
+
+The CSS variable `--font-display` maps to `--font-young-serif` via `@theme inline` in `globals.css`. Use `font-display` utility class (never pair with `font-bold` or `font-medium` — Young Serif is weight 400 only).
 
 ### Typography Rules
 
 - Display and H1 headlines intentionally run to 2 lines — this creates weight. Don't fight it.
-- Every major section opens with an eyebrow label followed by a Grenette heading.
+- Every major section opens with an eyebrow label followed by a Young Serif heading.
 - Eyebrow colour: `--color-lime` on dark sections, `--color-ink-muted` on light sections.
 - Body text max width: 65 characters (approx `640px`). Never stretch body copy full-width.
 - Never centre-align paragraphs. Centre only: eyebrows and headings in hero/CTA sections.
@@ -164,7 +161,7 @@ const mono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["lati
 
 ### Logo Typography
 
-The **IS** logo mark uses Grenette Bold inside the lime square container. The serif letterforms give the mark weight and brand character at small sizes.
+The **IS** logo mark uses Young Serif inside the lime square container. The serif letterforms give the mark character at small sizes.
 
 ---
 
@@ -424,7 +421,7 @@ When `background: --color-forest`:
 
 ```
 1. Nav             → transparent over dark hero
-2. Hero            → Dark · Grenette headline · subtext · 2 CTAs · right-side visual
+2. Hero            → Dark · Young Serif headline · subtext · 2 CTAs · right-side visual
 3. Social Proof    → White · logo strip · minimal, spacious
 4. Features Bento  → Off-white · eyebrow + H2 left · bento grid right
 5. Feature Rows    → White · 2–3 alternating text+visual rows
@@ -443,7 +440,7 @@ When `background: --color-forest`:
 - Left sidebar: `240px` wide, `--color-off-white` background, `1px` right border
 - Content area: white, `24px` padding
 - Max content width for text-heavy pages: `740px`
-- Headings: Inter only (Grenette is for marketing, not dense UI)
+- Headings: Inter only (Young Serif is for marketing, not dense UI)
 
 ### Docs Pages
 
@@ -481,7 +478,7 @@ export default {
         border: "#D4E8C2",
       },
       fontFamily: {
-        display: ["Grenette", "Georgia", "serif"],
+        display: ["var(--font-young-serif)", "Georgia", "serif"],
         sans:    ["var(--font-sans)", "system-ui", "sans-serif"],
         mono:    ["var(--font-mono)", "monospace"],
       },
@@ -510,7 +507,7 @@ Include this block when prompting AI tools to build Instant Strata UI:
 >
 > **Colours:** White (`#FFFFFF`) is the dominant background. Off-white (`#EEF2E3`) for subtle section alternation. Lime (`#C8F169`) is the brand accent — buttons, eyebrows, highlights. Forest green (`#043F2E`) for dark sections (hero, testimonial, footer) and all text. Lime-soft (`#EBF8C2`) for accent sections and card fills.
 >
-> **Typography:** Grenette (Grilli Type) serif for all display and section headings. Inter for UI, body, and labels. Logo mark uses Grenette Bold inside the lime square.
+> **Typography:** Young Serif (Google Fonts, weight 400 only) for all display and section headings. Inter for UI, body, and labels. Logo mark uses Young Serif inside the lime square.
 >
 > **Style:** Rectangular forms — `4px` radius on buttons and inputs, `8px` on cards. No pill shapes. Generous whitespace. Professional but not corporate.
 >
@@ -527,4 +524,4 @@ Include this block when prompting AI tools to build Instant Strata UI:
 | Date | Change |
 |---|---|
 | 2026-06-15 | Initial specification |
-| 2026-06-15 | Revised — white as dominant background, dark sections used sparingly, updated colours to match Mode reference palette, expanded whitespace guidance |
+| 2026-06-15 | Revised — white as dominant background, dark sections used sparingly, updated colours to match brand reference palette, expanded whitespace guidance |

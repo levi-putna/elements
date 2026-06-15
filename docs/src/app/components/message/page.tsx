@@ -2,6 +2,7 @@
 
 import { CodeBlock } from "@/components/docs/code-block";
 import { ComponentPreview } from "@/components/docs/component-preview";
+import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
 import { Message, MessageActions, MessageAction, MessageContent, MessageResponse, MessageToolbar } from "@/components/ui/message";
 import { CopyIcon } from "lucide-react";
@@ -117,7 +118,7 @@ const ACTION_PROPS = [
 
 export default function MessagePage() {
   return (
-    <div className="max-w-prose mx-auto px-8 py-14">
+    <DocsPage>
 
       <div className="mb-10">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
@@ -247,6 +248,6 @@ export default function MessagePage() {
         <PropTable props={ACTION_PROPS} />
       </section>
 
-    </div>
+    </DocsPage>
   );
 }

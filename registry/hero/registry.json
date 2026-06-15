@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hero",
+  "type": "registry:ui",
+  "description": "Marquee hero on a forest-green canvas. A stepped Young Serif headline ribbon on lime marker blocks (with concave notch masking) overflows into a notched lower-left photo, beside supporting copy and dual CTAs.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/hero/hero.tsx",
+      "target": "components/ui/hero.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-header",
+  "type": "registry:ui",
+  "description": "Two page header patterns inspired by Mode.com — a dark split header with competitor grid visual (comparisons) and a light editorial header with asymmetric photo (customers).",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/page-header/page-header.tsx",
+      "target": "components/ui/page-header.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}
