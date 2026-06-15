@@ -516,12 +516,12 @@ export function WorkItemMissingItems({
       )}
       {...props}
     >
-      <p className="text-xs font-semibold text-ink mb-1.5">Missing items</p>
+      <p className="text-xs font-semibold text-warning mb-1.5">Missing items</p>
       <ul className="space-y-1">
         {items.map((entry) => (
           <li
             key={entry}
-            className="flex items-start gap-2 text-xs text-ink-muted"
+            className="flex items-start gap-2 text-xs text-warning"
           >
             <AlertCircle
               className="size-3.5 shrink-0 text-warning mt-0.5"

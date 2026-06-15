@@ -216,6 +216,13 @@ export default function BadgePage() {
             correspondence preference, work item domain
           </li>
         </ul>
+        <p className="text-sm text-ink-muted mb-6 max-w-3xl">
+          Soft status backgrounds pair with saturated text:{" "}
+          <code className="font-mono text-xs">warning</code> uses{" "}
+          <code className="font-mono text-xs">text-warning</code>;{" "}
+          <code className="font-mono text-xs">destructive</code> uses{" "}
+          <code className="font-mono text-xs">text-danger</code>.
+        </p>
         <CodeBlock code={USAGE} />
       </section>
 

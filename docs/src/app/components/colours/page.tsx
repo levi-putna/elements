@@ -110,9 +110,9 @@ const STATUS_COLOURS = [
     name: "Warning soft",
     token: "--color-warning-soft / bg-warning-soft",
     hex: "#F8ECDC",
-    role: "Warning bands and subtle highlights. Pair with ink text, same pattern as lime-soft.",
+    role: "Warning bands and subtle highlights. Pair with text-warning on badges and compact labels.",
     className: "bg-warning-soft",
-    textClass: "text-ink",
+    textClass: "text-warning",
   },
 ] as const;
 
@@ -514,7 +514,7 @@ export default function ColoursPage() {
                 AGM date not confirmed
               </p>
               <p className="font-sans text-sm text-ink-muted leading-relaxed">
-                Soft warning background with amber heading. Distinct from lime accent.
+                Soft warning background with amber heading and ink-muted body for longer copy.
               </p>
             </div>
 
@@ -630,7 +630,7 @@ export default function ColoursPage() {
             "No more than three dark sections per page. Never two dark sections in a row.",
             "Logo: forest letterforms on lime container (light bg), forest container with white letterforms (primary bg), or lime letterforms on forest container (dark bg). Container rotated 15°; letterforms upright.",
             "Danger and warning are for status only. Never use them as section backgrounds or brand accents.",
-            "Status backgrounds: danger-soft or warning-soft with ink body text. Saturated tokens for headings, icons, and borders.",
+            "Status backgrounds: danger-soft or warning-soft with saturated text (text-danger or text-warning) on badges and compact labels. Longer callout body copy may use ink-muted.",
           ].map((rule) => (
             <li key={rule} className="flex gap-3 font-sans text-sm text-ink-muted leading-relaxed">
               <span className="text-lime shrink-0 mt-0.5" aria-hidden="true">-</span>

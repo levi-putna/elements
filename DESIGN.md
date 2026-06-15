@@ -58,7 +58,7 @@ White is the dominant background colour. Forest green and lime are used to creat
 | `--color-danger` | `#C44B47` | Errors, destructive actions, required markers. Earthy terracotta red. |
 | `--color-danger-soft` | `#F5E0DE` | Error banners and validation backgrounds. Pair with ink text. |
 | `--color-warning` | `#A8651A` | Caution states and pending actions. Warm amber, distinct from lime. |
-| `--color-warning-soft` | `#F8ECDC` | Warning bands and subtle highlights. Pair with ink text. |
+| `--color-warning-soft` | `#F8ECDC` | Warning bands and subtle highlights. Pair with `text-warning` on badges and compact labels. |
 
 ### Semantic Mapping
 
@@ -276,6 +276,7 @@ Foundation label primitive for status pills, identifiers, and metadata. All doma
 - Identifier badges use `size="sm"` and `variant="mono"`.
 - Status badges use `size="md"` with optional `hideIcon` in dense tables.
 - Danger-soft backgrounds always pair with `text-danger`, never `text-ink`.
+- Warning-soft backgrounds always pair with `text-warning`, never `text-ink`.
 - `border-radius: 2px` (`rounded-xs`) on all badges.
 
 ### Card

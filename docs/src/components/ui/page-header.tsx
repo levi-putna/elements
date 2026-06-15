@@ -157,10 +157,10 @@ export function PageHeaderSplitVisual({
 
       {/* Centre brand mark */}
       <div
-        className="absolute left-1/2 top-1/2 z-10 flex size-[76%] min-h-[200px] min-w-[200px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-2xl bg-lime shadow-[0_0_0_24px_rgba(4,63,46,0.65)]"
+        className="absolute left-1/2 top-1/2 z-10 flex size-[52%] min-h-[120px] min-w-[120px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-xl bg-lime shadow-[0_0_0_8px_rgba(4,63,46,0.65)] [container-type:size]"
         aria-hidden="true"
       >
-        <span className="font-display text-[clamp(5rem,16cqw,9rem)] leading-none tracking-tight text-forest">
+        <span className="font-display text-[length:min(72cqi,86cqh)] leading-none tracking-tight text-forest">
           {brand}
         </span>
       </div>
