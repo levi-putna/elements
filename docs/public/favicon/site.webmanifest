@@ -1,0 +1,19 @@
+{
+  "name": "Instant Strata",
+  "short_name": "Instant Strata",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#C8F169",
+  "background_color": "#043F2E",
+  "display": "standalone"
+}

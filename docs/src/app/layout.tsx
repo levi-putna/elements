@@ -26,8 +26,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Elements: Instant Strata UI Library",
-    template: "%s · Elements",
+    default: "Instant Strata - Elements",
+    template: "%s - Instant Strata - Elements",
   },
   description:
     "Design system repository for Instant Strata: brand guidelines, UI patterns, and copy-paste components.",
@@ -40,6 +40,7 @@ const components = [
       { href: "/components/colours", label: "Colours & Accent" },
       { href: "/components/typography", label: "Typography" },
       { href: "/components/logo", label: "Logo" },
+      { href: "/components/favicon", label: "Favicon" },
       { href: "/components/icons", label: "Icons" },
     ],
   },
