@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "shimmer",
+  "type": "registry:ui",
+  "description": "Animated gradient shimmer that sweeps across text using background-clip. Brand gradient: forest → lime → forest.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/shimmer/shimmer.tsx",
+      "target": "components/ui/shimmer.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

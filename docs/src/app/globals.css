@@ -41,9 +41,16 @@
   font-display: swap;
 }
 
-@keyframes button-shimmer {
+/* Shared sweep used by Button (loading overlay) and Skeleton */
+@keyframes shimmer {
   from { transform: translateX(-100%); }
   to   { transform: translateX(200%); }
+}
+
+/* Background-position sweep used by the Shimmer text component */
+@keyframes text-shimmer {
+  from { background-position: 100% center; }
+  to   { background-position: -100% center; }
 }
 
 @custom-variant dark (&:is(.dark *));

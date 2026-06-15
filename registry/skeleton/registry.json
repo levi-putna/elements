@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "type": "registry:ui",
+  "description": "Block loading placeholder with a sweep shimmer animation. Uses the same keyframe as the Button loading state for visual consistency.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/skeleton/skeleton.tsx",
+      "target": "components/ui/skeleton.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

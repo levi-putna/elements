@@ -70,7 +70,7 @@ function Button({
       {loading && (
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -translate-x-full animate-[button-shimmer_1.4s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/25 to-transparent"
+          className="pointer-events-none absolute inset-0 -translate-x-full animate-[shimmer_1.4s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-white/25 to-transparent"
         />
       )}
     </ButtonPrimitive>
