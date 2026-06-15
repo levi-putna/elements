@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "type": "registry:lib",
+  "description": "Shared utility functions (cn).",
+  "dependencies": ["clsx", "tailwind-merge"],
+  "files": [
+    {
+      "path": "registry/utils/utils.ts",
+      "target": "lib/utils.ts",
+      "type": "registry:lib"
+    }
+  ]
+}
