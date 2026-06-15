@@ -64,107 +64,117 @@ export default function ButtonPage() {
   }
 
   return (
-    <div className="px-12 py-10 max-w-3xl">
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-1">
-          <p className="text-xs text-muted-foreground uppercase tracking-wider font-medium">
-            Components
-          </p>
-        </div>
-        <h1 className="text-3xl font-semibold tracking-tight mb-2">Button</h1>
-        <p className="text-muted-foreground leading-relaxed">
+    <div className="max-w-prose mx-auto px-8 py-14">
+
+      {/* Page header */}
+      <div className="mb-10">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
+          Components / Base
+        </p>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">Button</h1>
+        <p className="text-base text-ink-muted leading-relaxed">
           Extends the{" "}
           <a
             href="https://ui.shadcn.com/docs/components/button"
-            className="underline underline-offset-4 hover:text-foreground"
+            className="text-foreground underline underline-offset-4 hover:text-forest-mid transition-colors"
           >
             shadcn/ui Button
           </a>{" "}
-          with a <code className="font-mono text-sm">loading</code> prop that shows a spinner and
-          disables interaction.
+          with a <code className="font-mono text-sm bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">loading</code> prop that shows a spinner and disables interaction while preserving the button label.
         </p>
       </div>
 
-      <section className="mb-10">
-        <h2 className="text-lg font-semibold mb-3">Installation</h2>
+      {/* Installation */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">
+          Installation
+        </h2>
         <CodeBlock code={INSTALL_CODE} language="bash" />
       </section>
 
-      <section className="mb-10">
-        <h2 className="text-lg font-semibold mb-3">Usage</h2>
+      {/* Usage */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">
+          Usage
+        </h2>
         <CodeBlock code={USAGE_CODE} language="tsx" />
       </section>
 
-      <section className="mb-10">
-        <h2 className="text-lg font-semibold mb-4">Examples</h2>
+      {/* Examples */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-6">
+          Examples
+        </h2>
 
-        <div className="mb-6">
-          <h3 className="text-sm font-medium mb-3">Variants</h3>
-          <ComponentPreview>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button variant="default">Default</Button>
-              <Button variant="outline">Outline</Button>
-              <Button variant="secondary">Secondary</Button>
-              <Button variant="ghost">Ghost</Button>
-              <Button variant="destructive">Destructive</Button>
-              <Button variant="link">Link</Button>
+        <div className="space-y-8">
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-3">Variants</p>
+            <ComponentPreview label="Preview">
+              <div className="flex flex-wrap items-center gap-3">
+                <Button variant="default">Default</Button>
+                <Button variant="outline">Outline</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="ghost">Ghost</Button>
+                <Button variant="destructive">Destructive</Button>
+                <Button variant="link">Link</Button>
+              </div>
+            </ComponentPreview>
+            <div className="mt-3">
+              <CodeBlock code={VARIANTS_CODE} language="tsx" />
             </div>
-          </ComponentPreview>
-          <div className="mt-3">
-            <CodeBlock code={VARIANTS_CODE} language="tsx" />
           </div>
-        </div>
 
-        <div className="mb-6">
-          <h3 className="text-sm font-medium mb-3">Loading state</h3>
-          <ComponentPreview>
-            <div className="flex items-center gap-3">
-              <Button loading>Saving...</Button>
-              <Button loading variant="outline">
-                Loading
-              </Button>
-              <Button onClick={simulateLoad} loading={loading} variant="secondary">
-                {loading ? "Saving..." : "Click to simulate"}
-              </Button>
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-3">Loading state</p>
+            <ComponentPreview label="Preview">
+              <div className="flex items-center gap-3">
+                <Button loading>Saving...</Button>
+                <Button loading variant="outline">Loading</Button>
+                <Button onClick={simulateLoad} loading={loading} variant="secondary">
+                  {loading ? "Saving..." : "Click to simulate"}
+                </Button>
+              </div>
+            </ComponentPreview>
+            <div className="mt-3">
+              <CodeBlock code={LOADING_CODE} language="tsx" />
             </div>
-          </ComponentPreview>
-          <div className="mt-3">
-            <CodeBlock code={LOADING_CODE} language="tsx" />
           </div>
-        </div>
 
-        <div className="mb-6">
-          <h3 className="text-sm font-medium mb-3">Sizes</h3>
-          <ComponentPreview>
-            <div className="flex flex-wrap items-end gap-3">
-              <Button size="xs">Extra Small</Button>
-              <Button size="sm">Small</Button>
-              <Button size="default">Default</Button>
-              <Button size="lg">Large</Button>
-            </div>
-          </ComponentPreview>
-        </div>
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-3">Sizes</p>
+            <ComponentPreview label="Preview">
+              <div className="flex flex-wrap items-end gap-3">
+                <Button size="xs">Extra Small</Button>
+                <Button size="sm">Small</Button>
+                <Button size="default">Default</Button>
+                <Button size="lg">Large</Button>
+              </div>
+            </ComponentPreview>
+          </div>
 
-        <div>
-          <h3 className="text-sm font-medium mb-3">Disabled</h3>
-          <ComponentPreview>
-            <div className="flex items-center gap-3">
-              <Button disabled>Disabled</Button>
-              <Button disabled variant="outline">
-                Disabled
-              </Button>
-            </div>
-          </ComponentPreview>
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-3">Disabled</p>
+            <ComponentPreview label="Preview">
+              <div className="flex items-center gap-3">
+                <Button disabled>Disabled</Button>
+                <Button disabled variant="outline">Disabled</Button>
+              </div>
+            </ComponentPreview>
+          </div>
         </div>
       </section>
 
-      <section>
-        <h2 className="text-lg font-semibold mb-3">Props</h2>
-        <p className="text-sm text-muted-foreground mb-4">
-          All standard HTML button attributes are also accepted.
+      {/* Props */}
+      <section className="pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">
+          Props
+        </h2>
+        <p className="text-sm text-ink-muted mb-4 leading-relaxed">
+          All standard HTML button attributes are also accepted via <code className="font-mono text-xs bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">...props</code>.
         </p>
         <PropTable props={PROPS} />
       </section>
+
     </div>
   );
 }

@@ -1,62 +1,133 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Lora } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const lora = Lora({
+  variable: "--font-lora",
   subsets: ["latin"],
+  weight: ["400", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Elements — UI Component Library",
-  description: "A personal UI component library extending shadcn/ui.",
+  title: {
+    default: "Elements — Instant Strata UI Library",
+    template: "%s · Elements",
+  },
+  description:
+    "A personal UI component library extending shadcn/ui with Instant Strata brand conventions.",
 };
+
+const components = [
+  {
+    label: "Base",
+    items: [{ href: "/components/button", label: "Button" }],
+  },
+  {
+    label: "AI",
+    items: [
+      { href: "/components/prompt-input", label: "Prompt Input" },
+      { href: "/components/conversation", label: "Conversation" },
+      { href: "/components/message", label: "Message" },
+    ],
+  },
+];
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${lora.variable} ${jetbrainsMono.variable} h-full`}
+    >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <header className="border-b border-border px-6 h-14 flex items-center justify-between shrink-0">
-          <Link href="/" className="font-semibold text-sm tracking-tight">
-            elements
-          </Link>
-          <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-            <Link href="/components/button" className="hover:text-foreground transition-colors">
-              Components
+        {/* Top nav */}
+        <header className="sticky top-0 z-40 h-14 border-b border-border bg-white/95 backdrop-blur-sm flex items-center px-6 justify-between shrink-0">
+          <div className="flex items-center gap-3">
+            {/* IS logo mark */}
+            <Link
+              href="/"
+              className="flex items-center justify-center w-7 h-7 rounded-sm bg-lime text-forest text-xs font-bold tracking-tight shrink-0 select-none"
+              aria-label="Elements home"
+            >
+              IS
+            </Link>
+            <span className="text-sm font-semibold text-foreground tracking-tight">
+              Elements
+            </span>
+          </div>
+
+          <nav className="flex items-center gap-5">
+            <Link
+              href="/"
+              className="text-sm text-ink-muted hover:text-foreground transition-colors duration-150"
+            >
+              Docs
             </Link>
             <a
               href="https://github.com/levi-putna/elements"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
+              className="text-sm text-ink-muted hover:text-foreground transition-colors duration-150 flex items-center gap-1.5"
             >
+              <svg
+                className="size-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2Z"
+                  clipRule="evenodd"
+                />
+              </svg>
               GitHub
             </a>
           </nav>
         </header>
-        <div className="flex flex-1">
-          <aside className="w-56 shrink-0 border-r border-border px-4 py-6">
-            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 px-2">
-              Components
-            </p>
-            <nav className="flex flex-col gap-0.5">
-              <Link
-                href="/components/button"
-                className="rounded-md px-2 py-1.5 text-sm hover:bg-muted transition-colors"
-              >
-                Button
-              </Link>
-            </nav>
+
+        <div className="flex flex-1 min-h-0">
+          {/* Left sidebar */}
+          <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-border bg-white">
+            <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+              {components.map((group) => (
+                <div key={group.label}>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted px-2 mb-1.5">
+                    {group.label}
+                  </p>
+                  <nav className="flex flex-col">
+                    {group.items.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="rounded-sm px-2 py-1.5 text-sm text-ink-muted hover:text-foreground hover:bg-secondary transition-colors duration-150"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </nav>
+                </div>
+              ))}
+            </div>
           </aside>
-          <main className="flex-1 min-w-0">{children}</main>
+
+          {/* Main content */}
+          <main className="flex-1 min-w-0 overflow-y-auto">
+            {children}
+          </main>
         </div>
       </body>
     </html>
