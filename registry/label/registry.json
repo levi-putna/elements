@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "type": "registry:ui",
+  "description": "A form label with a required flag (bold + destructive asterisk) and an optional Hint popover beside it.",
+  "dependencies": [],
+  "registryDependencies": ["utils", "hint"],
+  "files": [
+    {
+      "path": "registry/label/label.tsx",
+      "target": "components/ui/label.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

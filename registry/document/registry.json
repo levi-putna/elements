@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "document",
+  "type": "registry:ui",
+  "description": "Document and file element with list, thing, and wide layouts. Includes type icons, metadata, actions, and list/grid containers.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["utils", "badge"],
+  "files": [
+    {
+      "path": "registry/document/document.tsx",
+      "target": "components/ui/document.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

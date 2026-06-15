@@ -33,7 +33,7 @@ export default function TypographyPage() {
 
         {/* Young Serif */}
         <div className="mb-10 rounded-sm border border-border overflow-hidden">
-          <div className="px-8 pt-10 pb-8 bg-white">
+          <div className="px-8 pt-10 pb-8 bg-background">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-6">
               Young Serif · Display &amp; Headings
             </p>
@@ -64,7 +64,7 @@ export default function TypographyPage() {
 
         {/* Inter */}
         <div className="mb-10 rounded-sm border border-border overflow-hidden">
-          <div className="px-8 pt-10 pb-8 bg-white">
+          <div className="px-8 pt-10 pb-8 bg-background">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-6">
               Inter · UI, Body &amp; Labels
             </p>
@@ -93,7 +93,7 @@ export default function TypographyPage() {
 
         {/* JetBrains Mono */}
         <div className="rounded-sm border border-border overflow-hidden">
-          <div className="px-8 pt-10 pb-8 bg-white">
+          <div className="px-8 pt-10 pb-8 bg-background">
             <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-6">
               JetBrains Mono · Code
             </p>
@@ -128,7 +128,7 @@ export default function TypographyPage() {
         <div className="rounded-sm border border-border overflow-hidden divide-y divide-border">
 
           {/* Display */}
-          <div className="px-8 py-10 bg-white">
+          <div className="px-8 py-10 bg-background">
             <div className="flex items-start justify-between gap-4 mb-4">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-1">Display</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Young Serif · 400 · 64px · −0.02em</span>
@@ -139,7 +139,7 @@ export default function TypographyPage() {
           </div>
 
           {/* H1 */}
-          <div className="px-8 py-8 bg-white">
+          <div className="px-8 py-8 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">H1</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Young Serif · 400 · 48px</span>
@@ -150,7 +150,7 @@ export default function TypographyPage() {
           </div>
 
           {/* H2 */}
-          <div className="px-8 py-7 bg-white">
+          <div className="px-8 py-7 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">H2</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Young Serif · 400 · 36px</span>
@@ -161,7 +161,7 @@ export default function TypographyPage() {
           </div>
 
           {/* H3 */}
-          <div className="px-8 py-6 bg-white">
+          <div className="px-8 py-6 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">H3</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Inter · 600 · 22px</span>
@@ -172,7 +172,7 @@ export default function TypographyPage() {
           </div>
 
           {/* H4 */}
-          <div className="px-8 py-5 bg-white">
+          <div className="px-8 py-5 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">H4</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Inter · 600 · 18px</span>
@@ -183,7 +183,7 @@ export default function TypographyPage() {
           </div>
 
           {/* Eyebrow */}
-          <div className="px-8 py-5 bg-white">
+          <div className="px-8 py-5 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">Eyebrow</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Inter · 600 · 11px · All caps · 0.1em tracking</span>
@@ -194,7 +194,7 @@ export default function TypographyPage() {
           </div>
 
           {/* Body Large */}
-          <div className="px-8 py-5 bg-white">
+          <div className="px-8 py-5 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">Body Large</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Inter · 400 · 18px · 1.7 leading</span>
@@ -205,7 +205,7 @@ export default function TypographyPage() {
           </div>
 
           {/* Body */}
-          <div className="px-8 py-5 bg-white">
+          <div className="px-8 py-5 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">Body</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Inter · 400 · 16px · 1.65 leading</span>
@@ -216,7 +216,7 @@ export default function TypographyPage() {
           </div>
 
           {/* Caption */}
-          <div className="px-8 py-5 bg-white">
+          <div className="px-8 py-5 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">Caption</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Inter · 500 · 12px</span>
@@ -227,7 +227,7 @@ export default function TypographyPage() {
           </div>
 
           {/* Mono */}
-          <div className="px-8 py-5 bg-white">
+          <div className="px-8 py-5 bg-background">
             <div className="flex items-start justify-between gap-4 mb-3">
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">Mono</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">JetBrains Mono · 400 · 14px</span>

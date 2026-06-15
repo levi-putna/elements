@@ -32,6 +32,11 @@ npx shadcn init
 | Component | Description | Install |
 |---|---|---|
 | `button` | shadcn Button extended with `loading` prop | `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/button/registry.json` |
+| `badge` | Shared badge primitive with semantic variants for status and identifiers | `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/badge/registry.json` |
+| `scheme` | Strata scheme cards, context bar, badges, and portfolio layouts | `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/scheme/registry.json` |
+| `lot` | Strata lot badges, cards, roll lists, levy and proxy status | `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/lot/registry.json` |
+| `owner` | Strata owner roll rows, profile cards, portal status, lot holdings | `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/owner/registry.json` |
+| `task` | Manager task queue, work items, workflow states, and R-A-S gates | `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/task/registry.json` |
 
 ---
 

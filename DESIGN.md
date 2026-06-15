@@ -55,6 +55,10 @@ White is the dominant background colour. Forest green and lime are used to creat
 | `--color-ink` | `#043F2E` | Body and heading text on light backgrounds. Same value as forest, keeps the palette unified. |
 | `--color-ink-muted` | `#4A7A62` | Secondary text: labels, captions, metadata. |
 | `--color-border` | `#D4E8C2` | Subtle border on cards and inputs. |
+| `--color-danger` | `#C44B47` | Errors, destructive actions, required markers. Earthy terracotta red. |
+| `--color-danger-soft` | `#F5E0DE` | Error banners and validation backgrounds. Pair with ink text. |
+| `--color-warning` | `#A8651A` | Caution states and pending actions. Warm amber, distinct from lime. |
+| `--color-warning-soft` | `#F8ECDC` | Warning bands and subtle highlights. Pair with ink text. |
 
 ### Semantic Mapping
 
@@ -71,6 +75,12 @@ White is the dominant background colour. Forest green and lime are used to creat
 --primary:              #C8F169;
 --primary-foreground:   #043F2E;
 --primary-hover:        #B5E050;
+
+--danger:               #C44B47;
+--danger-soft:          #F5E0DE;
+--warning:              #A8651A;
+--warning-soft:         #F8ECDC;
+--destructive:          #C44B47;
 
 --border:               #D4E8C2;
 --border-dark:          rgba(255,255,255,0.12);
@@ -218,7 +228,7 @@ Rectangular with a small radius. Precise and professional.
 **Hard rules:**
 - All interactive elements (buttons, inputs) use `4px`.
 - All cards use `8px`.
-- `border-radius: 9999px` (pill) is reserved for avatar images only.
+- `border-radius: 9999px` (pill) is reserved for owner avatars (`OwnerAvatar`). System user avatars use `4px` (`rounded-md`).
 - The logo mark always uses `4px`.
 
 ---
@@ -246,6 +256,28 @@ Rectangular with a small radius. Precise and professional.
 - Loading state: spinner appears inline, before the label. Label stays visible.
 - Never more than 2 buttons in a CTA group.
 
+### Badge
+
+Foundation label primitive for status pills, identifiers, and metadata. All domain badges (`SchemeStatusBadge`, `LotLevyBadge`, `WorkItemStatusBadge`, etc.) compose `Badge` so tone and sizing stay consistent.
+
+**Variant mapping (use everywhere):**
+
+| Variant | Meaning | Examples |
+|---|---|---|
+| `accent` | Positive / active / success | Active scheme, paid levy, automatable, portal active, in progress |
+| `warning` | Caution / pending review | Onboarding, awaiting review, R-A-S, invited |
+| `destructive` | Error / overdue / attention | Needs attention, overdue levy, failed, escalated |
+| `default` | Neutral metadata | Archived, manual, not registered, snoozed |
+| `mono` | Identifiers | SP plan numbers, lot numbers, file extensions |
+| `outline` | Low-emphasis bordered | Correspondence preference, work item domain |
+
+**Rules:**
+- Prefer domain badges in product UI over raw `Badge`.
+- Identifier badges use `size="sm"` and `variant="mono"`.
+- Status badges use `size="md"` with optional `hideIcon` in dense tables.
+- Danger-soft backgrounds always pair with `text-danger`, never `text-ink`.
+- `border-radius: 2px` (`rounded-xs`) on all badges.
+
 ### Card
 
 Three card styles. Each has a clearly defined home context.
@@ -268,6 +300,115 @@ text: white
 ```
 
 Card shadows: use sparingly. `box-shadow: 0 1px 3px rgba(0,0,0,0.08)` only on bordered cards to lift them off a white background. Never use drop shadows on dark or accent cards.
+
+### Scheme (strata building identity)
+
+A **scheme** is the owners corporation for a building. It is identified consistently everywhere using the `SchemeSummary` contract: name, strata plan number (`SP 1042`), location, lot count, financial year end, manager, status, and health.
+
+**When to use each element:**
+
+| Element | Use for |
+|---|---|
+| `SchemeCard` (list) | Scheme directories, pickers, mobile lists |
+| `SchemeCard` (card) | Manager portfolio dashboards with stats |
+| `SchemeCard` (wide) | Tabular portfolio views with column headings |
+| `SchemeCard` (compact) | Dropdown rows, tight mentions |
+| `SchemeContextBar` | Top of every scheme-scoped page (sticky) |
+| `SchemeIdentity` | Breadcrumbs, inline references, table cells |
+| `SchemePlanBadge` | Mono SP number label |
+| `SchemeStatusBadge` | active · onboarding · archived · attention |
+| `SchemeHealthIndicator` | good · warning · critical compliance signal |
+| `SchemeSwitcher` | Portfolio scheme picker |
+
+**Rules:**
+- Building2 (or initials on lime-soft) is the scheme icon. One icon per scheme everywhere.
+- Plan numbers display as `SP 1042` (mono, uppercase prefix).
+- Location metadata format: `Suburb, STATE · N lots · FY end 30 Jun`.
+- `SchemeContextBar` appears on all pages inside a scheme. Portfolio-only pages use `SchemeList` without the bar.
+- Extend `SchemeSummary` in the app for fund balances and compliance dates. Do not fork the display primitives.
+
+### Lot (strata roll entry)
+
+A **lot** is an entry on the strata roll within a scheme. It is identified by lot number, unit label, entitlement, owner, levy status, and proxy eligibility.
+
+**When to use each element:**
+
+| Element | Use for |
+|---|---|
+| `LotBadge` | Inline lot references in correspondence and tables |
+| `LotCard` (list) | Strata roll rows (lot-centric) |
+| `LotCard` (wide) | Full roll tables with entitlement, levy, and proxy columns |
+| `LotCard` (card) | Lot picker grids (maintenance, complaints) |
+| `LotCard` (compact) | Dropdown and search result rows |
+| `LotIdentity` | Breadcrumbs and lot detail headers |
+| `LotLevyBadge` | paid · due · overdue · not assessed |
+| `LotProxyBadge` | AGM proxy eligibility |
+| `LotList` / `LotRollHeader` | Bordered roll container with summary counts |
+
+**Rules:**
+- Lot numbers display as `Lot 12` (mono badge or number tile).
+- Entitlement displays as `UE 85` in metadata.
+- Occupant line shows tenant when tenanted, otherwise owner. Vacant lots show `Vacant`.
+- Proxy ineligible lots typically correlate with levy arrears: surface both in wide roll views.
+- Extend `LotSummary` in the app for contact details and correspondence prefs.
+
+### Owner (registered proprietor)
+
+An **owner** is a person or entity on the strata roll who holds one or more lots. Owners receive levy notices, official correspondence, and portal access.
+
+**When to use each element:**
+
+| Element | Use for |
+|---|---|
+| `OwnerRollRow` (list) | Owner directory rows, correspondence pickers |
+| `OwnerRollRow` (wide) | Tabular directories with contact, levy, and portal columns |
+| `OwnerCard` | Profile tiles, portal admin, onboarding views |
+| `OwnerCard` (compact) | Search and dropdown picker rows |
+| `OwnerIdentity` | Breadcrumbs and inline owner references |
+| `OwnerAvatar` | Round avatar for proprietors (distinct from square system `Avatar`) |
+| `OwnerLotChips` | Owned lots via composed `LotBadge` chips |
+| `OwnerTypeBadge` | individual · company · joint |
+| `OwnerPortalBadge` | active · invited · not registered |
+| `OwnerCorrespondenceBadge` | email · post · portal preference |
+| `OwnerCommitteeBadge` | Committee member indicator |
+| `OwnerList` / `OwnerRollHeader` | Bordered directory with summary counts |
+
+**Rules:**
+- Use `OwnerRollRow` for owner-centric views; `LotCard` for lot-centric views.
+- Multi-lot owners appear once with `OwnerLotChips`, not duplicated per lot.
+- Levy status on owners reflects worst-case or primary lot status: document which in the app layer.
+- Avatar uses `OwnerAvatar` (round). System users use square `Avatar` in app chrome.
+- Joint owner names like `James & Sarah Chen` initialise as `JC` (not `J&`).
+- Extend `OwnerSummary` in the app for mortgagee, tenant, and settlement history.
+
+### Task (work items and queues)
+
+A **work item** is an operational task in a strata workflow. Items carry workflow state, AI automation class, domain, priority, and optional statutory due dates.
+
+**When to use each element:**
+
+| Element | Use for |
+|---|---|
+| `WorkItem` (list) | Manager inbox rows with priority bar |
+| `WorkItem` (detail) | R-A-S review panels with missing items and advisory |
+| `WorkItem` (card) | Dashboard and kanban tiles |
+| `WorkItem` (compact) | Sidebar and notification rows |
+| `TaskQueue` | Bordered inbox container with empty state |
+| `TaskQueue` (sectioned) | Grouped inbox: Escalated, Awaiting review, Active |
+| `TaskQueueHeader` | Open, review, overdue, and escalated counts |
+| `TaskQueueSection` | Labelled group with tone (default, warning, danger) |
+| `WorkItemStatusBadge` | Full workflow state set |
+| `WorkItemAutomationBadge` | automatable · R-A-S · manual |
+| `WorkItemDueBadge` | Due, statutory, or follow-up with overdue emphasis |
+| `WorkItemMissingItems` | Unmet prerequisites block |
+| `WorkItemAdvisory` | Non-blocking AI advisory note |
+
+**Rules:**
+- List layout scan order: priority bar → title → meta → badges → assignee.
+- R-A-S items use `awaiting_review` status and the amber `R-A-S` automation badge.
+- AI failures map to `failed` or `manual_required`, never silent success.
+- Statutory due dates use `dueKind: "statutory"` and overdue danger styling.
+- Group queues by urgency: Escalated first, then Awaiting review, then Active.
 
 ### Bento Grid
 
@@ -478,6 +619,14 @@ export default {
           DEFAULT: "#043F2E",
           muted:   "#4A7A62",
         },
+        danger: {
+          DEFAULT: "#C44B47",
+          soft:    "#F5E0DE",
+        },
+        warning: {
+          DEFAULT: "#A8651A",
+          soft:    "#F8ECDC",
+        },
         border: "#D4E8C2",
       },
       fontFamily: {
@@ -528,3 +677,7 @@ Include this block when prompting AI tools to build Instant Strata UI:
 |---|---|
 | 2026-06-15 | Initial specification |
 | 2026-06-15 | Revised, white as dominant background, dark sections used sparingly, updated colours to match brand reference palette, expanded whitespace guidance |
+| 2026-06-15 | Added Scheme identity component guidance (SchemeCard, SchemeContextBar, primitives) |
+| 2026-06-15 | Added Lot identity component guidance (LotCard, LotBadge, roll lists) |
+| 2026-06-15 | Added Owner identity component guidance (OwnerRollRow, OwnerCard, directory) |
+| 2026-06-15 | Added Task queue and WorkItem guidance (workflow states, R-A-S, sectioned inbox) |

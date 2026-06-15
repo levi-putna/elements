@@ -41,6 +41,10 @@
   --color-accent:            var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive:       var(--destructive);
+  --color-danger:            var(--danger);
+  --color-danger-soft:       var(--danger-soft);
+  --color-warning:           var(--warning);
+  --color-warning-soft:      var(--warning-soft);
   --color-border:            var(--border);
   --color-input:             var(--input);
   --color-ring:              var(--ring);
@@ -101,7 +105,12 @@
   --accent:                  #EBF8C2;
   --accent-foreground:       #043F2E;
 
-  --destructive:             oklch(0.577 0.245 27.325);
+  /* Danger = terracotta red; warning = amber */
+  --danger:                  #C44B47;
+  --danger-soft:             #F5E0DE;
+  --warning:                 #A8651A;
+  --warning-soft:            #F8ECDC;
+  --destructive:             var(--danger);
 
   /* Borders: very light green tint */
   --border:                  #D4E8C2;
@@ -119,6 +128,49 @@
   --sidebar-accent:          #EEF2E3;
   --sidebar-accent-foreground: #043F2E;
   --sidebar-border:          #D4E8C2;
+  --sidebar-ring:            #C8F169;
+}
+
+.dark {
+  /* Docs shell: deep forest canvas with lime accents */
+  --background:              #021A12;
+  --foreground:              #EEF2E3;
+
+  --card:                    #032B1F;
+  --card-foreground:         #EEF2E3;
+
+  --popover:                 #032B1F;
+  --popover-foreground:      #EEF2E3;
+
+  --primary:                 #C8F169;
+  --primary-foreground:      #043F2E;
+
+  --secondary:               #0A5C3D;
+  --secondary-foreground:    #EEF2E3;
+
+  --muted:                   #0A5C3D;
+  --muted-foreground:        #8FB89A;
+
+  --accent:                  #1A4D38;
+  --accent-foreground:       #C8F169;
+
+  --danger:                  #E8A09C;
+  --danger-soft:             #3D1F1E;
+  --warning:                 #E8B06A;
+  --warning-soft:            #3D2E1A;
+  --destructive:             var(--danger);
+
+  --border:                  #1A4D38;
+  --input:                   #1A4D38;
+  --ring:                    #C8F169;
+
+  --sidebar:                 #043F2E;
+  --sidebar-foreground:      #EEF2E3;
+  --sidebar-primary:         #C8F169;
+  --sidebar-primary-foreground: #043F2E;
+  --sidebar-accent:          #0A5C3D;
+  --sidebar-accent-foreground: #EEF2E3;
+  --sidebar-border:          #032B1F;
   --sidebar-ring:            #C8F169;
 }
 
@@ -173,7 +225,7 @@
   .docs-prose p {
     font-size: 0.9375rem;
     line-height: 1.7;
-    color: #4A7A62;
+    color: var(--muted-foreground);
     margin-bottom: 1rem;
   }
   /* docs-prose links inherit from base layer: no override needed */

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field",
+  "type": "registry:ui",
+  "description": "Field primitives built on Base UI: Field, FieldLabel (with required + optional Hint), FieldDescription, FieldError, FieldGroup, and FieldSet/FieldLegend (with optional Hint).",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils", "label", "hint"],
+  "files": [
+    {
+      "path": "registry/field/field.tsx",
+      "target": "components/ui/field.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

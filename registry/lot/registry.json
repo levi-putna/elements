@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "lot",
+  "type": "registry:ui",
+  "description": "Strata lot identity primitives: badges, cards, roll lists, and levy status for owner rolls.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["utils", "badge"],
+  "files": [
+    {
+      "path": "registry/lot/lot.tsx",
+      "target": "components/ui/lot.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

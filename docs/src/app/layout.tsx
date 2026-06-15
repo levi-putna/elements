@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Young_Serif } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+import { ModeToggle } from "@/components/docs/mode-toggle";
 import { TableOfContents } from "@/components/docs/table-of-contents";
+import { ThemeProvider } from "@/components/theme-provider";
 import { LogoMark } from "@/components/ui/logo";
 
 const youngSerif = Young_Serif({
@@ -45,7 +47,9 @@ const components = [
     label: "Base",
     items: [
       { href: "/components/button", label: "Button" },
+      { href: "/components/badge", label: "Badge" },
       { href: "/components/avatar", label: "Avatar" },
+      { href: "/components/dialog", label: "Dialog" },
       { href: "/components/skeleton", label: "Skeleton" },
       { href: "/components/shimmer", label: "Shimmer" },
     ],
@@ -63,6 +67,11 @@ const components = [
     items: [
       { href: "/components/sidebar", label: "Sidebar" },
       { href: "/components/app-layout", label: "App Layout" },
+      { href: "/components/document", label: "Document" },
+      { href: "/components/scheme", label: "Scheme" },
+      { href: "/components/lot", label: "Lot" },
+      { href: "/components/owner", label: "Owner" },
+      { href: "/components/task", label: "Task" },
     ],
   },
   {
@@ -92,10 +101,17 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${youngSerif.variable} ${inter.variable} ${jetbrainsMono.variable} h-full`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
         {/* Top nav: left column width matches sidebar on md+ */}
-        <header className="sticky top-0 z-40 h-14 border-b border-border bg-white/95 backdrop-blur-sm shrink-0">
+        <header className="sticky top-0 z-40 h-14 border-b border-border bg-background/95 backdrop-blur-sm shrink-0">
           <div className="flex h-full items-stretch">
             {/* Logo column: bordered cell aligned to sidebar width */}
             <div className="flex items-center gap-3 px-6 md:w-60 md:shrink-0 md:border-r md:border-border md:px-4">
@@ -113,10 +129,11 @@ export default function RootLayout({
             </div>
 
             {/* Nav links */}
-            <nav className="flex flex-1 items-center justify-end gap-5 px-6">
+            <nav className="flex flex-1 items-center justify-end gap-3 px-6">
+              <ModeToggle />
               <Link
                 href="/"
-                className="text-sm text-ink-muted hover:text-foreground transition-colors duration-150 no-underline"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-150 no-underline"
               >
                 Docs
               </Link>
@@ -124,7 +141,7 @@ export default function RootLayout({
                 href="https://github.com/levi-putna/elements"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm text-ink-muted hover:text-foreground transition-colors duration-150 flex items-center gap-1.5 no-underline"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-150 flex items-center gap-1.5 no-underline"
               >
                 <svg
                   className="size-4"
@@ -186,6 +203,7 @@ export default function RootLayout({
         </div>
 
         <TableOfContents />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -36,6 +36,7 @@ const AVATAR_PROPS = [
   { name: "fallback", type: "ReactNode", description: "Explicit fallback content, overriding the derived initials." },
   { name: "variant", type: '"default" | "primary"', default: '"default"', description: "default = off-white background with forest text. primary = forest background with white text." },
   { name: "size", type: '"sm" | "md" | "lg" | "xl"', default: '"md"', description: "Avatar dimensions: sm 24px, md 32px, lg 40px, xl 48px." },
+  { name: "shape", type: '"square" | "round"', default: '"square"', description: "square = system users (managers, staff). round = strata owners via OwnerAvatar." },
 ];
 
 const GROUP_PROPS = [
@@ -118,6 +119,65 @@ export default function AvatarPage() {
             <Avatar name="Margaret Hamilton" src="/missing.jpg" variant="primary" size="lg" />
           </div>
         </ComponentPreview>
+      </section>
+
+      {/* Shape */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Shape</h2>
+        <p className="text-sm text-ink-muted mb-5 leading-relaxed max-w-3xl">
+          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">square</code> (default)
+          is for system users: managers, staff, and assignees in the app shell.{" "}
+          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">round</code> is for
+          strata roll owners via{" "}
+          <a href="/components/owner" className="text-forest underline underline-offset-2">
+            OwnerAvatar
+          </a>
+          , so proprietors are visually distinct from internal team members in mixed lists.
+        </p>
+        <ComponentPreview label="square (system) · round (owner)">
+          <div className="flex items-center gap-8">
+            <div className="flex flex-col items-center gap-2">
+              <Avatar name="Jane Smith" size="lg" shape="square" />
+              <span className="text-[10px] font-mono text-ink-muted">square · manager</span>
+            </div>
+            <div className="flex flex-col items-center gap-2">
+              <Avatar name="James &amp; Sarah Chen" size="lg" shape="round" />
+              <span className="text-[10px] font-mono text-ink-muted">round · owner</span>
+            </div>
+          </div>
+        </ComponentPreview>
+      </section>
+
+      {/* Initials */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Initials</h2>
+        <p className="text-sm text-ink-muted mb-5 leading-relaxed max-w-3xl">
+          Initials are derived from <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">name</code>.
+          Joint proprietors use the first initial of each person and the shared surname.
+          Ampersands and &quot;and&quot; are never included in the initials.
+        </p>
+        <ComponentPreview label="Joint and single owner names">
+          <div className="flex flex-wrap items-center gap-4">
+            {[
+              { name: "James & Sarah Chen", initials: "JC" },
+              { name: "Daniel & Kim Wu", initials: "DW" },
+              { name: "Margaret O'Brien", initials: "MO" },
+              { name: "North Shore Investments Pty Ltd", initials: "NS" },
+            ].map(({ name, initials }) => (
+              <div key={name} className="flex flex-col items-center gap-2">
+                <Avatar name={name} shape="round" size="lg" />
+                <span className="text-[10px] font-mono text-ink-muted text-center max-w-[120px]">
+                  {initials} · {name.split(" ").slice(0, 2).join(" ")}…
+                </span>
+              </div>
+            ))}
+          </div>
+        </ComponentPreview>
+        <p className="mt-3 text-xs text-ink-muted">
+          Use <code className="font-mono text-xs">getAvatarInitials(&#123; name &#125;)</code> when you
+          need the initials string without rendering an avatar. Preview expected:{" "}
+          JC for James &amp; Sarah Chen.
+        </p>
       </section>
 
       {/* Sizes */}

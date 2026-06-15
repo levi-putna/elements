@@ -26,6 +26,13 @@ const foundationLinks = [
 
 const components = [
   {
+    href: "/components/badge",
+    label: "Badge",
+    description:
+      "Shared badge primitive with semantic variants and domain badge catalogue.",
+    badge: "Base",
+  },
+  {
     href: "/components/button",
     label: "Button",
     description: "Extends the shadcn/ui button with a loading state and spinner.",
@@ -51,6 +58,41 @@ const components = [
     description:
       "Streaming markdown messages with code highlighting, math, mermaid, and custom entity tags.",
     badge: "AI",
+  },
+  {
+    href: "/components/document",
+    label: "Document",
+    description:
+      "File and folder element with list, thing, and wide layouts for document libraries.",
+    badge: "Application",
+  },
+  {
+    href: "/components/scheme",
+    label: "Scheme",
+    description:
+      "Strata scheme identity: cards, context bar, badges, and portfolio layouts.",
+    badge: "Application",
+  },
+  {
+    href: "/components/lot",
+    label: "Lot",
+    description:
+      "Strata lot identity: badges, roll lists, levy status, and proxy eligibility.",
+    badge: "Application",
+  },
+  {
+    href: "/components/owner",
+    label: "Owner",
+    description:
+      "Registered proprietor identity: roll rows, profile cards, portal and lot holdings.",
+    badge: "Application",
+  },
+  {
+    href: "/components/task",
+    label: "Task",
+    description:
+      "Manager task queue and work items with workflow states, R-A-S gates, and due dates.",
+    badge: "Application",
   },
 ];
 
@@ -222,8 +264,15 @@ export default function HomePage() {
           <p>
             This design system encodes those qualities in reusable tokens and components.
             Marketing pages use generous whitespace and serif headlines to signal expertise.
-            Application screens stay light, legible, and fast. AI-assisted workflows inherit
-            the same visual language so the product feels like one coherent place.
+            Application screens stay legible and fast. AI-assisted workflows inherit the same
+            visual language so the product feels like one coherent place.
+          </p>
+          <p>
+            Both light and dark modes are supported. Light mode keeps white and off-white as
+            the default canvas; dark mode maps the same forest and lime palette to a deep
+            green shell for low-light reading and extended sessions. Semantic tokens carry
+            across both themes, so components adapt without one-off overrides. Use the theme
+            toggle in the site header to preview either version.
           </p>
         </div>
       </section>

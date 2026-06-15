@@ -9,7 +9,7 @@ const CORE_COLOURS = [
     token: "--color-white / bg-background",
     hex: "#FFFFFF",
     role: "Primary page background. Default for all content sections.",
-    className: "bg-white",
+    className: "bg-background",
     textClass: "text-ink",
   },
   {
@@ -57,7 +57,7 @@ const CORE_COLOURS = [
     token: "--color-ink / text-foreground",
     hex: "#043F2E",
     role: "Headings and primary body text on light backgrounds.",
-    className: "bg-white border border-border",
+    className: "bg-background border border-border",
     textClass: "text-ink",
     sample: "Primary heading text",
   },
@@ -66,7 +66,7 @@ const CORE_COLOURS = [
     token: "--color-ink-muted / text-muted-foreground",
     hex: "#4A7A62",
     role: "Secondary text: labels, captions, metadata, eyebrows on light sections.",
-    className: "bg-white border border-border",
+    className: "bg-background border border-border",
     textClass: "text-ink-muted",
     sample: "Secondary label text",
   },
@@ -75,16 +75,51 @@ const CORE_COLOURS = [
     token: "--color-border / border-border",
     hex: "#D4E8C2",
     role: "Subtle borders on cards, inputs, and dividers on light backgrounds.",
-    className: "bg-white border-2 border-border",
+    className: "bg-background border-2 border-border",
     textClass: "text-ink-muted",
     sample: "1px border",
+  },
+] as const;
+
+const STATUS_COLOURS = [
+  {
+    name: "Danger",
+    token: "--color-danger / text-danger",
+    hex: "#C44B47",
+    role: "Errors, destructive actions, and required field markers. Earthy terracotta red that complements the greens.",
+    className: "bg-danger",
+    textClass: "text-white",
+  },
+  {
+    name: "Danger soft",
+    token: "--color-danger-soft / bg-danger-soft",
+    hex: "#F5E0DE",
+    role: "Alert backgrounds, error banners, and validation callouts. Pair with ink text.",
+    className: "bg-danger-soft",
+    textClass: "text-ink",
+  },
+  {
+    name: "Warning",
+    token: "--color-warning / text-warning",
+    hex: "#A8651A",
+    role: "Caution states, pending actions, and non-blocking alerts. Warm amber, distinct from lime.",
+    className: "bg-warning",
+    textClass: "text-white",
+  },
+  {
+    name: "Warning soft",
+    token: "--color-warning-soft / bg-warning-soft",
+    hex: "#F8ECDC",
+    role: "Warning bands and subtle highlights. Pair with ink text, same pattern as lime-soft.",
+    className: "bg-warning-soft",
+    textClass: "text-ink",
   },
 ] as const;
 
 const SECTION_TYPES = [
   {
     type: "Default",
-    background: "bg-white",
+    background: "bg-background",
     hex: "#FFFFFF",
     heading: "text-ink",
     body: "text-ink-muted",
@@ -146,7 +181,37 @@ const FOREGROUND_RULES = [
     hex: "#043F2E",
     use: "Text on lime-filled buttons and primary actions. Never white text on lime.",
   },
+  {
+    token: "text-danger / text-destructive",
+    hex: "#C44B47",
+    use: "Error messages, destructive labels, and required asterisks on light backgrounds.",
+  },
+  {
+    token: "text-warning",
+    hex: "#A8651A",
+    use: "Caution labels and warning icons on light backgrounds. Use danger-soft or warning-soft fills behind copy.",
+  },
 ] as const;
+
+interface HexPreviewProps {
+  hex: string;
+  label?: string;
+}
+
+/**
+ * Renders a small colour chip for inline token previews.
+ */
+function HexPreview({ hex, label }: HexPreviewProps) {
+  return (
+    <span
+      className="size-5 shrink-0 rounded-sm border border-border shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)]"
+      style={{ backgroundColor: hex }}
+      aria-hidden={label ? undefined : true}
+      aria-label={label ? `${label}: ${hex}` : undefined}
+      title={hex}
+    />
+  );
+}
 
 interface ColourSwatchProps {
   name: string;
@@ -230,6 +295,25 @@ export default function ColoursPage() {
       </section>
 
       {/* ══════════════════════════════════════════════
+          STATUS COLOURS
+      ══════════════════════════════════════════════ */}
+      <section id="status-colours">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-8">
+          Status Colours
+        </p>
+        <p className="text-sm text-ink-muted leading-relaxed mb-6 max-w-2xl">
+          Danger and warning sit outside the brand greens but share their warmth. Terracotta red
+          and amber echo the organic palette without competing with lime. Use soft tints for
+          backgrounds and the saturated tokens for text, borders, and icons.
+        </p>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {STATUS_COLOURS.map((colour) => (
+            <ColourSwatch key={colour.name} {...colour} />
+          ))}
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
           SEMANTIC TOKENS
       ══════════════════════════════════════════════ */}
       <section id="semantic-tokens">
@@ -255,11 +339,19 @@ export default function ColoursPage() {
             { token: "--muted-foreground", utility: "text-muted-foreground", value: "#4A7A62", maps: "Secondary text" },
             { token: "--accent", utility: "bg-accent", value: "#EBF8C2", maps: "Highlight bands, accent cards" },
             { token: "--accent-foreground", utility: "text-accent-foreground", value: "#043F2E", maps: "Text on accent backgrounds" },
+            { token: "--danger", utility: "text-danger", value: "#C44B47", maps: "Errors, destructive actions, required markers" },
+            { token: "--danger-soft", utility: "bg-danger-soft", value: "#F5E0DE", maps: "Error banners and validation backgrounds" },
+            { token: "--warning", utility: "text-warning", value: "#A8651A", maps: "Caution labels and pending states" },
+            { token: "--warning-soft", utility: "bg-warning-soft", value: "#F8ECDC", maps: "Warning bands and subtle highlights" },
+            { token: "--destructive", utility: "text-destructive", value: "#C44B47", maps: "shadcn/ui alias for danger" },
             { token: "--border", utility: "border-border", value: "#D4E8C2", maps: "Card, input, and divider borders" },
             { token: "--ring", utility: "ring-ring", value: "#C8F169", maps: "Focus rings on interactive elements" },
           ].map((row) => (
-            <div key={row.token} className="px-6 py-4 bg-white flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
-              <code className="font-mono text-xs text-foreground shrink-0 w-44">{row.token}</code>
+            <div key={row.token} className="px-6 py-4 bg-background flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
+              <div className="flex items-center gap-2.5 shrink-0 sm:w-52">
+                <HexPreview hex={row.value} label={row.token} />
+                <code className="font-mono text-xs text-foreground">{row.token}</code>
+              </div>
               <code className="font-mono text-xs text-lime shrink-0 w-40 hidden sm:block">{row.utility}</code>
               <span className="font-mono text-xs text-ink-muted shrink-0 w-20">{row.value}</span>
               <span className="font-sans text-xs text-ink-muted">{row.maps}</span>
@@ -299,7 +391,7 @@ export default function ColoursPage() {
               <div className={`px-8 py-3 border-t flex flex-wrap items-center gap-4 ${
                 section.type === "Dark"
                   ? "border-white/10 bg-forest-mid"
-                  : "border-border bg-white/50"
+                  : "border-border bg-secondary"
               }`}>
                 <span className={`text-xs font-semibold ${section.type === "Dark" ? "text-white" : "text-foreground"}`}>
                   {section.type}
@@ -330,7 +422,7 @@ export default function ColoursPage() {
 
         <div className="rounded-sm border border-border overflow-hidden divide-y divide-border">
           {FOREGROUND_RULES.map((rule) => (
-            <div key={rule.token} className="px-6 py-5 bg-white flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-8">
+            <div key={rule.token} className="px-6 py-5 bg-background flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-8">
               <div className="shrink-0 sm:w-52">
                 <code className="font-mono text-xs text-foreground">{rule.token}</code>
                 <p className="font-mono text-[11px] text-ink-muted mt-1">{rule.hex}</p>
@@ -379,7 +471,7 @@ export default function ColoursPage() {
                 type="text"
                 readOnly
                 value="Focus ring"
-                className="rounded-sm border border-border bg-white px-3 py-2 text-sm text-foreground outline-none ring-2 ring-lime ring-offset-2"
+                className="rounded-sm border border-border bg-background px-3 py-2 text-sm text-foreground outline-none ring-2 ring-lime ring-offset-2"
                 aria-label="Focus ring example"
               />
               <p className="font-sans text-xs text-ink-muted">Focus ring uses lime via --ring.</p>
@@ -397,6 +489,48 @@ export default function ColoursPage() {
       </section>
 
       {/* ══════════════════════════════════════════════
+          STATUS USAGE
+      ══════════════════════════════════════════════ */}
+      <section id="status-usage">
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-8">
+          Status Usage
+        </p>
+
+        <ComponentPreview label="Danger and warning on light backgrounds">
+          <div className="w-full max-w-[640px] space-y-4 py-2">
+            {/* Danger alert */}
+            <div className="rounded-sm border border-[#EDB8B4] bg-danger-soft px-5 py-4">
+              <p className="font-sans text-sm font-semibold text-danger mb-1">
+                Levy payment failed
+              </p>
+              <p className="font-sans text-sm text-ink-muted leading-relaxed">
+                Soft danger background with ink body copy and terracotta heading.
+              </p>
+            </div>
+
+            {/* Warning alert */}
+            <div className="rounded-sm border border-[#E8C9A0] bg-warning-soft px-5 py-4">
+              <p className="font-sans text-sm font-semibold text-warning mb-1">
+                AGM date not confirmed
+              </p>
+              <p className="font-sans text-sm text-ink-muted leading-relaxed">
+                Soft warning background with amber heading. Distinct from lime accent.
+              </p>
+            </div>
+
+            {/* Inline markers */}
+            <p className="font-sans text-sm text-ink-muted pt-2">
+              Required fields use{" "}
+              <span className="text-danger font-semibold" aria-hidden="true">*</span>
+              <span className="sr-only">required</span>{" "}
+              danger text. Pending items can use{" "}
+              <span className="text-warning font-semibold">warning</span> inline.
+            </p>
+          </div>
+        </ComponentPreview>
+      </section>
+
+      {/* ══════════════════════════════════════════════
           CARDS ON BACKGROUNDS
       ══════════════════════════════════════════════ */}
       <section id="cards">
@@ -407,13 +541,13 @@ export default function ColoursPage() {
         <ComponentPreview label="Card styles by context">
           <div className="w-full grid gap-6 sm:grid-cols-3 py-2">
             {/* Bordered card */}
-            <div className="rounded-md border border-border bg-white p-6">
+            <div className="rounded-md border border-border bg-background p-6">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
                 Bordered
               </p>
-              <p className="font-sans text-sm font-semibold text-ink mb-2">White card</p>
+              <p className="font-sans text-sm font-semibold text-ink mb-2">Default card</p>
               <p className="font-sans text-xs text-ink-muted leading-relaxed">
-                On white or off-white sections. Subtle border, optional light shadow.
+                On default or off-white sections. Subtle border, optional light shadow.
               </p>
             </div>
 
@@ -457,10 +591,10 @@ export default function ColoursPage() {
         <div className="rounded-sm border border-border overflow-hidden font-mono text-xs">
           {[
             { section: "Hero", type: "Dark", className: "bg-forest text-white" },
-            { section: "Social proof", type: "Default", className: "bg-white text-ink" },
+            { section: "Social proof", type: "Default", className: "bg-background text-ink" },
             { section: "Features", type: "Subtle", className: "bg-off-white text-ink" },
             { section: "CTA band", type: "Accent", className: "bg-lime-soft text-ink" },
-            { section: "Feature rows", type: "Default", className: "bg-white text-ink" },
+            { section: "Feature rows", type: "Default", className: "bg-background text-ink" },
             { section: "Testimonial", type: "Dark", className: "bg-forest text-white" },
             { section: "Pricing", type: "Subtle", className: "bg-off-white text-ink" },
             { section: "Final CTA", type: "Accent", className: "bg-lime-soft text-ink" },
@@ -495,6 +629,8 @@ export default function ColoursPage() {
             "Borders on light surfaces use the green-tinted border token, not grey.",
             "No more than three dark sections per page. Never two dark sections in a row.",
             "Logo: forest letterforms on lime container (light bg), forest container with white letterforms (primary bg), or lime letterforms on forest container (dark bg). Container rotated 15°; letterforms upright.",
+            "Danger and warning are for status only. Never use them as section backgrounds or brand accents.",
+            "Status backgrounds: danger-soft or warning-soft with ink body text. Saturated tokens for headings, icons, and borders.",
           ].map((rule) => (
             <li key={rule} className="flex gap-3 font-sans text-sm text-ink-muted leading-relaxed">
               <span className="text-lime shrink-0 mt-0.5" aria-hidden="true">-</span>

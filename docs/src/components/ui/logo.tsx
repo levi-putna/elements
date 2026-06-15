@@ -17,8 +17,8 @@ const SURFACE_STYLES = {
   },
   dark: {
     container: "bg-secondary",
-    mark: "text-primary",
-    wordmark: "text-primary",
+    mark: "text-forest",
+    wordmark: "text-forest",
   },
 } as const
 

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input",
+  "type": "registry:ui",
+  "description": "A text input built on Base UI with focus, disabled, and invalid states.",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/input/input.tsx",
+      "target": "components/ui/input.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

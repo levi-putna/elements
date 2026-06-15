@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hint",
+  "type": "registry:ui",
+  "description": "An optional blue question icon that reveals supporting detail in a popover. Pairs with Label and FieldLabel; supports a required flag that surfaces a \"Required\" note.",
+  "dependencies": ["@base-ui/react", "lucide-react"],
+  "registryDependencies": ["utils", "popover"],
+  "files": [
+    {
+      "path": "registry/hint/hint.tsx",
+      "target": "components/ui/hint.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

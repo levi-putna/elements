@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "scheme",
+  "type": "registry:ui",
+  "description": "Strata scheme identity primitives: cards, context bar, badges, stats, and portfolio layouts.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["utils", "dropdown-menu", "badge"],
+  "files": [
+    {
+      "path": "registry/scheme/scheme.tsx",
+      "target": "components/ui/scheme.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "owner",
+  "type": "registry:ui",
+  "description": "Strata owner identity primitives: roll rows, profile cards, portal status, and lot holdings.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["utils", "avatar", "lot", "badge"],
+  "files": [
+    {
+      "path": "registry/owner/owner.tsx",
+      "target": "components/ui/owner.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils"
 // ─────────────────────────────────────────────────────────
 // Avatar
 //
-// A rounded-square identity mark showing a photo when available,
-// falling back to initials derived from `name`. Two brand variants:
+// A rounded-square identity mark for system users (managers, staff).
+// Strata roll owners use OwnerAvatar (round) from the owner component.
+// Falls back to initials derived from `name`. Two brand variants:
 //   • default  — off-white background, forest text (the calm default)
 //   • primary  — forest background, white text (high emphasis)
 // ─────────────────────────────────────────────────────────
@@ -27,15 +28,52 @@ const sizeStyles: Record<AvatarSize, string> = {
   xl: "size-12 text-base",
 }
 
-function initialsFromName(name?: string) {
+const shapeStyles = {
+  square: "rounded-md",
+  round: "rounded-full",
+} as const
+
+export type AvatarShape = keyof typeof shapeStyles
+
+/**
+ * Derive up to two initials from a person or entity name.
+ * Joint names like "James & Sarah Chen" resolve to JC, not J&.
+ */
+export function getAvatarInitials({ name }: { name?: string }): string {
   if (!name) return ""
-  return name
+
+  const normalized = name
     .trim()
+    .replace(/\s*&\s*/g, " & ")
+    .replace(/\s+and\s+/gi, " & ")
+
+  if (normalized.includes(" & ")) {
+    const people = normalized
+      .split(" & ")
+      .map((part) => part.trim())
+      .filter(Boolean)
+
+    if (people.length >= 2) {
+      const firstInitial = people[0].split(/\s+/).filter(Boolean)[0]?.[0] ?? ""
+      const surname =
+        people[people.length - 1].split(/\s+/).filter(Boolean).pop()?.[0] ?? ""
+      return `${firstInitial}${surname}`.toUpperCase()
+    }
+  }
+
+  const words = normalized
     .split(/\s+/)
-    .map((part) => part[0])
+    .filter((word) => word !== "&" && word.length > 0)
+
+  return words
+    .map((word) => word[0])
     .slice(0, 2)
     .join("")
     .toUpperCase()
+}
+
+function initialsFromName(name?: string) {
+  return getAvatarInitials({ name })
 }
 
 export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -47,6 +85,11 @@ export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
   fallback?: React.ReactNode
   variant?: AvatarVariant
   size?: AvatarSize
+  /**
+   * square = rounded-md for system users (managers, staff).
+   * round = circle for strata roll owners via {@link OwnerAvatar}.
+   */
+  shape?: AvatarShape
 }
 
 export function Avatar({
@@ -55,6 +98,7 @@ export function Avatar({
   fallback,
   variant = "default",
   size = "md",
+  shape = "square",
   className,
   ...props
 }: AvatarProps) {
@@ -65,7 +109,8 @@ export function Avatar({
     <span
       data-slot="avatar"
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-md font-semibold select-none",
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden font-semibold select-none",
+        shapeStyles[shape],
         variantStyles[variant],
         sizeStyles[size],
         className

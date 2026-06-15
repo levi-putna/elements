@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "type": "registry:ui",
+  "description": "Shared badge primitive with semantic variants for status, identifiers, and domain labels across Instant Strata.",
+  "dependencies": ["class-variance-authority", "lucide-react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/badge/badge.tsx",
+      "target": "components/ui/badge.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

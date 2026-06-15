@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "popover",
+  "type": "registry:ui",
+  "description": "A popover built on Base UI: trigger, positioned content, title, and description.",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/popover/popover.tsx",
+      "target": "components/ui/popover.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

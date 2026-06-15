@@ -32,7 +32,7 @@ const PROPS = [
     type: '"light" | "primary" | "dark"',
     default: '"light"',
     description:
-      "Background context. Light: lime container with forest letterforms. Primary: forest container with white letterforms on lime backgrounds. Dark: secondary container with primary (lime) letterforms and wordmark on forest backgrounds.",
+      "Background context. Light: lime container with forest letterforms. Primary: forest container with white letterforms on lime backgrounds. Dark: secondary container with forest letterforms and wordmark on forest backgrounds.",
   },
   {
     name: "size",
@@ -402,7 +402,7 @@ export default function LogoPage() {
             "Clear space: equal to the container width on all sides.",
             "Light backgrounds: lime container, forest letterforms.",
             "Primary (lime) backgrounds: forest container, white letterforms.",
-            "Dark (forest) backgrounds: secondary container, primary (lime) letterforms and wordmark.",
+            "Dark (forest) backgrounds: secondary container, forest letterforms and wordmark.",
             "Never stretch, recolour outside these surfaces, or add drop shadows.",
           ].map((rule) => (
             <li key={rule} className="flex gap-3 font-sans text-sm text-ink-muted leading-relaxed">

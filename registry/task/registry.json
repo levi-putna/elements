@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "task",
+  "type": "registry:ui",
+  "description": "Manager task queue and work items with workflow states, R-A-S gates, and statutory due dates.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["utils", "avatar", "badge"],
+  "files": [
+    {
+      "path": "registry/task/task.tsx",
+      "target": "components/ui/task.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

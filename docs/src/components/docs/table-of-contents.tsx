@@ -95,7 +95,7 @@ export function TableOfContents() {
             : "opacity-0 translate-x-2 pointer-events-none"
         )}
       >
-        <div className="rounded-sm border border-border bg-white shadow-md py-2 w-48">
+        <div className="rounded-sm border border-border bg-card shadow-md py-2 w-48">
           <p className="text-[9px] font-semibold uppercase tracking-widest text-ink-muted/60 px-3 pb-1.5">
             On this page
           </p>
