@@ -42,6 +42,10 @@ const components = [
       { href: "/components/message", label: "Message" },
     ],
   },
+  {
+    label: "Website",
+    items: [{ href: "/components/section", label: "Section" }],
+  },
 ];
 
 export default function RootLayout({

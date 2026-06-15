@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "section",
+  "type": "registry:ui",
+  "description": "Page section wrapper with typed backgrounds: default (white), secondary (off-white), primary (forest dark), alternative (lime-soft). Optionally constrains content to max-width with standard padding.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/section/section.tsx",
+      "target": "components/ui/section.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}
