@@ -13,7 +13,7 @@ export default function TypographyPage() {
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
           Foundation
         </p>
-        <h1 className="font-display text-4xl font-bold text-foreground mb-4 leading-tight">
+        <h1 className="font-display font-bold text-4xl text-foreground mb-4 leading-tight">
           Typography
         </h1>
         <p className="text-base text-ink-muted leading-relaxed">
@@ -36,10 +36,10 @@ export default function TypographyPage() {
             <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-6">
               Grenette · Display &amp; Headings
             </p>
-            <p className="font-display text-6xl font-bold text-foreground leading-none mb-6">
+            <p className="font-display font-bold text-6xl text-foreground leading-none mb-6">
               Strata
             </p>
-            <p className="font-display text-2xl font-bold text-foreground mb-2 leading-snug">
+            <p className="font-display font-bold text-2xl text-foreground mb-2 leading-snug">
               Strata management, simplified.
             </p>
             <p className="font-display text-base font-normal text-ink-muted italic mb-8">
@@ -132,7 +132,7 @@ export default function TypographyPage() {
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-1">Display</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Grenette · 700 · 64px · −0.02em</span>
             </div>
-            <p className="font-display text-[64px] font-bold text-foreground leading-none">
+            <p className="font-display font-bold text-[64px] text-foreground leading-none">
               Strata
             </p>
           </div>
@@ -143,7 +143,7 @@ export default function TypographyPage() {
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">H1</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Grenette · 700 · 48px</span>
             </div>
-            <h1 className="font-display text-5xl font-bold text-foreground leading-tight">
+            <h1 className="font-display font-bold text-5xl text-foreground leading-tight">
               Everything in one place
             </h1>
           </div>
@@ -154,7 +154,7 @@ export default function TypographyPage() {
               <span className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted shrink-0 pt-0.5">H2</span>
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Grenette · 500 · 36px</span>
             </div>
-            <h2 className="font-display text-4xl font-medium text-foreground leading-snug">
+            <h2 className="font-display font-bold text-4xl text-foreground leading-snug">
               Simplify your strata management
             </h2>
           </div>
@@ -248,7 +248,7 @@ export default function TypographyPage() {
         </p>
         <ComponentPreview label="Light section">
           <div className="w-full max-w-[640px] mx-auto space-y-4 py-4">
-            <h2 className="font-display text-3xl font-bold text-foreground leading-snug">
+            <h2 className="font-display font-bold text-3xl text-foreground leading-snug">
               One platform for every strata task
             </h2>
             <p className="font-sans text-base text-ink-muted leading-[1.65]">
@@ -280,7 +280,7 @@ export default function TypographyPage() {
               <div className="relative flex-1 min-w-0">
                 {/* Quote card */}
                 <div className="relative z-10 rounded-sm bg-[#EBF8C2] px-8 pt-8 pb-6">
-                  <p className="font-display text-xl font-medium leading-relaxed text-[#043F2E] mb-8">
+                  <p className="font-display text-xl leading-relaxed text-[#043F2E] mb-8">
                     Instant Strata is incredibly valuable — our team can raise a levy, send notices, and log a maintenance job in minutes, not hours. Owners actually read our communications now.
                   </p>
                   <div className="flex items-end justify-between gap-4">
@@ -297,7 +297,7 @@ export default function TypographyPage() {
                 {/* Oversized quotation mark — graphic device */}
                 <div
                   aria-hidden="true"
-                  className="absolute -bottom-5 -left-3 font-display text-[120px] font-bold leading-none text-[#C8F169]/30 select-none z-0 translate-y-2"
+                  className="absolute -bottom-5 -left-3 font-display font-bold text-[120px] leading-none text-[#C8F169]/30 select-none z-0 translate-y-2"
                 >
                   ,,
                 </div>
@@ -380,7 +380,7 @@ export default function TypographyPage() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-ink-muted mb-3">
                 For strata managers
               </p>
-              <h2 className="font-display text-3xl font-bold text-foreground leading-tight">
+              <h2 className="font-display font-bold text-3xl text-foreground leading-tight">
                 Everything in one place
               </h2>
             </div>
@@ -389,7 +389,7 @@ export default function TypographyPage() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-[#C8F169] mb-3">
                 What owners love
               </p>
-              <h2 className="font-display text-3xl font-bold text-white leading-tight bg-[#043F2E] -mx-8 -mb-6 px-8 pt-6 pb-8 rounded-b-sm">
+              <h2 className="font-display font-bold text-3xl text-white leading-tight bg-[#043F2E] -mx-8 -mb-6 px-8 pt-6 pb-8 rounded-b-sm">
                 Always in the loop
               </h2>
             </div>

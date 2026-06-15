@@ -315,7 +315,7 @@ export function BentoContentCell({
         )}
         <h3
           className={cn(
-            "font-display text-2xl font-bold leading-snug mb-3",
+            "font-display font-bold text-2xl leading-snug mb-3",
             type === "primary" || type === "dark-card" ? "text-white" : "text-[#043F2E]"
           )}
         >

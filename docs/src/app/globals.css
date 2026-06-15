@@ -3,14 +3,9 @@
 @import "shadcn/tailwind.css";
 
 /* ── Grenette (Grilli Type) ─────────────────────────────
-   Place font files in docs/public/fonts/.
-   Purchase and download from https://www.grillitype.com/typeface/gt-grenette
-   Expected file names:
-     Grenette-Regular.woff2
-     Grenette-RegularItalic.woff2
-     Grenette-Medium.woff2
-     Grenette-Bold.woff2
-   Until files are present Georgia is used as fallback.
+   Place purchased font files in docs/public/fonts/.
+   https://www.grillitype.com/typeface/gt-grenette
+   Georgia is used as a fallback until files are in place.
    ──────────────────────────────────────────────────── */
 @font-face {
   font-family: "Grenette";

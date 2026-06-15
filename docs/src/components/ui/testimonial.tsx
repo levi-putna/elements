@@ -111,7 +111,7 @@ export function Testimonial({
 
           {/* Quote text */}
           <div className="p-8 md:p-10">
-            <p className={cn("font-display text-xl md:text-2xl font-bold leading-snug", quoteColor[type])}>
+            <p className={cn("font-display font-bold text-xl md:text-2xl leading-snug", quoteColor[type])}>
               {quote}
             </p>
           </div>
@@ -150,7 +150,7 @@ export function Testimonial({
               <a
                 href={cta.href}
                 className={cn(
-                  "inline-flex items-center rounded-sm px-4 py-2 text-sm font-medium transition-colors duration-150 no-underline shrink-0",
+                  "inline-flex items-center rounded-sm px-4 py-2 text-sm transition-colors duration-150 no-underline shrink-0",
                   ctaBg[type]
                 )}
               >
@@ -166,7 +166,7 @@ export function Testimonial({
             aria-hidden="true"
             className={cn(
               "absolute -bottom-10 left-6 select-none leading-none",
-              "font-display text-[88px] font-bold",
+              "font-display font-bold text-[88px]",
               markColor[type]
             )}
           >
@@ -225,7 +225,7 @@ export function TestimonialBlock({
       <div
         aria-hidden="true"
         className={cn(
-          "absolute bottom-0 left-0 select-none leading-none font-display font-bold",
+          "absolute bottom-0 left-0 select-none leading-none font-display",
           "text-[140px]",
           type === "primary" || type === "dark"
             ? "text-[#C8F169]/20"
@@ -236,7 +236,7 @@ export function TestimonialBlock({
       </div>
 
       <div className={cn("relative z-10 rounded-xl max-w-2xl", cardBg[type], "p-10 md:p-12")}>
-        <p className={cn("font-display font-bold leading-snug mb-8", blockQuoteSize[size], quoteColor[type])}>
+        <p className={cn("font-display leading-snug mb-8", blockQuoteSize[size], quoteColor[type])}>
           {quote}
         </p>
         <div className={cn("flex flex-wrap items-end justify-between gap-4 pt-6 border-t", attributionBorder[type])}>
