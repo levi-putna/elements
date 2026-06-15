@@ -26,8 +26,16 @@ export const metadata: Metadata = {
 
 const components = [
   {
+    label: "Foundation",
+    items: [{ href: "/components/typography", label: "Typography" }],
+  },
+  {
     label: "Base",
-    items: [{ href: "/components/button", label: "Button" }],
+    items: [
+      { href: "/components/button", label: "Button" },
+      { href: "/components/skeleton", label: "Skeleton" },
+      { href: "/components/shimmer", label: "Shimmer" },
+    ],
   },
   {
     label: "AI",
