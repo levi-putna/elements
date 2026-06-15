@@ -47,7 +47,10 @@ const components = [
   },
   {
     label: "Website",
-    items: [{ href: "/components/section", label: "Section" }],
+    items: [
+      { href: "/components/section", label: "Section" },
+      { href: "/components/bento", label: "Bento" },
+    ],
   },
 ];
 

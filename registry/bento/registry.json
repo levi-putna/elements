@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "bento",
+  "type": "registry:ui",
+  "description": "Composable bento grid system. BentoGrid outer container + BentoCell for raw layout, BentoFeatureCell for icon/label cards (Mode-style), BentoContentCell for text sections, BentoVisualCell for image/screenshot fills.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/bento/bento.tsx",
+      "target": "components/ui/bento.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}
