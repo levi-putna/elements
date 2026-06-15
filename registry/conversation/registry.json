@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "conversation",
+  "type": "registry:ui",
+  "description": "AI chat conversation container with auto-scroll, scroll-to-bottom button, and markdown export. Extended from ai-elements with rectangular styling.",
+  "dependencies": [
+    "ai",
+    "lucide-react",
+    "use-stick-to-bottom"
+  ],
+  "registryDependencies": [
+    "utils",
+    "button"
+  ],
+  "files": [
+    {
+      "path": "registry/conversation/conversation.tsx",
+      "target": "components/ui/conversation.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

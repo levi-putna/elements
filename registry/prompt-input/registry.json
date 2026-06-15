@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "prompt-input",
+  "type": "registry:ui",
+  "description": "AI chat prompt input with model selector, file attachments, drag-and-drop, screenshot capture, and voice input. Extended from ai-elements with rectangular styling and built-in speech recognition.",
+  "dependencies": [
+    "@base-ui/react",
+    "ai",
+    "nanoid",
+    "lucide-react",
+    "class-variance-authority"
+  ],
+  "registryDependencies": [
+    "utils",
+    "command",
+    "dropdown-menu",
+    "hover-card",
+    "input-group",
+    "select",
+    "spinner",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/prompt-input/prompt-input.tsx",
+      "target": "components/ui/prompt-input.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "message",
+  "type": "registry:ui",
+  "description": "AI chat message components with streaming markdown, code highlighting, math, mermaid diagrams, and custom entity tags (person, location, strata-scheme). Extended from ai-elements.",
+  "dependencies": [
+    "ai",
+    "lucide-react",
+    "streamdown",
+    "@streamdown/code",
+    "@streamdown/math",
+    "@streamdown/mermaid",
+    "@streamdown/cjk"
+  ],
+  "registryDependencies": [
+    "utils",
+    "button",
+    "button-group",
+    "tooltip"
+  ],
+  "files": [
+    {
+      "path": "registry/message/message.tsx",
+      "target": "components/ui/message.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}
