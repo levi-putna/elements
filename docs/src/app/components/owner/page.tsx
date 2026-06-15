@@ -163,6 +163,15 @@ export default function OwnerPage() {
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">
           Primitives
         </h2>
+        <p className="text-sm text-ink-muted mb-6 max-w-3xl">
+          Owner badges compose the shared{" "}
+          <a href="/components/badge" className="text-forest underline underline-offset-2">
+            Badge
+          </a>{" "}
+          primitive. <code className="font-mono text-xs text-ink">OwnerRollHeader</code>{" "}
+          summary counts use <code className="font-mono text-xs text-ink">Badge</code>{" "}
+          for portal and invite totals. See the Badge docs for every owner badge state.
+        </p>
 
         <ComponentPreview label="Badges, chips, OwnerAvatar, and OwnerIdentity">
           <div className="flex flex-col gap-6 w-full max-w-lg py-2">
@@ -337,6 +346,14 @@ export default function OwnerPage() {
             committee communication). Multi-lot owners appear once with{" "}
             <code className="font-mono text-xs text-ink">OwnerLotChips</code>.
           </p>
+          <p>
+            <strong className="font-semibold text-ink">Badges</strong>: portal, type,
+            correspondence, and committee badges are catalogued on the{" "}
+            <a href="/components/badge" className="text-forest underline underline-offset-2">
+              Badge
+            </a>{" "}
+            page.
+          </p>
         </div>
       </section>
 
@@ -347,8 +364,9 @@ export default function OwnerPage() {
         </h2>
         <CodeBlock code={INSTALL} />
         <p className="mt-3 text-sm text-ink-muted">
-          Requires the <code className="font-mono text-xs text-ink">avatar</code> and{" "}
-          <code className="font-mono text-xs text-ink">lot</code> components.
+          Requires the <code className="font-mono text-xs text-ink">avatar</code>,{" "}
+          <code className="font-mono text-xs text-ink">lot</code>, and{" "}
+          <code className="font-mono text-xs text-ink">badge</code> components.
         </p>
       </section>
 

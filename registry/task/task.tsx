@@ -1027,22 +1027,19 @@ export function TaskQueueHeader({
 
       <div className="flex flex-wrap gap-2">
         {reviewCount !== undefined && reviewCount > 0 ? (
-          <span className="inline-flex items-center gap-1.5 rounded-xs bg-warning-soft px-2 py-0.5 text-xs font-medium text-ink">
-            <Eye className="size-3.5" strokeWidth={1.5} aria-hidden />
+          <Badge variant="warning" icon={Eye}>
             {reviewCount} to review
-          </span>
+          </Badge>
         ) : null}
         {overdueCount !== undefined && overdueCount > 0 ? (
-          <span className="inline-flex items-center gap-1.5 rounded-xs bg-danger-soft px-2 py-0.5 text-xs font-medium text-danger">
-            <Clock className="size-3.5" strokeWidth={1.5} aria-hidden />
+          <Badge variant="destructive" icon={Clock}>
             {overdueCount} overdue
-          </span>
+          </Badge>
         ) : null}
         {escalatedCount !== undefined && escalatedCount > 0 ? (
-          <span className="inline-flex items-center gap-1.5 rounded-xs bg-danger-soft px-2 py-0.5 text-xs font-medium text-danger">
-            <AlertTriangle className="size-3.5" strokeWidth={1.5} aria-hidden />
+          <Badge variant="destructive" icon={AlertTriangle}>
             {escalatedCount} escalated
-          </span>
+          </Badge>
         ) : null}
       </div>
     </div>

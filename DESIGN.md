@@ -322,6 +322,7 @@ A **scheme** is the owners corporation for a building. It is identified consiste
 
 **Rules:**
 - Building2 (or initials on lime-soft) is the scheme icon. One icon per scheme everywhere.
+- `SchemePlanBadge` and `SchemeStatusBadge` compose the shared `Badge` primitive (see Badge docs for variant mapping).
 - Plan numbers display as `SP 1042` (mono, uppercase prefix).
 - Location metadata format: `Suburb, STATE · N lots · FY end 30 Jun`.
 - `SchemeContextBar` appears on all pages inside a scheme. Portfolio-only pages use `SchemeList` without the bar.
@@ -347,6 +348,7 @@ A **lot** is an entry on the strata roll within a scheme. It is identified by lo
 
 **Rules:**
 - Lot numbers display as `Lot 12` (mono badge or number tile).
+- `LotBadge`, `LotLevyBadge`, and `LotProxyBadge` compose `Badge`. `LotRollHeader` summary counts use `Badge` directly.
 - Entitlement displays as `UE 85` in metadata.
 - Occupant line shows tenant when tenanted, otherwise owner. Vacant lots show `Vacant`.
 - Proxy ineligible lots typically correlate with levy arrears: surface both in wide roll views.
@@ -375,6 +377,7 @@ An **owner** is a person or entity on the strata roll who holds one or more lots
 
 **Rules:**
 - Use `OwnerRollRow` for owner-centric views; `LotCard` for lot-centric views.
+- Owner badges and `OwnerRollHeader` summary counts compose `Badge` (see Badge docs).
 - Multi-lot owners appear once with `OwnerLotChips`, not duplicated per lot.
 - Levy status on owners reflects worst-case or primary lot status: document which in the app layer.
 - Avatar uses `OwnerAvatar` (round). System users use square `Avatar` in app chrome.
@@ -405,6 +408,7 @@ A **work item** is an operational task in a strata workflow. Items carry workflo
 
 **Rules:**
 - List layout scan order: priority bar → title → meta → badges → assignee.
+- Work item badges and `TaskQueueHeader` summary counts compose `Badge` (see Badge docs).
 - R-A-S items use `awaiting_review` status and the amber `R-A-S` automation badge.
 - AI failures map to `failed` or `manual_required`, never silent success.
 - Statutory due dates use `dueKind: "statutory"` and overdue danger styling.

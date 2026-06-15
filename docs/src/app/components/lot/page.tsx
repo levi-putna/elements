@@ -141,7 +141,14 @@ export default function LotPage() {
           Primitives
         </h2>
         <p className="text-sm text-ink-muted mb-6 max-w-3xl">
-          Compose these in custom layouts, levy notices, and inline references.
+          Compose these in custom layouts, levy notices, and inline references. All lot
+          badges compose{" "}
+          <a href="/components/badge" className="text-forest underline underline-offset-2">
+            Badge
+          </a>
+          . <code className="font-mono text-xs text-ink">LotRollHeader</code> summary
+          counts use <code className="font-mono text-xs text-ink">Badge</code> directly.
+          See the Badge docs for every levy and proxy state.
         </p>
 
         <ComponentPreview label="LotBadge, LotLevyBadge, LotProxyBadge, LotIdentity">
@@ -329,6 +336,17 @@ export default function LotPage() {
             for proprietor-centric views with contact details and portal status.
           </p>
           <p>
+            <strong className="font-semibold text-ink">Badges</strong>:{" "}
+            <code className="font-mono text-xs text-ink">LotBadge</code>,{" "}
+            <code className="font-mono text-xs text-ink">LotLevyBadge</code>, and{" "}
+            <code className="font-mono text-xs text-ink">LotProxyBadge</code> are
+            documented with every state on the{" "}
+            <a href="/components/badge" className="text-forest underline underline-offset-2">
+              Badge
+            </a>{" "}
+            page.
+          </p>
+          <p>
             <strong className="font-semibold text-ink">Inline references</strong>: use{" "}
             <code className="font-mono text-xs text-ink">LotBadge</code> in correspondence
             and AI drafts where a full card is too heavy.
@@ -342,6 +360,9 @@ export default function LotPage() {
           Install
         </h2>
         <CodeBlock code={INSTALL} />
+        <p className="mt-3 text-sm text-ink-muted">
+          Requires the <code className="font-mono text-xs text-ink">badge</code> component.
+        </p>
       </section>
 
       {/* Props */}

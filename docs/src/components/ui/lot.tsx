@@ -869,22 +869,19 @@ export function LotRollHeader({
         overdueCount !== undefined) && (
         <div className="flex flex-wrap gap-2">
           {paidCount !== undefined ? (
-            <span className="inline-flex items-center gap-1.5 rounded-xs bg-lime-soft px-2 py-0.5 text-xs font-medium text-ink">
-              <Check className="size-3.5" strokeWidth={1.5} aria-hidden />
+            <Badge variant="accent" icon={Check}>
               {paidCount} paid
-            </span>
+            </Badge>
           ) : null}
           {dueCount !== undefined && dueCount > 0 ? (
-            <span className="inline-flex items-center gap-1.5 rounded-xs bg-off-white px-2 py-0.5 text-xs font-medium text-ink-muted">
-              <Clock className="size-3.5" strokeWidth={1.5} aria-hidden />
+            <Badge variant="default" icon={Clock}>
               {dueCount} due
-            </span>
+            </Badge>
           ) : null}
           {overdueCount !== undefined && overdueCount > 0 ? (
-            <span className="inline-flex items-center gap-1.5 rounded-xs bg-danger-soft px-2 py-0.5 text-xs font-medium text-danger">
-              <AlertCircle className="size-3.5" strokeWidth={1.5} aria-hidden />
+            <Badge variant="destructive" icon={AlertCircle}>
               {overdueCount} overdue
-            </span>
+            </Badge>
           ) : null}
         </div>
       )}

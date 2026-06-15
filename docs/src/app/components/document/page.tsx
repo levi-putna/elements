@@ -118,8 +118,13 @@ export default function DocumentPage() {
           <p>
             Rather than rainbow file-type colours, the component uses the Instant Strata
             palette: lime-soft icon tiles for primary documents, off-white for secondary
-            types, and a mono type badge. That keeps the interface calm and consistent
-            with building list rows and the icons page document preview.
+            types, and a mono type badge via{" "}
+            <code className="font-mono text-xs text-ink">DocumentTypeBadge</code>, which
+            composes{" "}
+            <a href="/components/badge" className="text-forest underline underline-offset-2">
+              Badge
+            </a>
+            . See the Badge docs for every file type label.
           </p>
           <p>
             Metadata is joined with middle dots, matching existing card and list patterns.
@@ -135,6 +140,9 @@ export default function DocumentPage() {
           Installation
         </h2>
         <CodeBlock code={INSTALL} language="bash" />
+        <p className="mt-3 text-sm text-ink-muted">
+          Requires the <code className="font-mono text-xs text-ink">badge</code> component.
+        </p>
       </section>
 
       {/* Usage */}
@@ -256,6 +264,13 @@ export default function DocumentPage() {
                 <DocumentTypeBadge type="spreadsheet" name="budget.xlsx" />
                 <DocumentTypeBadge type="presentation" name="slides.pptx" />
               </div>
+              <p className="mt-4 text-sm text-ink-muted">
+                All file type labels and brand colours are listed on the{" "}
+                <a href="/components/badge" className="text-forest underline underline-offset-2">
+                  Badge
+                </a>{" "}
+                page.
+              </p>
             </ComponentPreview>
           </div>
 

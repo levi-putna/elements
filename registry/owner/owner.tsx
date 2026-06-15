@@ -911,14 +911,14 @@ export function OwnerRollHeader({
 
       <div className="flex flex-wrap gap-2">
         {portalActiveCount !== undefined && portalActiveCount > 0 ? (
-          <span className="inline-flex items-center rounded-xs bg-lime-soft px-2 py-0.5 text-xs font-medium text-ink">
+          <Badge variant="accent">
             {portalActiveCount} portal active
-          </span>
+          </Badge>
         ) : null}
         {invitedCount !== undefined && invitedCount > 0 ? (
-          <span className="inline-flex items-center rounded-xs bg-warning-soft px-2 py-0.5 text-xs font-medium text-ink">
+          <Badge variant="warning">
             {invitedCount} invited
-          </span>
+          </Badge>
         ) : null}
         {committeeCount !== undefined && committeeCount > 0 ? (
           <OwnerCommitteeBadge />

@@ -160,33 +160,29 @@ export default function TaskPage() {
         </div>
       </section>
 
-      {/* Status badges */}
+      {/* Workflow badges */}
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">
-          Workflow states
+          Workflow badges
         </h2>
         <p className="text-sm text-ink-muted mb-6 max-w-3xl">
-          Every distinct work item status with automation and due variants.
+          Work item badges and{" "}
+          <code className="font-mono text-xs text-ink">TaskQueueHeader</code> summary
+          counts compose the shared{" "}
+          <a href="/components/badge" className="text-forest underline underline-offset-2">
+            Badge
+          </a>{" "}
+          primitive. The{" "}
+          <a href="/components/badge" className="text-forest underline underline-offset-2">
+            Badge documentation
+          </a>{" "}
+          lists every workflow, automation, domain, and due state.
         </p>
 
-        <ComponentPreview label="All WorkItemStatusBadge states">
+        <ComponentPreview label="Inbox row badges (representative)">
           <div className="flex flex-wrap gap-2 py-2">
-            {WORK_ITEM_DEMO_BY_STATUS.map((item) => (
-              <WorkItemStatusBadge key={item.id} status={item.status} />
-            ))}
-          </div>
-        </ComponentPreview>
-
-        <ComponentPreview label="Automation and due badges">
-          <div className="flex flex-wrap gap-2 py-2">
-            <WorkItemAutomationBadge automation="automatable" />
+            <WorkItemStatusBadge status="awaiting_review" />
             <WorkItemAutomationBadge automation="semi_automated" />
-            <WorkItemAutomationBadge automation="manual" />
-            <WorkItemDueBadge
-              dueAt="2026-06-10"
-              dueKind="statutory"
-              status="awaiting_review"
-            />
             <WorkItemDueBadge
               dueAt="2026-05-30"
               dueKind="statutory"
@@ -370,6 +366,10 @@ export default function TaskPage() {
           Install
         </h2>
         <CodeBlock code={INSTALL} />
+        <p className="mt-3 text-sm text-ink-muted">
+          Requires the <code className="font-mono text-xs text-ink">avatar</code> and{" "}
+          <code className="font-mono text-xs text-ink">badge</code> components.
+        </p>
       </section>
 
       {/* Props */}

@@ -137,6 +137,11 @@ export default function SchemePage() {
         </h2>
         <p className="text-sm text-ink-muted mb-6 max-w-3xl">
           Compose these in custom layouts, AI entity tags, breadcrumbs, and table cells.
+          Status and plan badges compose the shared{" "}
+          <a href="/components/badge" className="text-forest underline underline-offset-2">
+            Badge
+          </a>{" "}
+          primitive. See the Badge docs for all lifecycle states and variant mapping.
         </p>
 
         <div className="space-y-8">
@@ -303,6 +308,15 @@ export default function SchemePage() {
         </h2>
         <div className="max-w-3xl space-y-4 text-sm text-ink-muted leading-relaxed">
           <p>
+            <strong className="font-semibold text-ink">Badges</strong>:{" "}
+            <code className="font-mono text-xs text-ink">SchemePlanBadge</code> and{" "}
+            <code className="font-mono text-xs text-ink">SchemeStatusBadge</code> compose{" "}
+            <a href="/components/badge" className="text-forest underline underline-offset-2">
+              Badge
+            </a>
+            . Use that page as the canonical reference for status tones and states.
+          </p>
+          <p>
             <strong className="font-semibold text-ink">Lot</strong>: the child entity
             under a scheme. See the{" "}
             <a href="/components/lot" className="text-forest underline underline-offset-2">
@@ -329,6 +343,10 @@ export default function SchemePage() {
           Install
         </h2>
         <CodeBlock code={INSTALL} />
+        <p className="mt-3 text-sm text-ink-muted">
+          Requires the <code className="font-mono text-xs text-ink">badge</code> and{" "}
+          <code className="font-mono text-xs text-ink">dropdown-menu</code> components.
+        </p>
       </section>
 
       {/* Props */}
