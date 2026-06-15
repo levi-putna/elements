@@ -1,0 +1,27 @@
+---
+description: Avoid em dashes in documentation and user-facing copy
+alwaysApply: true
+---
+
+# No em dashes
+
+Do not use the em dash character (`—`, U+2014) in documentation, comments, UI copy, or prose.
+
+Use these alternatives instead:
+
+- **Labels and titles:** colon (`Card: alternative`, `LOCKUP: WHITE`)
+- **Clause breaks in prose:** comma, semicolon, or full stop as appropriate
+- **Code comments:** colon (`// SidebarNav: the sidebar navigation`)
+- **Empty table cells:** hyphen (`-`) or leave blank
+- **List bullets:** hyphen (`-`) or a bullet character
+
+Examples:
+
+- Bad: `Instant Strata — Design System`
+- Good: `Instant Strata: Design System`
+
+- Bad: `Forest green and lime draw attention — not as wallpaper.`
+- Good: `Forest green and lime draw attention, not as wallpaper.`
+
+- Bad: `/** Background context — adjusts colours */`
+- Good: `/** Background context: adjusts colours */`

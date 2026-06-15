@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "marketing-section",
+  "type": "registry:ui",
+  "description": "Mode-inspired marketing section blocks: spotlight, benefits grid, visual explorer, cycle statement, product tour CTA, and governed data features. Six composed layouts for landing pages.",
+  "dependencies": [],
+  "registryDependencies": ["utils", "card", "infographic"],
+  "files": [
+    {
+      "path": "registry/marketing-section/marketing-section.tsx",
+      "target": "components/ui/marketing-section.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

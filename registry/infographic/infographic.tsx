@@ -2,11 +2,11 @@ import { cn } from "@/lib/utils"
 import type { HTMLAttributes, ReactNode } from "react"
 
 // ─────────────────────────────────────────────────────────
-// Infographic — flat UI mock elements for marketing sections
+// Infographic: flat UI mock elements for marketing sections
 //
 // Small, self-contained dark-window illustrations used inside
 // FeatureSplit, Bento cells, and landing page visuals. Each themed
-// variant is a single element — compose with InfographicRow when
+// variant is a single element: compose with InfographicRow when
 // you need a side-by-side pair.
 // ─────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ export interface InfographicProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Base dark UI window — the shared shell for all infographic variants.
+ * Base dark UI window: the shared shell for all infographic variants.
  */
 export function Infographic({
   title,
@@ -48,7 +48,7 @@ export interface InfographicRowProps extends HTMLAttributes<HTMLDivElement> {
   /** Optional floating pill label (Share, Export, Run, etc.). */
   pill?: string
   /**
-   * Keep the row inside its parent — no negative margins, tighter gap,
+   * Keep the row inside its parent: no negative margins, tighter gap,
    * and children shrink to fit. Use inside FeatureSplit visual slots.
    */
   contained?: boolean
@@ -76,7 +76,7 @@ export function InfographicRow({
       )}
       {...props}
     >
-      {/* Floating pill — kept inside bounds when contained */}
+      {/* Floating pill: kept inside bounds when contained */}
       {pill && (
         <span
           className={cn(
@@ -97,7 +97,7 @@ export interface InfographicStackProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Vertical stack — useful for hero sidebars and narrow bento cells.
+ * Vertical stack: useful for hero sidebars and narrow bento cells.
  */
 export function InfographicStack({ className, children, ...props }: InfographicStackProps) {
   return (
@@ -311,11 +311,11 @@ export function InfographicSelect({
 }
 
 // ─────────────────────────────────────────────────────────
-// Schemes — building health / scheme overview
+// Schemes: building health / scheme overview
 // ─────────────────────────────────────────────────────────
 
 /**
- * Scheme health bar chart — levies, maintenance and compliance at a glance.
+ * Scheme health bar chart: levies, maintenance and compliance at a glance.
  */
 export function InfographicScheme({ className }: { className?: string }) {
   return (
@@ -329,11 +329,11 @@ export function InfographicScheme({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Portfolio — multi-scheme portfolio overview
+// Portfolio: multi-scheme portfolio overview
 // ─────────────────────────────────────────────────────────
 
 /**
- * Portfolio snapshot — stacked scheme cards with occupancy bars.
+ * Portfolio snapshot: stacked scheme cards with occupancy bars.
  */
 export function InfographicPortfolio({ className }: { className?: string }) {
   const schemes = [
@@ -357,11 +357,11 @@ export function InfographicPortfolio({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Owners — owner directory / portal
+// Owners: owner directory / portal
 // ─────────────────────────────────────────────────────────
 
 /**
- * Owner directory — lot numbers with status indicators.
+ * Owner directory: lot numbers with status indicators.
  */
 export function InfographicOwners({ className }: { className?: string }) {
   const owners = [
@@ -396,11 +396,11 @@ export function InfographicOwners({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Reports — financial / compliance reports
+// Reports: financial / compliance reports
 // ─────────────────────────────────────────────────────────
 
 /**
- * Reports queue — document rows with a mini trend strip.
+ * Reports queue: document rows with a mini trend strip.
  */
 export function InfographicReports({ className }: { className?: string }) {
   return (
@@ -424,11 +424,11 @@ export function InfographicReports({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Finance — levy breakdown / payments
+// Finance: levy breakdown / payments
 // ─────────────────────────────────────────────────────────
 
 /**
- * Levy breakdown — quarterly payment bars.
+ * Levy breakdown: quarterly payment bars.
  */
 export function InfographicFinance({ className }: { className?: string }) {
   return (
@@ -448,11 +448,11 @@ export function InfographicFinance({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Finance editor — levy calculator workflow
+// Finance editor: levy calculator workflow
 // ─────────────────────────────────────────────────────────
 
 /**
- * Levy calculator — input lines with a run action.
+ * Levy calculator: input lines with a run action.
  */
 export function InfographicLevyCalc({ className }: { className?: string }) {
   return (
@@ -471,11 +471,11 @@ export function InfographicLevyCalc({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// AI — assistant / smart suggestions
+// AI: assistant / smart suggestions
 // ─────────────────────────────────────────────────────────
 
 /**
- * AI assist — prompt bubble with suggested actions.
+ * AI assist: prompt bubble with suggested actions.
  */
 export function InfographicAi({ className }: { className?: string }) {
   return (
@@ -508,11 +508,11 @@ export function InfographicAi({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Workflow — automation pipeline
+// Workflow: automation pipeline
 // ─────────────────────────────────────────────────────────
 
 /**
- * Workflow automation — stepped tasks with completion states.
+ * Workflow automation: stepped tasks with completion states.
  */
 export function InfographicWorkflow({ className }: { className?: string }) {
   const steps = [
@@ -546,11 +546,11 @@ export function InfographicWorkflow({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Extended strata infographics — 15 additional layouts
+// Extended strata infographics: 15 additional layouts
 // ─────────────────────────────────────────────────────────
 
 /**
- * Maintenance queue — priority feed with open work orders.
+ * Maintenance queue: priority feed with open work orders.
  * Layout: vertical feed.
  */
 export function InfographicMaintenance({ className }: { className?: string }) {
@@ -586,7 +586,7 @@ export function InfographicMaintenance({ className }: { className?: string }) {
 }
 
 /**
- * AGM calendar — month grid with meeting date highlighted.
+ * AGM calendar: month grid with meeting date highlighted.
  * Layout: calendar grid.
  */
 export function InfographicAgm({ className }: { className?: string }) {
@@ -617,7 +617,7 @@ export function InfographicAgm({ className }: { className?: string }) {
 }
 
 /**
- * Compliance tracker — checklist with overall progress.
+ * Compliance tracker: checklist with overall progress.
  * Layout: checklist + progress bar.
  */
 export function InfographicCompliance({ className }: { className?: string }) {
@@ -659,7 +659,7 @@ export function InfographicCompliance({ className }: { className?: string }) {
 }
 
 /**
- * Budget overview — four-up metric grid.
+ * Budget overview: four-up metric grid.
  * Layout: stat grid.
  */
 export function InfographicBudget({ className }: { className?: string }) {
@@ -678,7 +678,7 @@ export function InfographicBudget({ className }: { className?: string }) {
 }
 
 /**
- * Cashflow trend — balance headline with sparkline.
+ * Cashflow trend: balance headline with sparkline.
  * Layout: metric + sparkline chart.
  */
 export function InfographicCashflow({ className }: { className?: string }) {
@@ -699,7 +699,7 @@ export function InfographicCashflow({ className }: { className?: string }) {
 }
 
 /**
- * Owner communications — notice thread feed.
+ * Owner communications: notice thread feed.
  * Layout: message thread.
  */
 export function InfographicCommunications({ className }: { className?: string }) {
@@ -730,7 +730,7 @@ export function InfographicCommunications({ className }: { className?: string })
 }
 
 /**
- * Contractor board — mini kanban with job columns.
+ * Contractor board: mini kanban with job columns.
  * Layout: three-column kanban.
  */
 export function InfographicContractor({ className }: { className?: string }) {
@@ -759,7 +759,7 @@ export function InfographicContractor({ className }: { className?: string }) {
 }
 
 /**
- * Insurance renewals — timeline with upcoming dates.
+ * Insurance renewals: timeline with upcoming dates.
  * Layout: vertical timeline.
  */
 export function InfographicInsurance({ className }: { className?: string }) {
@@ -796,7 +796,7 @@ export function InfographicInsurance({ className }: { className?: string }) {
 }
 
 /**
- * Committee motions — compact voting table.
+ * Committee motions: compact voting table.
  * Layout: data table.
  */
 export function InfographicCommittee({ className }: { className?: string }) {
@@ -825,7 +825,7 @@ export function InfographicCommittee({ className }: { className?: string }) {
 }
 
 /**
- * Global search — query bar with result snippets.
+ * Global search: query bar with result snippets.
  * Layout: search + results list.
  */
 export function InfographicSearch({ className }: { className?: string }) {
@@ -847,7 +847,7 @@ export function InfographicSearch({ className }: { className?: string }) {
 }
 
 /**
- * Notification inbox — unread counts per category.
+ * Notification inbox: unread counts per category.
  * Layout: inbox with badges.
  */
 export function InfographicNotifications({ className }: { className?: string }) {
@@ -868,7 +868,7 @@ export function InfographicNotifications({ className }: { className?: string }) 
               {count}
             </span>
           ) : (
-            <span className="text-[8px] font-mono text-white/20">—</span>
+            <span className="text-[8px] font-mono text-white/20">-</span>
           )}
         </div>
       ))}
@@ -877,7 +877,7 @@ export function InfographicNotifications({ className }: { className?: string }) 
 }
 
 /**
- * Building profile — scheme identity with key stats.
+ * Building profile: scheme identity with key stats.
  * Layout: hero card + stat row.
  */
 export function InfographicBuilding({ className }: { className?: string }) {
@@ -909,7 +909,7 @@ export function InfographicBuilding({ className }: { className?: string }) {
 }
 
 /**
- * Arrears aging — horizontal stacked buckets.
+ * Arrears aging: horizontal stacked buckets.
  * Layout: stacked horizontal bar.
  */
 export function InfographicArrears({ className }: { className?: string }) {
@@ -940,7 +940,7 @@ export function InfographicArrears({ className }: { className?: string }) {
 }
 
 /**
- * Document vault — folder tree with file counts.
+ * Document vault: folder tree with file counts.
  * Layout: folder tree.
  */
 export function InfographicDocuments({ className }: { className?: string }) {
@@ -977,7 +977,7 @@ export function InfographicDocuments({ className }: { className?: string }) {
 }
 
 /**
- * Scheme onboarding — horizontal setup stepper.
+ * Scheme onboarding: horizontal setup stepper.
  * Layout: horizontal progress stepper.
  */
 export function InfographicOnboarding({ className }: { className?: string }) {
@@ -1028,7 +1028,7 @@ export function InfographicOnboarding({ className }: { className?: string }) {
 }
 
 // ─────────────────────────────────────────────────────────
-// Composites — pairs used by FeatureSplit (built from singles)
+// Composites: pairs used by FeatureSplit (built from singles)
 // ─────────────────────────────────────────────────────────
 
 interface InfographicPairProps {
@@ -1038,7 +1038,7 @@ interface InfographicPairProps {
 }
 
 /**
- * Scheme overview pair — health chart + metric sidebar.
+ * Scheme overview pair: health chart + metric sidebar.
  */
 export function InfographicSchemePair({ className, contained }: InfographicPairProps) {
   return (
@@ -1057,7 +1057,7 @@ export function InfographicSchemePair({ className, contained }: InfographicPairP
 }
 
 /**
- * Levy workflow pair — calculator + quarter selector.
+ * Levy workflow pair: calculator + quarter selector.
  */
 export function InfographicLevyPair({ className, contained }: InfographicPairProps) {
   return (
@@ -1125,7 +1125,7 @@ export function InfographicCodeEditor({ className }: { className?: string }) {
 }
 
 /**
- * Top-right visual — chart + config sidebar.
+ * Top-right visual: chart + config sidebar.
  */
 export function InfographicChartPair({ className, contained }: InfographicPairProps) {
   return (
@@ -1144,7 +1144,7 @@ export function InfographicChartPair({ className, contained }: InfographicPairPr
 }
 
 /**
- * Bottom-left visual — SQL editor + language menu.
+ * Bottom-left visual: SQL editor + language menu.
  */
 export function InfographicEditorPair({ className, contained }: InfographicPairProps) {
   return (

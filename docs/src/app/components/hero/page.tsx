@@ -30,28 +30,28 @@ export function Page() {
 
 const ANATOMY = `<Hero
   lines={[
-    "Strata Intelligence",  // lines[0] — 100% width  (cols 1–12, row 1)
-    "built around",         // lines[1] —  2/3 width  (cols 5–12, row 2) over photo
-    "your clients",         // lines[2] —  1/3 width  (cols 9–12, row 3) clear of photo
+    "Strata Intelligence",  // lines[0]: 100% width  (cols 1–12, row 1)
+    "built around",         // lines[1]:  2/3 width  (cols 5–12, row 2) over photo
+    "your clients",         // lines[2]:  1/3 width  (cols 9–12, row 3) clear of photo
   ]}
-  subtext="..."             // supporting paragraph — right 1/3, below ribbon
+  subtext="..."             // supporting paragraph: right 1/3, below ribbon
   actions={...}             // dual CTA (HeroAction primary + outline)
-  visual={...}              // lower-left photo (w-2/3) — use <HeroVisual> for notch masking
+  visual={...}              // lower-left photo (w-2/3): use <HeroVisual> for notch masking
 />`;
 
 const HOW_IT_WORKS = `/*
- * Instant Strata hero — how the layout works
+ * Instant Strata hero: how the layout works
  *
  * 1. THIRDS-BASED LAYOUT (12-column grid on desktop)
  *    Each step = 4 columns = 1 third. Starts and spans are derived as:
  *      col start = 1, 5, 9   →   col span = 13 − start = 12, 8, 4
  *
- *    lines[0] → cols  1–12, row 1  (100% — full top width)
- *    lines[1] → cols  5–12, row 2  ( 2/3 — sits over the photo)
- *    lines[2] → cols  9–12, row 3  ( 1/3 — clear of the photo)
+ *    lines[0] → cols  1–12, row 1  (100%: full top width)
+ *    lines[1] → cols  5–12, row 2  ( 2/3: sits over the photo)
+ *    lines[2] → cols  9–12, row 3  ( 1/3: clear of the photo)
  *
  *    The photo is absolutely positioned at w-2/3 (8 cols wide) so its
- *    right edge falls exactly at the col-9 boundary — the same column
+ *    right edge falls exactly at the col-9 boundary: the same column
  *    where lines[2] and the copy block begin.
  *
  * 2. THE LIME RIBBON
@@ -67,7 +67,7 @@ const HOW_IT_WORKS = `/*
  *      a) a small lime square is pushed just OUTSIDE the block edge
  *         (translateX ±100%), extending the block by 24 px;
  *      b) a larger ::after (110%, forest-coloured) with ONE rounded corner
- *         masks it — leaving a smooth inward curve.
+ *         masks it: leaving a smooth inward curve.
  *    Notch positions: top-left on lines[1] and lines[2]; bottom-right on lines[1].
  *    The photo's HeroVisual \`notches={["topRight"]}\` carves the same concave
  *    curve at the photo's top-right corner, interlocking it with lines[1].
@@ -81,7 +81,7 @@ const HOW_IT_WORKS = `/*
  * 5. FLUID TYPE
  *    The section is a CSS container ([container-type:inline-size]) and the
  *    headline uses cqw units (clamp(26px, 6.4cqw, 92px)) so it scales with
- *    the hero's own width — not the viewport.
+ *    the hero's own width: not the viewport.
  */`;
 
 const PROPS = [
@@ -120,7 +120,7 @@ export default function HeroPage() {
           A bold marquee hero on a forest-green canvas. Three headline lines step
           in clean thirds: the first fills 100% of the top, the second spans the
           right 2/3 and sits over a 2/3-wide photo, the third occupies the right
-          1/3 — clear of the photo. Concave masking fuses the stepped lime blocks
+          1/3: clear of the photo. Concave masking fuses the stepped lime blocks
           into one ribbon, with supporting copy and CTAs in the right 1/3 below.
         </p>
       </div>
@@ -132,7 +132,7 @@ export default function HeroPage() {
         </h2>
         <p className="text-sm text-ink-muted mb-4 leading-relaxed">
           Each headline string is a direct grid item in its own row. The layout
-          uses a clean thirds system — each step is 4 columns (one third).{" "}
+          uses a clean thirds system: each step is 4 columns (one third).{" "}
           <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm text-foreground text-xs">lines[0]</code>{" "}
           fills the full 100% (cols 1–12),{" "}
           <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm text-foreground text-xs">lines[1]</code>{" "}
@@ -140,7 +140,7 @@ export default function HeroPage() {
           <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm text-foreground text-xs">lines[2]</code>{" "}
           occupies the right 1/3 (cols 9–12). The photo is{" "}
           <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm text-foreground text-xs">w-2/3</code>{" "}
-          wide so its right edge aligns exactly with col 9 — where line 2 and
+          wide so its right edge aligns exactly with col 9: where line 2 and
           the copy block both begin. Selective corner flattening fuses all three
           blocks into one continuous ribbon.
         </p>
@@ -156,7 +156,7 @@ export default function HeroPage() {
           <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm text-foreground text-xs">
             ::after
           </code>{" "}
-          with a single rounded corner masks it — carving a smooth inward curve
+          with a single rounded corner masks it: carving a smooth inward curve
           so the steps fuse together.
         </p>
         <p className="text-sm text-ink-muted mb-4 leading-relaxed">
@@ -192,7 +192,7 @@ export default function HeroPage() {
         <CodeBlock code={ANATOMY} language="tsx" />
       </section>
 
-      {/* Preview — break out of the prose column so the hero has full width */}
+      {/* Preview: break out of the prose column so the hero has full width */}
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-6">Example</h2>
         <div className="rounded-sm border border-border overflow-hidden">
@@ -214,7 +214,7 @@ export default function HeroPage() {
           />
         </div>
         <p className="text-xs text-ink-muted mt-3 leading-relaxed">
-          Resize the browser to see the mobile stack — headline lines collapse
+          Resize the browser to see the mobile stack: headline lines collapse
           into a single lime block, with the photo below.
         </p>
       </section>

@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Young Serif — loaded via next/font/google, no @font-face needed. */
+/* Young Serif: loaded via next/font/google, no @font-face needed. */
 
 /* Shared sweep used by Button (loading overlay) and Skeleton */
 @keyframes shimmer {
@@ -54,7 +54,7 @@
   --color-ink:               #043F2E;
   --color-ink-muted:         #4A7A62;
 
-  /* Radius scale — small values for rectangular feel */
+  /* Radius scale: small values for rectangular feel */
   --radius-xs:  2px;
   --radius-sm:  4px;
   --radius-md:  8px;
@@ -103,12 +103,12 @@
 
   --destructive:             oklch(0.577 0.245 27.325);
 
-  /* Borders — very light green tint */
+  /* Borders: very light green tint */
   --border:                  #D4E8C2;
   --input:                   #D4E8C2;
   --ring:                    #C8F169;
 
-  /* Radius base — maps to 4px default for rectangular feel */
+  /* Radius base: maps to 4px default for rectangular feel */
   --radius:                  0.25rem;
 
   /* Sidebar */
@@ -176,5 +176,5 @@
     color: #4A7A62;
     margin-bottom: 1rem;
   }
-  /* docs-prose links inherit from base layer — no override needed */
+  /* docs-prose links inherit from base layer: no override needed */
 }

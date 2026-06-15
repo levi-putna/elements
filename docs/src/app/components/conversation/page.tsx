@@ -148,7 +148,7 @@ export default function ConversationPage() {
           <div>
             <p className="text-sm font-semibold text-foreground mb-1">Full chat page with AI SDK</p>
             <p className="text-sm text-ink-muted mb-3 leading-relaxed">
-              The most common pattern — <code className="font-mono text-xs bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">Conversation</code> fills available height,{" "}
+              The most common pattern: <code className="font-mono text-xs bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">Conversation</code> fills available height,{" "}
               <code className="font-mono text-xs bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">PromptInput</code> sits pinned to the bottom.
             </p>
             <CodeBlock code={WITH_AI_SDK} language="tsx" />

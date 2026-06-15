@@ -2,25 +2,25 @@ import { cn } from "@/lib/utils"
 import type { HTMLAttributes } from "react"
 
 // ─────────────────────────────────────────────────────────
-// Section — full-bleed coloured band
+// Section: full-bleed coloured band
 //
-// The colour runs edge-to-edge. Width is NOT managed here —
+// The colour runs edge-to-edge. Width is NOT managed here -
 // wrap children in <Container> (or set `contained`) to constrain
 // content to the site grid. This separation lets a section hold
 // full-bleed visuals and a constrained text column at once.
 // ─────────────────────────────────────────────────────────
 
 export type SectionType =
-  | "default"     // white — the base, most sections
+  | "default"     // white: the base, most sections
   | "white"       // explicit white (same as default, useful for clarity)
-  | "secondary"   // off-white #EEF2E3 — subtle differentiation
-  | "primary"     // forest #043F2E — dark, high contrast (hero, footer, testimonial)
-  | "alternative" // lime-soft #EBF8C2 — accent, CTA bands
+  | "secondary"   // off-white #EEF2E3: subtle differentiation
+  | "primary"     // forest #043F2E: dark, high contrast (hero, footer, testimonial)
+  | "alternative" // lime-soft #EBF8C2: accent, CTA bands
 
 export type ContainerWidth =
-  | "prose"   // 740px — dense, text-heavy reading column
-  | "default" // 1200px — standard marketing content
-  | "wide"    // 1360px — wide visual / bento sections
+  | "prose"   // 740px: dense, text-heavy reading column
+  | "default" // 1200px: standard marketing content
+  | "wide"    // 1360px: wide visual / bento sections
   | "full"    // no max-width, gutter only
 
 export interface SectionProps extends HTMLAttributes<HTMLElement> {
@@ -79,7 +79,7 @@ export function Section({
 }
 
 // ─────────────────────────────────────────────────────────
-// Container — width + horizontal gutter
+// Container: width + horizontal gutter
 //
 // The single source of truth for content width across the site.
 // Use inside a Section, or standalone anywhere a constrained

@@ -1,4 +1,4 @@
-# Instant Strata — Design System
+# Instant Strata: Design System
 
 > Single source of truth for brand, visual design, and component decisions. Use this file when building UI, reviewing designs, or prompting AI tools.
 
@@ -13,29 +13,32 @@
 
 ### Logo
 
-The mark is the letters **IS** set in bold weight inside a square container with `4px` border radius. Tight and compact.
+The mark is the letters **IS** set in Young Serif inside a square container with `4px` border radius. The container is rotated **15°** for energy; the letterforms stay upright. Tight and compact.
 
 ```
-┌──────┐
-│  IS  │
+  ┌──────┐
+ ╱  IS  ╲
 └──────┘
 ```
 
 | Context | Letterforms | Container |
 |---|---|---|
 | White or light background | `--color-forest` | `--color-lime` |
-| Dark background | `#FFFFFF` | `--color-lime` |
+| Primary (lime) background | `#FFFFFF` | `--color-forest` |
+| Dark (forest) background | `--color-lime` (`--primary`) | `--color-forest` |
 
-- Always use the square container — never the letterforms alone
+Lockup: icon mark beside the **Instant Strata** wordmark in Young Serif.
+
+- Always use the square container; never use the letterforms alone
 - Minimum size: 24×24px
 - Clear space: equal to the container width on all sides
-- Never stretch, rotate, recolour, or add drop shadows
+- Never stretch, recolour outside the surface rules, or add drop shadows
 
 ---
 
 ## Colour System
 
-White is the dominant background colour. Forest green and lime are used to create emphasis, break apart major sections, and draw attention — not as wallpaper.
+White is the dominant background colour. Forest green and lime are used to create emphasis, break apart major sections, and draw attention, not as wallpaper.
 
 **The rule of thumb:** if in doubt, use white. Reach for a coloured section only when you need to signal a transition or create a deliberate moment of emphasis.
 
@@ -49,7 +52,7 @@ White is the dominant background colour. Forest green and lime are used to creat
 | `--color-lime-soft` | `#EBF8C2` | Lightest green tint. Card fills on white sections, highlight bands, tag backgrounds. |
 | `--color-forest` | `#043F2E` | Deep green. Used sparingly for hero, testimonial, and footer sections. Provides anchoring contrast. |
 | `--color-forest-mid` | `#0A5C3D` | Mid-tone forest. Card backgrounds inside dark sections. |
-| `--color-ink` | `#043F2E` | Body and heading text on light backgrounds. Same value as forest — keeps the palette unified. |
+| `--color-ink` | `#043F2E` | Body and heading text on light backgrounds. Same value as forest, keeps the palette unified. |
 | `--color-ink-muted` | `#4A7A62` | Secondary text: labels, captions, metadata. |
 | `--color-border` | `#D4E8C2` | Subtle border on cards and inputs. |
 
@@ -90,7 +93,7 @@ Most sections use white or off-white. Dark and accent sections are used at most 
 Hero          → Dark          (strong opening)
 Social proof  → White         (breathing room)
 Features      → Off-white     (differentiated but light)
-CTA band      → Accent        (lime-soft — draws attention)
+CTA band      → Accent        (lime-soft, draws attention)
 Feature rows  → White         (content, spacious)
 Testimonial   → Dark          (one more dark moment)
 Pricing       → Off-white     (calm, readable)
@@ -104,17 +107,17 @@ Avoid placing two dark sections back-to-back. Never use more than 3 dark section
 
 ## Typography
 
-A refined serif for display headings signals expertise and trust. Inter handles everything else — UI, body, labels — cleanly and at scale.
+A refined serif for display headings signals expertise and trust. Inter handles everything else: UI, body, labels, cleanly and at scale.
 
 ### Typefaces
 
 | Role | Typeface | Source |
 |---|---|---|
-| **Display / Headings** | Young Serif | [Google Fonts](https://fonts.google.com/specimen/Young+Serif) — free |
-| **UI / Body / Labels** | Inter | Google Fonts — free |
-| **Code** | JetBrains Mono | Google Fonts — free |
+| **Display / Headings** | Young Serif | [Google Fonts](https://fonts.google.com/specimen/Young+Serif) (free) |
+| **UI / Body / Labels** | Inter | Google Fonts (free) |
+| **Code** | JetBrains Mono | Google Fonts (free) |
 
-Young Serif's elegant serifs and high contrast give headings authority and warmth. Weight 400 only — never use bold or medium with this font.
+Young Serif's elegant serifs and high contrast give headings authority and warmth. Weight 400 only; never use bold or medium with this font.
 
 ### Type Scale
 
@@ -125,11 +128,11 @@ Young Serif's elegant serifs and high contrast give headings authority and warmt
 | **H2** | Young Serif | 400 | 36px | 26px |
 | **H3** | Inter | 600 | 22px | 18px |
 | **H4** | Inter | 600 | 18px | 16px |
-| **Eyebrow** | Inter | 600 | 11px · ALL CAPS · 0.1em tracking | — |
-| **Body** | Inter | 400 | 16px · 1.65 line-height | — |
-| **Body Large** | Inter | 400 | 18px · 1.7 line-height | — |
-| **Caption** | Inter | 500 | 12px | — |
-| **Mono** | JetBrains Mono | 400 | 14px | — |
+| **Eyebrow** | Inter | 600 | 11px · ALL CAPS · 0.1em tracking | - |
+| **Body** | Inter | 400 | 16px · 1.65 line-height | - |
+| **Body Large** | Inter | 400 | 18px · 1.7 line-height | - |
+| **Caption** | Inter | 500 | 12px | - |
+| **Mono** | JetBrains Mono | 400 | 14px | - |
 
 ### Font Setup
 
@@ -147,11 +150,11 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const mono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"], weight: ["400", "500"] });
 ```
 
-The CSS variable `--font-display` maps to `--font-young-serif` via `@theme inline` in `globals.css`. Use `font-display` utility class (never pair with `font-bold` or `font-medium` — Young Serif is weight 400 only).
+The CSS variable `--font-display` maps to `--font-young-serif` via `@theme inline` in `globals.css`. Use `font-display` utility class (never pair with `font-bold` or `font-medium`: Young Serif is weight 400 only).
 
 ### Typography Rules
 
-- Display and H1 headlines intentionally run to 2 lines — this creates weight. Don't fight it.
+- Display and H1 headlines intentionally run to 2 lines, this creates weight. Don't fight it.
 - Every major section opens with an eyebrow label followed by a Young Serif heading.
 - Eyebrow colour: `--color-lime` on dark sections, `--color-ink-muted` on light sections.
 - Body text max width: 65 characters (approx `640px`). Never stretch body copy full-width.
@@ -225,13 +228,13 @@ Rectangular with a small radius. Precise and professional.
 ### Button
 
 ```tsx
-// Primary — lime fill, dark text. Used once per section maximum.
+// Primary: lime fill, dark text. Used once per section maximum.
 <Button variant="default">Try for free</Button>
 
-// Outline — used alongside primary for secondary actions.
+// Outline: used alongside primary for secondary actions.
 <Button variant="outline">Request demo</Button>
 
-// Ghost — text links with directional arrow, no border.
+// Ghost: text links with directional arrow, no border.
 <Button variant="ghost">See how it works →</Button>
 ```
 
@@ -247,18 +250,18 @@ Rectangular with a small radius. Precise and professional.
 
 Three card styles. Each has a clearly defined home context.
 
-**Bordered card** — on white or off-white backgrounds:
+**Bordered card**: on white or off-white backgrounds:
 ```
 bg: white   border: 1px solid var(--border)   radius: 8px   padding: 24px
 ```
 
-**Accent card** — on white or off-white backgrounds, for featured/highlighted content:
+**Accent card**: on white or off-white backgrounds, for featured/highlighted content:
 ```
 bg: --color-lime-soft   border: none   radius: 8px   padding: 24px
 text: --color-ink
 ```
 
-**Dark card** — inside a dark section:
+**Dark card**: inside a dark section:
 ```
 bg: --color-forest-mid   border: none   radius: 8px   padding: 24px
 text: white
@@ -355,7 +358,7 @@ Used inside a dark section so the lime-soft card pops against the forest backgro
 
 ### Social Proof Strip
 
-Logo strip on a white or dark background. Logos rendered at `opacity-40` (dark bg) or `opacity-30` (light bg) — greyscale. No borders, no cards.
+Logo strip on a white or dark background. Logos rendered at `opacity-40` (dark bg) or `opacity-30` (light bg): greyscale. No borders, no cards.
 
 ### Section Divider
 
@@ -385,7 +388,7 @@ No `<hr>` tags. Section transitions are created entirely by alternating backgrou
 
 ## Motion
 
-Professional tool. Motion is subtle and purposeful — never decorative.
+Professional tool. Motion is subtle and purposeful, never decorative.
 
 | Interaction | Duration | Easing |
 |---|---|---|
@@ -448,7 +451,7 @@ When `background: --color-forest`:
 - Left nav sidebar
 - `740px` max content width
 - Code blocks: `--color-forest` background, `--color-lime` for keywords
-- No decorative elements — clean, functional
+- No decorative elements, clean, functional
 
 ---
 
@@ -503,19 +506,19 @@ export default {
 
 Include this block when prompting AI tools to build Instant Strata UI:
 
-> **Brand:** Instant Strata — strata property management platform.
+> **Brand:** Instant Strata: strata property management platform.
 >
-> **Colours:** White (`#FFFFFF`) is the dominant background. Off-white (`#EEF2E3`) for subtle section alternation. Lime (`#C8F169`) is the brand accent — buttons, eyebrows, highlights. Forest green (`#043F2E`) for dark sections (hero, testimonial, footer) and all text. Lime-soft (`#EBF8C2`) for accent sections and card fills.
+> **Colours:** White (`#FFFFFF`) is the dominant background. Off-white (`#EEF2E3`) for subtle section alternation. Lime (`#C8F169`) is the brand accent: buttons, eyebrows, highlights. Forest green (`#043F2E`) for dark sections (hero, testimonial, footer) and all text. Lime-soft (`#EBF8C2`) for accent sections and card fills.
 >
 > **Typography:** Young Serif (Google Fonts, weight 400 only) for all display and section headings. Inter for UI, body, and labels. Logo mark uses Young Serif inside the lime square.
 >
-> **Style:** Rectangular forms — `4px` radius on buttons and inputs, `8px` on cards. No pill shapes. Generous whitespace. Professional but not corporate.
+> **Style:** Rectangular forms: `4px` radius on buttons and inputs, `8px` on cards. No pill shapes. Generous whitespace. Professional but not corporate.
 >
-> **Sections:** Most content sections are white or off-white. Dark sections (forest) used sparingly — hero, one testimonial, footer. Lime-soft accent sections used for CTA bands. Max 3 dark sections per page.
+> **Sections:** Most content sections are white or off-white. Dark sections (forest) used sparingly: hero, one testimonial, footer. Lime-soft accent sections used for CTA bands. Max 3 dark sections per page.
 >
 > **Buttons:** Lime fill + dark text for primary. Outline (dark border on light, white border on dark) for secondary. No pill shapes.
 >
-> **Logo:** IS letterforms in a `4px` radius square. Lime container, dark letterforms on light backgrounds.
+> **Logo:** IS letterforms in a `4px` radius square, container rotated 15° with upright letterforms. Lime container + forest letterforms on light backgrounds; forest container + white letterforms on lime; forest container + lime letterforms on dark.
 
 ---
 
@@ -524,4 +527,4 @@ Include this block when prompting AI tools to build Instant Strata UI:
 | Date | Change |
 |---|---|
 | 2026-06-15 | Initial specification |
-| 2026-06-15 | Revised — white as dominant background, dark sections used sparingly, updated colours to match brand reference palette, expanded whitespace guidance |
+| 2026-06-15 | Revised, white as dominant background, dark sections used sparingly, updated colours to match brand reference palette, expanded whitespace guidance |

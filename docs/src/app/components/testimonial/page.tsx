@@ -20,7 +20,7 @@ const CARD_CODE = `import { Testimonial } from "@/components/ui/testimonial"
 
 const CARD_DARK_CODE = `import { Testimonial } from "@/components/ui/testimonial"
 
-// Inside a forest Section — bright lime card on dark background
+// Inside a forest Section: bright lime card on dark background
 <Section type="primary" contained>
   <Testimonial
     quote="Instant Strata is incredibly valuable as a full stack platform from strata managers all the way to committee members."
@@ -32,7 +32,7 @@ const CARD_DARK_CODE = `import { Testimonial } from "@/components/ui/testimonial
   />
 </Section>`;
 
-const CARD_PRIMARY_CODE = `// Forest card on a light section — quote marks use lime in the cutout
+const CARD_PRIMARY_CODE = `// Forest card on a light section: quote marks use lime in the cutout
 <Testimonial
   quote="The levy notice workflow used to take our team a full day. Now it's done before morning tea."
   name="James O'Brien"
@@ -59,7 +59,7 @@ const PROPS = [
   { name: "name", type: "string", description: "Person's full name." },
   { name: "role", type: "string", description: "Job title or role." },
   { name: "company", type: "string", description: "Company or organisation name shown beside the logo." },
-  { name: "companyLogo", type: "ReactNode", description: "Company logo — any img, svg, or icon. Sized to h-5 automatically." },
+  { name: "companyLogo", type: "ReactNode", description: "Company logo: any img, svg, or icon. Sized to h-5 automatically." },
   { name: "portrait", type: "{ src: string; alt?: string }", description: "Portrait photo. Renders as a square card top-aligned to the right of the quote card. Hidden below sm breakpoint." },
   { name: "cta", type: "{ label: string; href: string }", description: "Optional call-to-action link in the attribution row. Forest button with lime text on lime cards." },
   { name: "type", type: '"alternative" | "primary" | "dark"', default: '"alternative"', description: "Card colour. alternative = bright lime on light sections. primary = forest on light sections. dark = bright lime card for use inside a forest Section." },
@@ -94,9 +94,9 @@ export default function TestimonialPage() {
         <CodeBlock code={INSTALL} language="bash" />
       </section>
 
-      {/* ── Testimonial — alternative (lime) ── */}
+      {/* ── Testimonial: alternative (lime) ── */}
       <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Card — alternative</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Card: alternative</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
           Bright lime card on a light background. Quote marks sit in the bottom-left cutout on the page background.
           Portrait is a separate square image, top-aligned to the card.
@@ -119,9 +119,9 @@ export default function TestimonialPage() {
         </div>
       </section>
 
-      {/* ── Testimonial — dark section with portrait ── */}
+      {/* ── Testimonial: dark section with portrait ── */}
       <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Card — dark section</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Card: dark section</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
           The primary homepage pattern from{" "}
           <a href="https://mode.com/" className="underline underline-offset-2 hover:text-foreground">
@@ -146,9 +146,9 @@ export default function TestimonialPage() {
         </div>
       </section>
 
-      {/* ── Testimonial — primary (forest) ── */}
+      {/* ── Testimonial: primary (forest) ── */}
       <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Card — primary</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Card: primary</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
           Forest card on a light background. Quote marks use lime in the cutout. CTA switches to lime fill.
         </p>
@@ -169,9 +169,9 @@ export default function TestimonialPage() {
         </div>
       </section>
 
-      {/* ── TestimonialBlock — no portrait ── */}
+      {/* ── TestimonialBlock: no portrait ── */}
       <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Block — without portrait</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Block: without portrait</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
           Same stepped cutout card at full width when a portrait is not needed.
         </p>
@@ -195,7 +195,7 @@ export default function TestimonialPage() {
 
       {/* ── Block size variants ── */}
       <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Block — size variants</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Block: size variants</h2>
         <ComponentPreview label="light section · sm / md / lg sizes">
           <div className="w-full space-y-8">
             {(["sm", "md", "lg"] as const).map((size) => (
@@ -222,7 +222,7 @@ export default function TestimonialPage() {
             ["Section background", "Recommended type", "Notes"],
             ["white / default", "alternative", "Bright lime card on white"],
             ["secondary (off-white)", "alternative or primary", "Lime for Mode-style; forest for high contrast"],
-            ["primary (forest)", "dark", "Bright lime card — use Testimonial with portrait"],
+            ["primary (forest)", "dark", "Bright lime card: use Testimonial with portrait"],
             ["alternative (lime-soft)", "primary", "Forest card on lime-soft accent"],
           ].map(([a, b, c], i) => (
             <div
@@ -237,13 +237,13 @@ export default function TestimonialPage() {
         </div>
       </section>
 
-      {/* ── Props — Testimonial ── */}
+      {/* ── Props: Testimonial ── */}
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">Testimonial Props</h2>
         <PropTable props={PROPS} />
       </section>
 
-      {/* ── Props — TestimonialBlock ── */}
+      {/* ── Props: TestimonialBlock ── */}
       <section className="pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">TestimonialBlock Props</h2>
         <p className="text-xs text-ink-muted mb-4">Extends Testimonial props (without portrait).</p>

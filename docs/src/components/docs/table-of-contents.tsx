@@ -47,7 +47,7 @@ export function TableOfContents() {
     setActiveId(items[0]?.id ?? "")
   }, [pathname])
 
-  // Intersection observer — tracks which heading is in view
+  // Intersection observer: tracks which heading is in view
   useEffect(() => {
     if (!headings.length) return
     const main = document.querySelector("main")
@@ -86,7 +86,7 @@ export function TableOfContents() {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {/* Text popover — slides in from right on hover */}
+      {/* Text popover: slides in from right on hover */}
       <div
         className={cn(
           "transition-all duration-200 ease-out",

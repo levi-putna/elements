@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "statement",
+  "type": "registry:ui",
+  "description": "Oversized editorial statement section (Mode-style closing manifesto): eyebrow, large display headline with accentable <em>, an optional cycle-loop diagram, and dual CTAs. Three background types.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/statement/statement.tsx",
+      "target": "components/ui/statement.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

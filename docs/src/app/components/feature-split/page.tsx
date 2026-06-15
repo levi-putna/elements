@@ -56,11 +56,11 @@ import {
 />`;
 
 const PROPS = [
-  { name: "primary", type: "{ heading: string; body: string }", description: "Top-left copy block — heading in Young Serif, body in Inter." },
+  { name: "primary", type: "{ heading: string; body: string }", description: "Top-left copy block: heading in Young Serif, body in Inter." },
   { name: "secondary", type: "{ heading: string; body: string }", description: "Bottom-right copy block." },
   { name: "topVisual", type: "ReactNode", description: "Top-right visual slot. Defaults to InfographicChartPair." },
   { name: "bottomVisual", type: "ReactNode", description: "Bottom-left visual slot. Defaults to InfographicEditorPair." },
-  { name: "gap", type: '"sm" | "md" | "lg"', default: '"md"', description: "Gap between quadrants — also the visible forest-green seam width." },
+  { name: "gap", type: '"sm" | "md" | "lg"', default: '"md"', description: "Gap between quadrants: also the visible forest-green seam width." },
 ];
 
 export default function FeatureSplitPage() {
@@ -132,8 +132,8 @@ export default function FeatureSplitPage() {
           {[
             ["Quadrant", "Tone", "Content"],
             ["Top-left", "cream (#EEF2E3)", "primary.heading + primary.body"],
-            ["Top-right", "lime (#C8F169)", "topVisual — Infographic pair, bleeds left"],
-            ["Bottom-left", "cream (#EEF2E3)", "bottomVisual — Infographic pair, bleeds right"],
+            ["Top-right", "lime (#C8F169)", "topVisual: Infographic pair, bleeds left"],
+            ["Bottom-left", "cream (#EEF2E3)", "bottomVisual: Infographic pair, bleeds right"],
             ["Bottom-right", "lime (#C8F169)", "secondary.heading + secondary.body"],
           ].map(([a, b, c], i) => (
             <div

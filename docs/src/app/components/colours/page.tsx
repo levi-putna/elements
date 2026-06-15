@@ -209,7 +209,7 @@ export default function ColoursPage() {
           Colours &amp; Accent
         </h1>
         <p className="text-base text-ink-muted leading-relaxed max-w-2xl">
-          White is the dominant background. Forest green and lime create emphasis and rhythm —
+          White is the dominant background. Forest green and lime create emphasis and rhythm -
           not wallpaper. If in doubt, use white. Reach for colour only when you need to signal
           a transition or draw deliberate attention.
         </p>
@@ -325,7 +325,7 @@ export default function ColoursPage() {
         </p>
         <p className="text-sm text-ink-muted leading-relaxed mb-6 max-w-2xl">
           Text colour always follows the background. Ink on light, white on dark. Lime is reserved
-          for accents — eyebrows, links, and syntax — not body copy.
+          for accents: eyebrows, links, and syntax, not body copy.
         </p>
 
         <div className="rounded-sm border border-border overflow-hidden divide-y divide-border">
@@ -360,7 +360,7 @@ export default function ColoursPage() {
                 Try for free
               </button>
               <p className="font-sans text-xs text-ink-muted">
-                Primary CTA — lime fill, ink text. One per section maximum.
+                Primary CTA: lime fill, ink text. One per section maximum.
               </p>
             </div>
 
@@ -489,15 +489,15 @@ export default function ColoursPage() {
         <ul className="space-y-3 max-w-2xl">
           {[
             "White is the default. Coloured sections are deliberate moments, not the baseline.",
-            "Never use white text on lime buttons — always ink on lime.",
-            "Never use ink text on forest backgrounds — always white or white at reduced opacity.",
+            "Never use white text on lime buttons: always ink on lime.",
+            "Never use ink text on forest backgrounds: always white or white at reduced opacity.",
             "Eyebrows: ink-muted on light sections, lime on dark sections.",
             "Borders on light surfaces use the green-tinted border token, not grey.",
             "No more than three dark sections per page. Never two dark sections in a row.",
-            "Logo: forest letterforms on lime container (light bg), or white on lime (dark bg).",
+            "Logo: forest letterforms on lime container (light bg), forest container with white letterforms (primary bg), or lime letterforms on forest container (dark bg). Container rotated 15°; letterforms upright.",
           ].map((rule) => (
             <li key={rule} className="flex gap-3 font-sans text-sm text-ink-muted leading-relaxed">
-              <span className="text-lime shrink-0 mt-0.5" aria-hidden="true">—</span>
+              <span className="text-lime shrink-0 mt-0.5" aria-hidden="true">-</span>
               {rule}
             </li>
           ))}

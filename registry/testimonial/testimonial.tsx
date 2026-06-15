@@ -19,7 +19,7 @@ interface TestimonialProps extends HTMLAttributes<HTMLDivElement> {
   role: string
   /** Company or organisation name. */
   company?: string
-  /** Company logo — any ReactNode (img, svg, icon). Sized to h-5. */
+  /** Company logo: any ReactNode (img, svg, icon). Sized to h-5. */
   companyLogo?: ReactNode
   /**
    * Portrait image URL. Renders as a square card to the right of the quote card,
@@ -60,7 +60,7 @@ const metaColor: Record<TestimonialType, string> = {
   dark:        "text-forest/70",
 }
 
-/** Quote marks sit in the bottom-left cutout — darker green on page/section bg. */
+/** Quote marks sit in the bottom-left cutout: darker green on page/section bg. */
 const markColor: Record<TestimonialType, string> = {
   alternative: "text-[#78C51C]",
   primary:     "text-lime",
@@ -80,7 +80,7 @@ const cardFill: Record<TestimonialType, string> = {
   dark:        "#C8F169",
 }
 
-/** Oversized ,, marks — 200% larger than the previous scale. */
+/** Oversized ,, marks: 200% larger than the previous scale. */
 const markSize =
   "text-[136px] sm:text-[152px] md:text-[176px] leading-[0.78]"
 
@@ -141,9 +141,9 @@ function TestimonialCardContent({
         </p>
       </div>
 
-      {/* Stepped footer — cutout cell + attribution cell */}
+      {/* Stepped footer: cutout cell + attribution cell */}
       <div className={cn("grid", cutoutCols)}>
-        {/* Bottom-left cutout — quote marks sit on section/page background */}
+        {/* Bottom-left cutout: quote marks sit on section/page background */}
         <div className="relative flex items-end justify-start pb-0">
           <StepFillet fill={cardFill[type]} />
           <span
@@ -154,7 +154,7 @@ function TestimonialCardContent({
           </span>
         </div>
 
-        {/* Attribution — continues the card fill to the bottom-right */}
+        {/* Attribution: continues the card fill to the bottom-right */}
         <div
           className={cn(
             "flex flex-wrap items-end justify-between gap-x-6 gap-y-3",
@@ -210,7 +210,7 @@ function TestimonialCardContent({
 }
 
 // ─────────────────────────────────────────────────────────
-// Testimonial — card + optional portrait
+// Testimonial: card + optional portrait
 // ─────────────────────────────────────────────────────────
 
 /**
@@ -243,7 +243,7 @@ export function Testimonial({
           type={type}
         />
 
-        {/* Square portrait — top-aligned, separate from the card */}
+        {/* Square portrait: top-aligned, separate from the card */}
         {portrait && (
           <div className="hidden sm:block w-32 md:w-40 lg:w-44 shrink-0">
             <div className="rounded-xl overflow-hidden aspect-square bg-forest-mid">
@@ -261,7 +261,7 @@ export function Testimonial({
 }
 
 // ─────────────────────────────────────────────────────────
-// TestimonialBlock — full-width variant without portrait
+// TestimonialBlock: full-width variant without portrait
 // ─────────────────────────────────────────────────────────
 
 interface TestimonialBlockProps extends Omit<TestimonialProps, "portrait"> {
@@ -275,7 +275,7 @@ const blockQuoteSize = {
 }
 
 /**
- * Full-width testimonial card without a portrait — same stepped cutout layout,
+ * Full-width testimonial card without a portrait: same stepped cutout layout,
  * designed for dark forest sections or centred feature bands.
  */
 export function TestimonialBlock({

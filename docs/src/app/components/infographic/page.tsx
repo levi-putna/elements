@@ -47,7 +47,7 @@ const USAGE = `import {
   InfographicGrid,
 } from "@/components/ui/infographic"
 
-// Single element — drop into a bento cell or feature section
+// Single element: drop into a bento cell or feature section
 <InfographicMaintenance />
 
 // Side-by-side pair
@@ -56,13 +56,13 @@ const USAGE = `import {
   <InfographicBudget />
 </InfographicRow>
 
-// Vertical stack — hero sidebar or narrow column
+// Vertical stack: hero sidebar or narrow column
 <InfographicStack>
   <InfographicNotifications />
   <InfographicSearch />
 </InfographicStack>
 
-// Showcase grid — feature section or landing page
+// Showcase grid: feature section or landing page
 <InfographicGrid cols={3}>
   <InfographicBuilding />
   <InfographicCompliance />
@@ -103,7 +103,7 @@ const METRIC_LAYOUT = [
 ] as const;
 
 const OPERATIONS_LAYOUT = [
-  { name: "Contractor", component: InfographicContractor, description: "Mini kanban — quoted, active, done." },
+  { name: "Contractor", component: InfographicContractor, description: "Mini kanban: quoted, active, done." },
   { name: "Compliance", component: InfographicCompliance, description: "Checklist with progress bar." },
   { name: "Onboarding", component: InfographicOnboarding, description: "Horizontal scheme setup stepper." },
   { name: "Insurance", component: InfographicInsurance, description: "Policy renewal timeline." },
@@ -193,31 +193,31 @@ export default function InfographicPage() {
 
       <InfographicGallery
         title="Core"
-        description="Original eight illustrations — schemes, portfolio, owners, reports, finance, AI, and workflow."
+        description="Original eight illustrations: schemes, portfolio, owners, reports, finance, AI, and workflow."
         items={CORE}
       />
 
       <InfographicGallery
         title="Feed &amp; inbox layout"
-        description="Vertical lists with badges, avatars, and status pills — maintenance queues, communications, and notifications."
+        description="Vertical lists with badges, avatars, and status pills: maintenance queues, communications, and notifications."
         items={FEED_LAYOUT}
       />
 
       <InfographicGallery
         title="Metric &amp; chart layout"
-        description="Stat grids, sparklines, profile cards, and stacked bars — budget, cashflow, building profiles, and arrears."
+        description="Stat grids, sparklines, profile cards, and stacked bars: budget, cashflow, building profiles, and arrears."
         items={METRIC_LAYOUT}
       />
 
       <InfographicGallery
         title="Operations layout"
-        description="Kanban boards, checklists, steppers, and timelines — contractors, compliance, onboarding, and insurance."
+        description="Kanban boards, checklists, steppers, and timelines: contractors, compliance, onboarding, and insurance."
         items={OPERATIONS_LAYOUT}
       />
 
       <InfographicGallery
         title="Governance layout"
-        description="Calendars, tables, folder trees, and search — AGMs, committee votes, documents, and global search."
+        description="Calendars, tables, folder trees, and search: AGMs, committee votes, documents, and global search."
         items={GOVERNANCE_LAYOUT}
       />
 

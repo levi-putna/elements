@@ -18,8 +18,8 @@ export default function TypographyPage() {
           Typography
         </h1>
         <p className="text-base text-ink-muted leading-relaxed">
-          Two typefaces. Young Serif for display headings — authority and warmth at scale.
-          Inter for everything else — clean, legible, neutral. JetBrains Mono for code.
+          Two typefaces. Young Serif for display headings: authority and warmth at scale.
+          Inter for everything else, clean, legible, neutral. JetBrains Mono for code.
         </p>
       </div>
 
@@ -50,7 +50,7 @@ export default function TypographyPage() {
               {ALPHABET}
             </p>
             <p className="font-display text-sm text-foreground/50 tracking-wide mt-1">
-              {NUMERALS} &amp; ! @ # $ % &amp; * ( ) — " "
+              {NUMERALS} &amp; ! @ # $ % &amp; * ( ): " "
             </p>
           </div>
           <div className="px-8 py-3 bg-secondary border-t border-border flex items-center gap-6">
@@ -82,12 +82,12 @@ export default function TypographyPage() {
               {ALPHABET}
             </p>
             <p className="font-sans text-sm text-foreground/50 tracking-wide mt-1">
-              {NUMERALS} &amp; ! @ # $ % &amp; * ( ) — " "
+              {NUMERALS} &amp; ! @ # $ % &amp; * ( ): " "
             </p>
           </div>
           <div className="px-8 py-3 bg-secondary border-t border-border flex items-center gap-6">
             <span className="text-xs text-ink-muted">Google Fonts · Free &amp; open source</span>
-            <span className="text-xs text-ink-muted">Variable font — all weights</span>
+            <span className="text-xs text-ink-muted">Variable font: all weights</span>
           </div>
         </div>
 
@@ -107,7 +107,7 @@ export default function TypographyPage() {
               {ALPHABET}
             </p>
             <p className="font-mono text-sm text-foreground/50 mt-1">
-              {NUMERALS} &amp; ! @ # $ % &amp; * ( ) — " "
+              {NUMERALS} &amp; ! @ # $ % &amp; * ( ): " "
             </p>
           </div>
           <div className="px-8 py-3 bg-secondary border-t border-border flex items-center gap-6">
@@ -200,7 +200,7 @@ export default function TypographyPage() {
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Inter · 400 · 18px · 1.7 leading</span>
             </div>
             <p className="font-sans text-lg font-normal text-ink-muted leading-[1.7]">
-              Instant Strata brings levy management, maintenance tracking, and owner communications into a single workspace — so nothing falls through the cracks.
+              Instant Strata brings levy management, maintenance tracking, and owner communications into a single workspace: so nothing falls through the cracks.
             </p>
           </div>
 
@@ -211,7 +211,7 @@ export default function TypographyPage() {
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">Inter · 400 · 16px · 1.65 leading</span>
             </div>
             <p className="font-sans text-base font-normal text-ink-muted leading-[1.65]">
-              Instant Strata brings levy management, maintenance tracking, and owner communications into a single workspace — so nothing falls through the cracks.
+              Instant Strata brings levy management, maintenance tracking, and owner communications into a single workspace: so nothing falls through the cracks.
             </p>
           </div>
 
@@ -254,7 +254,7 @@ export default function TypographyPage() {
             </h2>
             <p className="font-sans text-base text-ink-muted leading-[1.65]">
               Managing a strata scheme means juggling levy notices, maintenance requests,
-              AGM minutes, insurance renewals, and owner queries — often simultaneously.
+              AGM minutes, insurance renewals, and owner queries: often simultaneously.
               Instant Strata gives every role in your team a single place to work, so
               context is never lost and nothing gets overlooked.
             </p>
@@ -274,7 +274,7 @@ export default function TypographyPage() {
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-8">
           Quote
         </p>
-        <ComponentPreview label="Dark section — quote card">
+        <ComponentPreview label="Dark section: quote card">
           <div className="w-full bg-[#043F2E] rounded-sm px-8 py-14">
             <div className="flex gap-6 items-start">
               {/* Card + oversized quote mark */}
@@ -282,7 +282,7 @@ export default function TypographyPage() {
                 {/* Quote card */}
                 <div className="relative z-10 rounded-sm bg-[#EBF8C2] px-8 pt-8 pb-6">
                   <p className="font-display text-xl leading-relaxed text-[#043F2E] mb-8">
-                    Instant Strata is incredibly valuable — our team can raise a levy, send notices, and log a maintenance job in minutes, not hours. Owners actually read our communications now.
+                    Instant Strata is incredibly valuable: our team can raise a levy, send notices, and log a maintenance job in minutes, not hours. Owners actually read our communications now.
                   </p>
                   <div className="flex items-end justify-between gap-4">
                     <div>
@@ -295,7 +295,7 @@ export default function TypographyPage() {
                   </div>
                 </div>
 
-                {/* Oversized quotation mark — graphic device */}
+                {/* Oversized quotation mark: graphic device */}
                 <div
                   aria-hidden="true"
                   className="absolute -bottom-5 -left-3 font-display text-[120px] leading-none text-[#C8F169]/30 select-none z-0 translate-y-2"
@@ -304,7 +304,7 @@ export default function TypographyPage() {
                 </div>
               </div>
 
-              {/* Portrait — breaks out of card */}
+              {/* Portrait: breaks out of card */}
               <div className="shrink-0 w-28 h-36 rounded-sm bg-[#0A5C3D] overflow-hidden mt-4 hidden sm:block">
                 <div className="w-full h-full flex items-center justify-center text-white/20 text-xs font-mono">
                   photo
@@ -361,7 +361,7 @@ export default function TypographyPage() {
 
             {/* Caption / meta */}
             <p className="font-sans text-xs font-medium text-ink-muted">
-              Fig. 1 — Levy schedule for SP12345 · Updated 12 June 2026 · Draft
+              Fig. 1: Levy schedule for SP12345 · Updated 12 June 2026 · Draft
             </p>
 
           </div>

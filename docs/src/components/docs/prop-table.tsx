@@ -29,7 +29,7 @@ export function PropTable({ props }: PropTableProps) {
             >
               <td className="px-4 py-3 font-mono text-xs text-foreground">{prop.name}</td>
               <td className="px-4 py-3 font-mono text-xs text-ink-muted">{prop.type}</td>
-              <td className="px-4 py-3 font-mono text-xs text-ink-muted">{prop.default ?? "—"}</td>
+              <td className="px-4 py-3 font-mono text-xs text-ink-muted">{prop.default ?? "-"}</td>
               <td className="px-4 py-3 text-xs text-ink-muted leading-relaxed">{prop.description}</td>
             </tr>
           ))}

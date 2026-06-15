@@ -9,7 +9,7 @@ import { CopyIcon } from "lucide-react";
 
 const INSTALL = `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/message/registry.json`;
 
-const GLOBALS_CSS = `/* Add to globals.css — required for MessageResponse code block styles */
+const GLOBALS_CSS = `/* Add to globals.css: required for MessageResponse code block styles */
 @source "../node_modules/streamdown/dist/*.js";`;
 
 const USAGE = `import { Message, MessageContent, MessageResponse } from "@/components/ui/message"
@@ -65,7 +65,7 @@ const ENTITY_TAGS = `// The AI response markdown can include custom entity tags:
 // <strata-scheme plan="SP12345" name="Sunrise Apartments" />
 
 // MessageResponse will render these as styled inline badges automatically.
-// No extra setup needed — the plugins are built in.
+// No extra setup needed: the plugins are built in.
 
 const exampleContent = \`
 The lot is managed by <person name="Jane Smith" id="u_123">Jane Smith</person>

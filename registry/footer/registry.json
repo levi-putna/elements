@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "footer",
+  "type": "registry:ui",
+  "description": "Site-wide forest footer inspired by Mode.com: brand column with logo, tagline and social links beside a grid of link columns, closed by a bottom bar with copyright and legal links.",
+  "dependencies": [],
+  "registryDependencies": ["utils", "logo"],
+  "files": [
+    {
+      "path": "registry/footer/footer.tsx",
+      "target": "components/ui/footer.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

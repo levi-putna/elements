@@ -1,6 +1,6 @@
 # Elements
 
-A personal UI component library extending [shadcn/ui](https://ui.shadcn.com). Components are distributed as source code using the shadcn CLI — you copy them into your project and own them outright.
+A personal UI component library extending [shadcn/ui](https://ui.shadcn.com). Components are distributed as source code using the shadcn CLI: you copy them into your project and own them outright.
 
 **Live docs:** https://levi-putna.github.io/elements
 
@@ -116,7 +116,7 @@ The docs site uses its own local copy so you can develop and preview without pub
 
 ### 3. Create the docs page
 
-Create `docs/src/app/components/my-component/page.tsx`. Use the Button page as a template — it shows the standard structure:
+Create `docs/src/app/components/my-component/page.tsx`. Use the Button page as a template: it shows the standard structure:
 
 - Installation command
 - Usage example with code block
@@ -143,10 +143,10 @@ Edit `docs/src/app/page.tsx` and add a card to the components grid.
 
 The recommended pattern for extending a shadcn component:
 
-1. **Find the source** at [ui.shadcn.com](https://ui.shadcn.com) — the "View source" link on each component page shows the exact code.
+1. **Find the source** at [ui.shadcn.com](https://ui.shadcn.com): the "View source" link on each component page shows the exact code.
 2. **Copy it** into `registry/component-name/component-name.tsx`.
 3. **Add your changes** (new props, variants, behaviour).
-4. **Create `registry.json`** following the template above — make sure `"dependencies"` matches what the component imports.
+4. **Create `registry.json`** following the template above: make sure `"dependencies"` matches what the component imports.
 5. **Follow steps 2–5** from "Adding a new component" above.
 
 Your component completely replaces the shadcn version in any project that installs it, so name it identically (e.g. `button.tsx` targeting `components/ui/button.tsx`).
@@ -160,22 +160,22 @@ Each component doc page lives at `docs/src/app/components/[name]/page.tsx`.
 Standard sections to include:
 
 ```
-1. Header — name, brief description, link to shadcn source if it extends one
-2. Installation — the npx shadcn add command
-3. Usage — minimal import + usage code block
-4. Examples — live previews with matching code blocks
+1. Header: name, brief description, link to shadcn source if it extends one
+2. Installation: the npx shadcn add command
+3. Usage: minimal import + usage code block
+4. Examples: live previews with matching code blocks
    - All variants
    - All sizes
    - Any custom props (e.g. loading state)
    - Disabled state
-5. Props table — name, type, default, description
+5. Props table: name, type, default, description
 ```
 
 Use the shared doc components from `@/components/docs/`:
 
-- `<ComponentPreview>` — bordered preview box
-- `<CodeBlock code="..." language="tsx">` — syntax-highlighted code with copy button
-- `<PropTable props={[...]} />` — prop reference table
+- `<ComponentPreview>`: bordered preview box
+- `<CodeBlock code="..." language="tsx">`: syntax-highlighted code with copy button
+- `<PropTable props={[...]} />`: prop reference table
 
 ---
 

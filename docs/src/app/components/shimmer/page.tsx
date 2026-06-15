@@ -3,6 +3,7 @@ import { ComponentPreview } from "@/components/docs/component-preview";
 import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
 import { Shimmer } from "@/components/ui/shimmer";
+import { Spinner } from "@/components/ui/spinner";
 
 const INSTALL = `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/shimmer/registry.json`;
 
@@ -16,16 +17,29 @@ export function Loading() {
   )
 }`;
 
+const LOADING_STATUS = `import { Shimmer } from "@/components/ui/shimmer"
+import { Spinner } from "@/components/ui/spinner"
+
+export function LoadingStatus() {
+  return (
+    <p className="flex items-center gap-2 text-base text-foreground">
+      <Spinner className="size-3.5 text-forest" />
+      <Shimmer className="text-base font-normal">Generating your report</Shimmer>
+      <span aria-hidden="true">...</span>
+    </p>
+  )
+}`;
+
 const TUNING = `{/* duration controls the sweep speed (seconds) */}
 <Shimmer duration={3}>Slower sweep</Shimmer>
 
 {/* spread widens or narrows the bright band */}
 <Shimmer spread={4}>Wider highlight</Shimmer>
 
-{/* as renders a different element — defaults to span */}
+{/* as renders a different element: defaults to span */}
 <Shimmer as="h2" className="text-3xl font-bold">Heading shimmer</Shimmer>`;
 
-const KEYFRAMES = `/* globals.css — required for the sweep */
+const KEYFRAMES = `/* globals.css: required for the sweep */
 @keyframes text-shimmer {
   0%   { background-position: 200% center; }
   100% { background-position: 0% center; }
@@ -34,7 +48,7 @@ const KEYFRAMES = `/* globals.css — required for the sweep */
 const PROPS = [
   { name: "as", type: "ElementType", default: '"span"', description: "HTML element (or component) to render. Defaults to span so it can sit inline within text." },
   { name: "duration", type: "number", default: "2", description: "Animation duration in seconds. Higher is slower." },
-  { name: "spread", type: "number", default: "2", description: "Spread multiplier — higher values widen the bright band that sweeps across the letterforms." },
+  { name: "spread", type: "number", default: "2", description: "Spread multiplier: higher values widen the bright band that sweeps across the letterforms." },
   { name: "className", type: "string", description: "Additional classes. inline-block is always applied so background-clip works." },
   { name: "children", type: "ReactNode", description: "Text content the shimmer is painted on." },
 ];
@@ -51,7 +65,7 @@ export default function ShimmerPage() {
         <p className="text-base text-ink-muted leading-relaxed">
           Animated gradient shimmer that sweeps across text using the brand gradient
           (forest → lime → forest). Painted directly on the letterforms via
-          <code className="font-mono text-sm bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">background-clip: text</code> —
+          <code className="font-mono text-sm bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">background-clip: text</code> -
           ideal for in-progress or streaming states.
         </p>
       </div>
@@ -86,6 +100,24 @@ export default function ShimmerPage() {
             <ComponentPreview label="Preview">
               <Shimmer className="text-2xl font-bold">Generating your report…</Shimmer>
             </ComponentPreview>
+          </div>
+
+          <div>
+            <p className="text-sm font-semibold text-foreground mb-1">Loading status</p>
+            <p className="text-sm text-ink-muted mb-3 leading-relaxed">
+              Paragraph-sized text with a leading spinner and trailing ellipsis: useful for inline
+              loading or streaming states.
+            </p>
+            <ComponentPreview label="Preview">
+              <p className="flex items-center gap-2 text-base text-foreground">
+                <Spinner className="size-3.5 text-forest" />
+                <Shimmer className="text-base font-normal">Generating your report</Shimmer>
+                <span aria-hidden="true">...</span>
+              </p>
+            </ComponentPreview>
+            <div className="mt-3">
+              <CodeBlock code={LOADING_STATUS} language="tsx" />
+            </div>
           </div>
 
           <div>

@@ -6,7 +6,7 @@ interface ShimmerProps extends HTMLAttributes<HTMLElement> {
   as?: ElementType
   /** Animation duration in seconds. */
   duration?: number
-  /** Spread multiplier — higher values widen the bright band. */
+  /** Spread multiplier: higher values widen the bright band. */
   spread?: number
 }
 

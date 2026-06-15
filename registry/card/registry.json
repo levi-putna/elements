@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card",
+  "type": "registry:ui",
+  "description": "Card primitives and Mode-inspired variants: bordered, accent, and dark base shells, plus FeatureCard (Datasets style), BlogCardSimple, BlogCardFeatured, and BlogCard for blog indexes.",
+  "dependencies": [],
+  "registryDependencies": ["utils", "avatar"],
+  "files": [
+    {
+      "path": "registry/card/card.tsx",
+      "target": "components/ui/card.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

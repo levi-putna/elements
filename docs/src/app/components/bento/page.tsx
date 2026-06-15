@@ -5,183 +5,107 @@ import { PropTable } from "@/components/docs/prop-table";
 import {
   BentoGrid,
   BentoCell,
+  BentoNotch,
   BentoFeatureCell,
   BentoContentCell,
   BentoVisualCell,
-  BentoSplit,
-  BentoSplitPanel,
-  BentoBleed,
 } from "@/components/ui/bento";
 import {
   BarChart3,
-  Bell,
-  FileText,
-  Globe,
-  LayoutGrid,
-  MessageSquare,
-  Search,
-  Settings,
-  Shield,
-  Users,
-  Zap,
+  Boxes,
+  Code2,
+  Database,
+  LayoutDashboard,
+  LineChart,
 } from "lucide-react";
 
 const INSTALL = `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/bento/registry.json`;
 
-const FEATURE_GRID_CODE = `import {
+const SHOWCASE_CODE = `import {
   BentoGrid,
   BentoFeatureCell,
 } from "@/components/ui/bento"
-import { BarChart3, FileText, Globe, LayoutGrid, MessageSquare, Shield } from "lucide-react"
+import { Code2, LineChart, BarChart3, Boxes, LayoutDashboard, Database } from "lucide-react"
 
-// Feature grid — icon top-left, label bottom-left
-// Outer: lime-soft. Cells: forest green.
-<BentoGrid type="alternative" cols={3}>
-  <BentoFeatureCell
-    icon={<FileText />}
-    label="Levy management"
-    type="primary"
-  />
-  <BentoFeatureCell
-    icon={<BarChart3 />}
-    label="Financial reporting"
-    type="primary"
-    rowSpan={2}
-    minH="min-h-64"
-  />
-  <BentoFeatureCell
-    icon={<Bell />}
-    label="Owner notifications"
-    type="primary"
-  />
-  <BentoFeatureCell
-    icon={<Globe />}
-    label="Online portal"
-    type="primary"
-    colSpan={2}
-  />
+// 12-column base grid. Cells span a slice of it; flush + notches
+// carve the concave interlock where cards meet.
+<BentoGrid seam="default" cols={12} rowHeight={168} gap={12}>
+  <BentoFeatureCell icon={<Code2 />}        label="Ad hoc analysis"      tone="secondary" colSpan={7} flush={["br"]}      notches={["br"]} />
+  <BentoFeatureCell icon={<LineChart />}    label="Advanced analytics"   tone="primary"   colSpan={5} rowSpan={2} flush={["bl"]} notches={["bl"]} />
+  <BentoFeatureCell icon={<BarChart3 />}    label="Self-serve reporting" tone="secondary" colSpan={4} />
+  <BentoFeatureCell icon={<Boxes />}        label="Custom data apps"     tone="secondary" colSpan={3} flush={["tr", "br"]} notches={["tr", "br"]} />
+  <BentoFeatureCell icon={<LayoutDashboard />} label="Interactive dashboards" tone="secondary" colSpan={7} flush={["tr"]} notches={["tr"]} />
+  <BentoFeatureCell icon={<Database />}     label="Explorable datasets"  tone="secondary" colSpan={5} flush={["tl"]} notches={["tl"]} />
 </BentoGrid>`;
 
-const CONTENT_GRID_CODE = `import {
+const NOTCH_CODE = `// A concave corner: flatten the card corner, then drop a
+// seam-coloured BentoNotch over it. The notch's inner corner is
+// rounded, so the seam colour bites a quarter-circle out of the card.
+<BentoCell tone="primary" colSpan={4} flush={["br"]}>
+  {/* …content… */}
+  <BentoNotch corner="br" size={22} />
+</BentoCell>`;
+
+const CONTENT_CODE = `import {
   BentoGrid,
   BentoContentCell,
   BentoVisualCell,
 } from "@/components/ui/bento"
 
-// Content bento — alternating text + visual cells
-// Outer: off-white. Cells: white text blocks + dark visual cards.
-<BentoGrid type="secondary" cols={2} gap="lg">
+<BentoGrid seam="secondary" cols={2} rowHeight={220} gap={12}>
   <BentoContentCell
     eyebrow="Built for managers"
     heading="Made for your strata team"
-    body="Levy notices, maintenance requests, AGM minutes and owner queries — all in one workspace."
-    type="default"
+    body="Levy notices, maintenance requests and owner queries in one workspace."
+    tone="default"
   />
-  <BentoVisualCell type="primary" rowSpan={1}>
-    {/* screenshot / illustration */}
-  </BentoVisualCell>
-  <BentoVisualCell type="dark-card">
-    {/* screenshot / illustration */}
-  </BentoVisualCell>
-  <BentoContentCell
-    eyebrow="Owner experience"
-    heading="And the owners you serve"
-    body="A self-service portal means fewer calls and more trust."
-    type="alternative"
-  />
+  <BentoVisualCell tone="primary">{/* screenshot */}</BentoVisualCell>
 </BentoGrid>`;
-
-const DARK_FEATURE_CODE = `// Forest background — cells use lime-soft (alternative)
-<BentoGrid type="primary" cols={3}>
-  <BentoFeatureCell icon={<Shield />} label="Audit trail"      type="dark-card" />
-  <BentoFeatureCell icon={<Zap />}    label="Automation"       type="alternative" rowSpan={2} />
-  <BentoFeatureCell icon={<Users />}  label="Role permissions" type="dark-card" />
-  <BentoFeatureCell icon={<Search />} label="Global search"    type="dark-card" colSpan={2} />
-</BentoGrid>`;
-
-const SPLIT_CODE = `import {
-  BentoSplit,
-  BentoSplitPanel,
-  BentoBleed,
-} from "@/components/ui/bento"
-
-// Two-column interlocking overlap — the signature brand element.
-// Right column staggers down; media bleeds across the seam.
-<BentoSplit
-  stagger={56}
-  left={[
-    <BentoSplitPanel type="secondary">
-      <h3 className="font-display text-2xl">Made for your data team</h3>
-      <p>SQL, R, Python and data viz, all connected.</p>
-    </BentoSplitPanel>,
-    <BentoSplitPanel type="secondary" padding="none" className="overflow-visible">
-      <BentoBleed bleed={{ right: 40, bottom: 24 }} className="p-6">
-        {/* dark mockup card that overhangs onto the next panel */}
-      </BentoBleed>
-    </BentoSplitPanel>,
-  ]}
-  right={[
-    <BentoSplitPanel type="alternative">{/* chart */}</BentoSplitPanel>,
-    <BentoSplitPanel type="alternative">
-      <h3 className="font-display text-2xl">And the teams you work with</h3>
-      <p>Easy, trusted self-service for everyone.</p>
-    </BentoSplitPanel>,
-  ]}
-/>`;
-
-const SPLIT_PROPS = [
-  { name: "left", type: "ReactNode[]", description: "Panels stacked in the left column. Typically BentoSplitPanel elements." },
-  { name: "right", type: "ReactNode[]", description: "Panels stacked in the right column. Offset downward by stagger to create the interlocking rhythm." },
-  { name: "stagger", type: "number", default: "64", description: "Vertical offset (px) applied to the right column. This downward shift is what makes the columns appear to interlock." },
-  { name: "gap", type: '"sm" | "md" | "lg"', default: '"md"', description: "Gap between all panels — also the visual seam width between columns." },
-];
-
-const BLEED_PROPS = [
-  { name: "bleed", type: "{ top?, right?, bottom?, left? }", description: "Pixels each edge overhangs its panel via negative margin. The wrapper is raised with z-index so media spills across the seam onto the neighbouring panel." },
-];
 
 const GRID_PROPS = [
-  { name: "type", type: '"default" | "secondary" | "primary" | "alternative"', default: '"secondary"', description: "Background of the outer container. Also sets the gap and padding colour, creating the notch effect where cell corners meet." },
-  { name: "cols", type: "2 | 3 | 4", default: "3", description: "Number of equal-width columns." },
-  { name: "gap", type: '"sm" | "md" | "lg"', default: '"md"', description: "Gap between cells. Equal to the outer padding so the grid border and inner gaps are visually consistent." },
-  { name: "rounded", type: '"md" | "lg" | "xl"', default: '"xl"', description: "Border radius of the outer container. Should be slightly larger than the cell radius to avoid sharp corners." },
+  { name: "seam", type: '"default" | "secondary" | "primary" | "alternative"', default: '"default"', description: "Background of the container. Shows through every gap and the outer padding, and is the colour the notches paint, so it reads as the seam between cards." },
+  { name: "cols", type: "number", default: "12", description: "Base columns. Cells span a slice of these via colSpan." },
+  { name: "rowHeight", type: "number", default: "168", description: "Height (px) of one grid row. Cells with rowSpan get multiples of this." },
+  { name: "gap", type: "number", default: "12", description: "Gap between cells (px). Reused as the outer padding so the frame is even on every side." },
+  { name: "rounded", type: "number", default: "28", description: "Outer container radius (px). Keep it larger than the cell radius so the frame never clips a card corner." },
 ];
 
 const CELL_PROPS = [
-  { name: "type", type: '"default" | "secondary" | "primary" | "alternative" | "dark-card"', default: '"primary"', description: "Cell background. Choose based on the container type — primary cells on alternative containers, dark-card or alternative cells on primary containers." },
-  { name: "colSpan", type: "1 | 2 | 3 | 4", default: "1", description: "Columns this cell spans." },
-  { name: "rowSpan", type: "1 | 2 | 3", default: "1", description: "Rows this cell spans. Use rowSpan={2} for tall feature cells." },
-  { name: "minH", type: "string", description: 'Tailwind min-height class, e.g. "min-h-36". Keeps cells proportional when row content is short.' },
+  { name: "tone", type: '"default" | "secondary" | "primary" | "alternative" | "dark"', default: '"secondary"', description: "Card background and text colour." },
+  { name: "colSpan", type: "number", default: "1", description: "Columns this cell spans, of the grid's cols." },
+  { name: "rowSpan", type: "number", default: "1", description: "Rows this cell spans." },
+  { name: "radius", type: "number", default: "18", description: "Corner radius of the card (px)." },
+  { name: "flush", type: '("tl" | "tr" | "bl" | "br")[]', default: "[]", description: "Corners to flatten to radius 0 where the card butts against a neighbour. Pair each with a BentoNotch to carve the concave interlock." },
+  { name: "clip", type: "boolean", default: "false", description: "Clip overflowing content (images). Off by default so notches can render outside the box." },
+];
+
+const NOTCH_PROPS = [
+  { name: "corner", type: '"tl" | "tr" | "bl" | "br"', description: "Which corner of the parent cell to carve. The parent must be a BentoCell (position: relative)." },
+  { name: "size", type: "number", default: "22", description: "Radius of the concave quarter-circle carve (px)." },
+  { name: "seam", type: "string", description: "Override the carve colour. Defaults to the grid's seam colour, supplied via context." },
 ];
 
 const FEATURE_PROPS = [
-  { name: "icon", type: "ReactNode", description: "Lucide icon (or any SVG). Rendered at the top of the cell." },
-  { name: "label", type: "string", description: "Primary label pinned to the bottom-left of the cell." },
-  { name: "description", type: "string", description: "Optional secondary text beneath the label." },
-  { name: "visual", type: "ReactNode", description: "Optional visual element (illustration, chart, screenshot) placed between icon and label." },
-];
-
-const CONTENT_PROPS = [
-  { name: "eyebrow", type: "string", description: "Small all-caps label above the heading. Colour adapts to cell type (lime on dark, muted on light)." },
-  { name: "heading", type: "string", description: "Section heading in the Young Serif display font." },
-  { name: "body", type: "string", description: "Supporting paragraph text." },
-  { name: "footer", type: "ReactNode", description: "Optional slot for a CTA button or link below the body copy." },
-  { name: "padding", type: '"sm" | "md" | "lg"', default: '"md"', description: "Internal padding of the cell." },
+  { name: "icon", type: "ReactNode", description: "24px icon (Lucide or any SVG) rendered at the top-left." },
+  { name: "label", type: "string", description: "Primary label pinned to the bottom-left." },
+  { name: "body", type: "string", description: "Optional supporting text under the label." },
+  { name: "visual", type: "ReactNode", description: "Optional chart / screenshot placed between icon and label." },
+  { name: "notches", type: '("tl" | "tr" | "bl" | "br")[]', default: "[]", description: "Convenience: renders a BentoNotch at each listed corner." },
 ];
 
 export default function BentoPage() {
   return (
     <DocsPage width="wide">
-
       <div className="mb-10">
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
           Components / Website
         </p>
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">Bento</h1>
         <p className="text-base text-ink-muted leading-relaxed">
-          A composable bento grid system. The outer container background doubles as the gap
-          colour, creating the characteristic notch effect at inner corners. Four background
-          types work across all Section states — light, dark, and accent.
+          A standalone bento grid in the style of mode.com&apos;s &ldquo;Beyond BI&rdquo; section.
+          Feature cards span a 12-column base grid; where they meet, corners are flattened and a
+          seam-coloured notch carves a concave interlock, so the cards read as routed into one
+          another rather than floating in a plain grid.
         </p>
       </div>
 
@@ -191,129 +115,157 @@ export default function BentoPage() {
         <CodeBlock code={INSTALL} language="bash" />
       </section>
 
-      {/* ── Feature grid — alternative (lime-soft) ── */}
+      {/* ── How the grid works ── */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">How it works</h2>
+        <ul className="space-y-3 text-sm text-ink-muted leading-relaxed list-disc pl-5">
+          <li>
+            <strong className="text-foreground">The grid</strong> is a 12-column track. Each card
+            sets a <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">colSpan</code>{" "}
+            (and optional <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">rowSpan</code>),
+            so spans of 7 + 5, or 4 + 3 + 5, fill a row. Auto-flow places them left-to-right, top-to-bottom.
+          </li>
+          <li>
+            <strong className="text-foreground">The seam</strong> is the container background. It
+            shows through every gap and the equal outer padding, so the frame and the inner gaps
+            are one continuous colour — that&apos;s what the eye reads as the join between cards.
+          </li>
+          <li>
+            <strong className="text-foreground">Radius is managed in two halves.</strong> Cards are
+            rounded on every corner by default. Where a card meets a neighbour, that corner is set
+            to <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">flush</code>{" "}
+            (radius&nbsp;0) so the edge is square, then a <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoNotch</code>{" "}
+            — a small seam-coloured square with its <em>inner</em> corner rounded — is laid over
+            that corner. The seam colour bites a concave quarter-circle out of the card. Two cards
+            carving the corners they share produces the interlocking &ldquo;pocket&rdquo; that
+            defines the mode.com look.
+          </li>
+        </ul>
+      </section>
+
+      {/* ── Showcase: interlocking feature grid ── */}
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Feature grid</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
-          Icon top-left, label bottom-left. Outer container is <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">alternative</code> (lime-soft),
-          cells are <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">primary</code> (forest). Use{" "}
-          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">rowSpan</code> and{" "}
-          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">colSpan</code> to create asymmetric hierarchy.
+          Six capabilities on a 12-column grid, with one tall accent card and concave notches at the
+          interior junctions.
         </p>
 
-        <ComponentPreview label="alternative container · primary cells">
-          <BentoGrid type="alternative" cols={3} className="w-full">
+        <ComponentPreview label="default seam · interlocking feature cards">
+          <BentoGrid seam="default" cols={12} rowHeight={168} gap={12} className="w-full">
             <BentoFeatureCell
-              icon={<FileText />}
-              label="Levy management"
-              type="primary"
+              icon={<Code2 />}
+              label="Ad hoc analysis"
+              body="SQL, R and Python in one notebook."
+              tone="secondary"
+              colSpan={7}
+              flush={["br"]}
+              notches={["br"]}
+            />
+            <BentoFeatureCell
+              icon={<LineChart />}
+              label="Advanced analytics"
+              body="Interactive modelling without the rebuild."
+              tone="primary"
+              colSpan={5}
+              rowSpan={2}
+              flush={["bl"]}
+              notches={["bl"]}
             />
             <BentoFeatureCell
               icon={<BarChart3 />}
-              label="Financial reporting"
-              type="primary"
-              rowSpan={2}
-              minH="min-h-52"
+              label="Self-serve reporting"
+              tone="secondary"
+              colSpan={4}
             />
             <BentoFeatureCell
-              icon={<Bell />}
-              label="Owner notifications"
-              type="primary"
+              icon={<Boxes />}
+              label="Custom data apps"
+              tone="secondary"
+              colSpan={3}
+              flush={["tr", "br"]}
+              notches={["tr", "br"]}
             />
             <BentoFeatureCell
-              icon={<Globe />}
-              label="Online owner portal"
-              type="primary"
-              colSpan={2}
+              icon={<LayoutDashboard />}
+              label="Interactive dashboards"
+              tone="secondary"
+              colSpan={7}
+              flush={["tr"]}
+              notches={["tr"]}
+            />
+            <BentoFeatureCell
+              icon={<Database />}
+              label="Explorable datasets"
+              tone="secondary"
+              colSpan={5}
+              flush={["tl"]}
+              notches={["tl"]}
             />
           </BentoGrid>
         </ComponentPreview>
         <div className="mt-4">
-          <CodeBlock code={FEATURE_GRID_CODE} language="tsx" />
+          <CodeBlock code={SHOWCASE_CODE} language="tsx" />
         </div>
       </section>
 
-      {/* ── Feature grid — primary (forest) ── */}
+      {/* ── The notch in isolation ── */}
       <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Feature grid — dark</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">The notch</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
-          Same structure on a <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">primary</code> (forest) container.
-          Mix <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">dark-card</code> and{" "}
-          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">alternative</code> cells to create emphasis within the dark section.
+          A single concave corner. The card&apos;s bottom-right is flattened, then a seam-coloured{" "}
+          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoNotch</code>{" "}
+          carves the curve back in.
         </p>
 
-        <ComponentPreview label="primary container · dark-card + alternative cells">
-          <BentoGrid type="primary" cols={3} className="w-full">
-            <BentoFeatureCell
-              icon={<Shield />}
-              label="Audit trail"
-              type="dark-card"
-            />
-            <BentoFeatureCell
-              icon={<Zap />}
-              label="Automation"
-              description="Set and forget recurring tasks."
-              type="alternative"
-              rowSpan={2}
-              minH="min-h-52"
-            />
-            <BentoFeatureCell
-              icon={<Users />}
-              label="Role permissions"
-              type="dark-card"
-            />
-            <BentoFeatureCell
-              icon={<Search />}
-              label="Global search"
-              type="dark-card"
-              colSpan={2}
-            />
+        <ComponentPreview label="one cell · one notch">
+          <BentoGrid seam="default" cols={2} rowHeight={160} gap={12} className="w-full">
+            <BentoCell tone="primary" colSpan={1} flush={["br"]} className="flex items-end p-6 text-white">
+              <span className="text-sm font-medium">Concave bottom-right</span>
+              <BentoNotch corner="br" size={22} />
+            </BentoCell>
+            <BentoCell tone="secondary" colSpan={1} className="flex items-end p-6">
+              <span className="text-sm font-medium">Plain card</span>
+            </BentoCell>
           </BentoGrid>
         </ComponentPreview>
         <div className="mt-4">
-          <CodeBlock code={DARK_FEATURE_CODE} language="tsx" />
+          <CodeBlock code={NOTCH_CODE} language="tsx" />
         </div>
       </section>
 
-      {/* ── Content grid — secondary ── */}
+      {/* ── Content grid ── */}
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Content grid</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
-          Alternating text and visual cells. The <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoContentCell</code> handles
-          eyebrow + Young Serif heading + body copy. The <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoVisualCell</code> is a
-          fill container for screenshots, illustrations, or UI previews.
+          The editorial variant: <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoContentCell</code>{" "}
+          for eyebrow + display heading + copy, alongside <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoVisualCell</code>{" "}
+          fills for screenshots and UI previews.
         </p>
 
-        <ComponentPreview label="secondary container · content + visual cells">
-          <BentoGrid type="secondary" cols={2} gap="lg" className="w-full">
+        <ComponentPreview label="secondary seam · content + visual">
+          <BentoGrid seam="secondary" cols={2} rowHeight={220} gap={12} className="w-full">
             <BentoContentCell
               eyebrow="Built for managers"
               heading="Made for your strata team"
-              body="Levy notices, maintenance requests, AGM minutes and owner queries — all in one place."
-              type="default"
-              padding="lg"
+              body="Levy notices, maintenance requests, AGM minutes and owner queries: all in one workspace."
+              tone="default"
             />
-            <BentoVisualCell type="primary" minH="min-h-48">
-              <div className="flex flex-col items-start gap-2 p-5 w-full">
-                <div className="w-full h-2 rounded-full bg-white/10" />
-                <div className="w-3/4 h-2 rounded-full bg-white/10" />
-                <div className="mt-3 w-full h-16 rounded-sm bg-white/5 border border-white/10" />
-                <div className="w-1/2 h-2 rounded-full bg-[#C8F169]/40 mt-2" />
-                <div className="w-2/3 h-2 rounded-full bg-white/10" />
+            <BentoVisualCell tone="primary">
+              <div className="flex w-full flex-col items-start gap-2 p-6">
+                <div className="h-2 w-full rounded-full bg-white/10" />
+                <div className="h-2 w-3/4 rounded-full bg-white/10" />
+                <div className="mt-3 h-16 w-full rounded-sm border border-white/10 bg-white/5" />
+                <div className="mt-2 h-2 w-1/2 rounded-full bg-[#C8F169]/40" />
               </div>
             </BentoVisualCell>
-            <BentoVisualCell type="dark-card" minH="min-h-48">
-              <div className="flex flex-col items-start gap-2 p-5 w-full">
-                <div className="text-[10px] font-mono text-white/30 mb-1">SP12345</div>
-                <div className="w-full h-2 rounded-full bg-white/10" />
-                <div className="w-2/3 h-2 rounded-full bg-white/10" />
-                <div className="mt-3 grid grid-cols-3 gap-1.5 w-full">
+            <BentoVisualCell tone="dark">
+              <div className="flex w-full flex-col items-start gap-2 p-6">
+                <div className="mb-1 font-mono text-[10px] text-white/30">SP12345</div>
+                <div className="mt-1 grid w-full grid-cols-6 gap-1.5">
                   {[40, 65, 50, 80, 55, 70].map((h, i) => (
-                    <div key={i} className="flex items-end h-10">
-                      <div
-                        className="w-full rounded-sm bg-[#C8F169]/50"
-                        style={{ height: `${h}%` }}
-                      />
+                    <div key={i} className="flex h-16 items-end">
+                      <div className="w-full rounded-sm bg-[#C8F169]/50" style={{ height: `${h}%` }} />
                     </div>
                   ))}
                 </div>
@@ -323,132 +275,12 @@ export default function BentoPage() {
               eyebrow="Owner experience"
               heading="And the owners you serve"
               body="A self-service portal means fewer calls, more transparency, and owners who trust you."
-              type="alternative"
-              padding="lg"
+              tone="alternative"
             />
           </BentoGrid>
         </ComponentPreview>
         <div className="mt-4">
-          <CodeBlock code={CONTENT_GRID_CODE} language="tsx" />
-        </div>
-      </section>
-
-      {/* ── Split overlap — the signature brand element ── */}
-      <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Split overlap</h2>
-        <p className="text-sm text-ink-muted mb-5 leading-relaxed">
-          The signature interlocking layout. Two columns of stacked panels where the right
-          column is <strong className="font-semibold text-foreground">staggered down</strong> to
-          create a woven rhythm, panels alternate off-white ↔ lime, and media can{" "}
-          <strong className="font-semibold text-foreground">bleed across the seam</strong> with{" "}
-          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoBleed</code> for depth.
-        </p>
-
-        <ComponentPreview label="BentoSplit · staggered columns with cross-seam bleed">
-          <div className="w-full">
-            <BentoSplit
-              stagger={56}
-              left={[
-                <BentoSplitPanel key="a" type="secondary">
-                  <h3 className="font-display text-2xl text-[#043F2E] mb-3">Made for your data team</h3>
-                  <p className="text-sm text-[#4A7A62] leading-relaxed">
-                    SQL, R, Python and data viz, all connected to help you deliver insights faster.
-                    No rigid data model stands in the way of the analysis you need.
-                  </p>
-                </BentoSplitPanel>,
-                <BentoSplitPanel key="b" type="secondary" padding="none" className="overflow-visible">
-                  <BentoBleed bleed={{ right: 40, bottom: 24 }} className="p-6">
-                    <div className="rounded-xl bg-[#043F2E] p-4 shadow-lg">
-                      <p className="text-[10px] font-mono text-white/40 mb-2">SQL Editor</p>
-                      <div className="space-y-1.5">
-                        <div className="h-1.5 w-3/4 rounded-full bg-[#C8F169]/40" />
-                        <div className="h-1.5 w-1/2 rounded-full bg-white/15" />
-                        <div className="h-1.5 w-2/3 rounded-full bg-white/15" />
-                      </div>
-                      <div className="mt-3 h-8 rounded-sm bg-[#C8F169]" />
-                    </div>
-                  </BentoBleed>
-                </BentoSplitPanel>,
-              ]}
-              right={[
-                <BentoSplitPanel key="c" type="alternative" minH="min-h-44">
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-[10px] font-mono text-[#043F2E]/50">Faceted Combo</p>
-                    <span className="rounded-sm bg-[#043F2E] px-2 py-1 text-[10px] text-white">Share</span>
-                  </div>
-                  <div className="grid grid-cols-6 gap-1.5 items-end h-20">
-                    {[50, 70, 45, 85, 60, 75].map((h, i) => (
-                      <div key={i} className="rounded-sm bg-[#043F2E]/70" style={{ height: `${h}%` }} />
-                    ))}
-                  </div>
-                </BentoSplitPanel>,
-                <BentoSplitPanel key="d" type="alternative">
-                  <h3 className="font-display text-2xl text-[#043F2E] mb-3">And the teams you work with</h3>
-                  <p className="text-sm text-[#043F2E]/70 leading-relaxed">
-                    Deliver tools for easy, trusted self-service. Everyone&apos;s analytical tools live
-                    in one place, without long implementation times or tedious maintenance.
-                  </p>
-                </BentoSplitPanel>,
-              ]}
-            />
-          </div>
-        </ComponentPreview>
-        <div className="mt-4">
-          <CodeBlock code={SPLIT_CODE} language="tsx" />
-        </div>
-      </section>
-
-      {/* ── 4-up small grid ── */}
-      <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">4-column icon grid</h2>
-        <p className="text-sm text-ink-muted mb-5 leading-relaxed">
-          Uniform small cards — good for listing many capabilities at a glance. Works on any section background.
-        </p>
-
-        <ComponentPreview label="alternative container · 4-col · primary cells">
-          <BentoGrid type="alternative" cols={4} gap="sm" className="w-full">
-            {[
-              { icon: <FileText />, label: "Levy notices" },
-              { icon: <MessageSquare />, label: "Communications" },
-              { icon: <LayoutGrid />, label: "Scheme overview" },
-              { icon: <BarChart3 />, label: "Financials" },
-              { icon: <Users />, label: "Owner directory" },
-              { icon: <Settings />, label: "Settings" },
-              { icon: <Shield />, label: "Compliance" },
-              { icon: <Bell />, label: "Notifications" },
-            ].map(({ icon, label }) => (
-              <BentoFeatureCell
-                key={label}
-                icon={icon}
-                label={label}
-                type="primary"
-                minH="min-h-28"
-              />
-            ))}
-          </BentoGrid>
-        </ComponentPreview>
-      </section>
-
-      {/* ── Background context guide ── */}
-      <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">Background context guide</h2>
-        <div className="rounded-sm border border-border overflow-hidden">
-          {[
-            ["Section type", "Grid container type", "Recommended cell types"],
-            ["default / white", "secondary", "default, alternative"],
-            ["secondary (off-white)", "default or alternative", "default, primary, dark-card"],
-            ["primary (forest)", "primary", "dark-card, alternative"],
-            ["alternative (lime-soft)", "alternative", "primary, dark-card"],
-          ].map(([a, b, c], i) => (
-            <div
-              key={a}
-              className={`flex gap-4 px-4 py-3 border-b border-border last:border-0 ${i === 0 ? "bg-secondary" : ""}`}
-            >
-              <span className={`text-xs w-40 shrink-0 ${i === 0 ? "font-semibold text-foreground" : "font-mono text-foreground"}`}>{a}</span>
-              <span className={`text-xs w-44 shrink-0 ${i === 0 ? "font-semibold text-foreground" : "font-mono text-ink-muted"}`}>{b}</span>
-              <span className={`text-xs ${i === 0 ? "font-semibold text-foreground" : "font-mono text-ink-muted"}`}>{c}</span>
-            </div>
-          ))}
+          <CodeBlock code={CONTENT_CODE} language="tsx" />
         </div>
       </section>
 
@@ -464,28 +296,15 @@ export default function BentoPage() {
       </section>
 
       <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoNotch Props</h2>
+        <PropTable props={NOTCH_PROPS} />
+      </section>
+
+      <section className="pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoFeatureCell Props</h2>
         <p className="text-xs text-ink-muted mb-3">Extends BentoCell props.</p>
         <PropTable props={FEATURE_PROPS} />
       </section>
-
-      <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoContentCell Props</h2>
-        <p className="text-xs text-ink-muted mb-3">Extends BentoCell props.</p>
-        <PropTable props={CONTENT_PROPS} />
-      </section>
-
-      <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoSplit Props</h2>
-        <PropTable props={SPLIT_PROPS} />
-      </section>
-
-      <section className="pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoBleed Props</h2>
-        <p className="text-xs text-ink-muted mb-3">BentoSplitPanel extends BentoCell props with a padding prop.</p>
-        <PropTable props={BLEED_PROPS} />
-      </section>
-
     </DocsPage>
   );
 }

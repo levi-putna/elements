@@ -8,10 +8,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Forest green background, white text — the primary brand action
+        // Forest green background, white text: the primary brand action
         default:
           "bg-[#043F2E] text-white hover:bg-[#0A5C3D] border-transparent",
-        // Lime green background, forest text — high-visibility accent action
+        // Lime green background, forest text: high-visibility accent action
         accent:
           "bg-[#C8F169] text-[#043F2E] hover:bg-[#B5E050] border-transparent",
         outline:

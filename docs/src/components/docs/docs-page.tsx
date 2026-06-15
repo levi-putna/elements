@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils"
 import type { HTMLAttributes } from "react"
 
 interface DocsPageProps extends HTMLAttributes<HTMLDivElement> {
-  /** Container width — default matches standard marketing pages (1200px). */
+  /** Container width: default matches standard marketing pages (1200px). */
   width?: ContainerWidth
 }
 

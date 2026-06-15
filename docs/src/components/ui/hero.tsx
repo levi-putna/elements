@@ -2,18 +2,18 @@ import { cn } from "@/lib/utils"
 import type { HTMLAttributes, ReactNode } from "react"
 
 // ─────────────────────────────────────────────────────────
-// Hero — Instant Strata marquee hero
+// Hero: Instant Strata marquee hero
 //
 //   · forest-green canvas (#043F2E)
 //   · Young Serif headline split across stepped lime (#C8F169) blocks
-//     that read as one descending "ribbon" — easy to edit via `lines`
+//     that read as one descending "ribbon": easy to edit via `lines`
 //   · selective flat corners + concave "notch" cut-outs at each junction
 //     so the blocks fuse into a single shape
 //
 // Desktop layout (12-column grid, thirds-based):
-//   · lines[0] — 100% (cols 1–12, row 1)   full top width
-//   · lines[1] —  2/3 (cols 5–12, row 2)   right 2/3, sits over the photo
-//   · lines[2] —  1/3 (cols 9–12, row 3)   right 1/3, clear of the photo
+//   · lines[0]: 100% (cols 1–12, row 1)   full top width
+//   · lines[1]:  2/3 (cols 5–12, row 2)   right 2/3, sits over the photo
+//   · lines[2]:  1/3 (cols 9–12, row 3)   right 1/3, clear of the photo
 //
 //   col start:  1  5  9   (each step = 4 cols = 1 third)
 //   col span:  12  8  4   (13 − start)
@@ -28,7 +28,7 @@ import type { HTMLAttributes, ReactNode } from "react"
 
 export interface HeroProps extends HTMLAttributes<HTMLElement> {
   /**
-   * Headline lines — three separate strings, one per thirds-based zone:
+   * Headline lines: three separate strings, one per thirds-based zone:
    *   · lines[0] → 100% width (full top)
    *   · lines[1] → 2/3 width (right 2/3, sits over the photo)
    *   · lines[2] → 1/3 width (right 1/3, clear of the photo)
@@ -86,18 +86,18 @@ export function Hero({
             Thirds-based 12-col grid:
               · line 0 (100%) fills the entire top
               · line 1 ( 2/3) starts at col 5 and sits over the photo
-              · line 2 ( 1/3) starts at col 9 — the photo's right edge
+              · line 2 ( 1/3) starts at col 9: the photo's right edge
             Photo is w-2/3 so its right edge aligns exactly with col 9. */}
         <div className="relative hidden grid-cols-12 gap-0 md:grid">
 
-          {/* Photo — lower-left, 2/3 wide so right edge aligns with col 9 */}
+          {/* Photo: lower-left, 2/3 wide so right edge aligns with col 9 */}
           {visual && (
             <div className="pointer-events-none absolute left-0 top-[28%] z-10 h-[68%] w-2/3">
               {visual}
             </div>
           )}
 
-          {/* Headline lines — each in its own fixed grid row & column zone.
+          {/* Headline lines: each in its own fixed grid row & column zone.
               A wrapper div owns the grid placement and the clip-path so that
               text overflow is hidden while still allowing the 24 px topLeft
               notch (which sits outside the block's left edge) to remain
@@ -128,7 +128,7 @@ export function Hero({
             )
           })}
 
-          {/* Supporting copy + CTAs — right 1/3, below the ribbon */}
+          {/* Supporting copy + CTAs: right 1/3, below the ribbon */}
           {(subtext || actions) && (
             <div
               className="z-20 col-start-9 col-span-4 mt-8 flex flex-col items-start gap-7"
@@ -186,7 +186,7 @@ export function Hero({
 }
 
 // ─────────────────────────────────────────────────────────
-// HeroLine — one lime block with stepped placement + concave notches
+// HeroLine: one lime block with stepped placement + concave notches
 // ─────────────────────────────────────────────────────────
 
 interface HeroLineProps {
@@ -230,7 +230,7 @@ function HeroLine({ index, total, children }: HeroLineProps) {
 }
 
 // ─────────────────────────────────────────────────────────
-// HeroNotch — concave / inverted corner (inverted-radius technique)
+// HeroNotch: concave / inverted corner (inverted-radius technique)
 // ─────────────────────────────────────────────────────────
 
 interface HeroNotchProps {
@@ -243,7 +243,7 @@ interface HeroNotchProps {
  *
  * A small lime square is pushed just outside the block edge, then a
  * larger forest-coloured ::after with a single rounded corner masks it
- * — leaving a smooth inward curve.
+ *: leaving a smooth inward curve.
  */
 function HeroNotch({ position }: HeroNotchProps) {
   return (
@@ -266,7 +266,7 @@ function HeroNotch({ position }: HeroNotchProps) {
 }
 
 // ─────────────────────────────────────────────────────────
-// HeroVisual — photo block with optional concave corner masking
+// HeroVisual: photo block with optional concave corner masking
 // ─────────────────────────────────────────────────────────
 
 type VisualCorner = "topLeft" | "topRight" | "bottomLeft" | "bottomRight"
@@ -318,7 +318,7 @@ export function HeroVisual({
         className={cn("absolute inset-0 h-full w-full object-cover", imgClassName)}
       />
 
-      {/* Concave corner masks — forest caps that carve the photo inward */}
+      {/* Concave corner masks: forest caps that carve the photo inward */}
       {notches.map((corner) => (
         <span
           key={corner}
@@ -331,7 +331,7 @@ export function HeroVisual({
 }
 
 // ─────────────────────────────────────────────────────────
-// HeroAction — convenience CTA link matching brand styles
+// HeroAction: convenience CTA link matching brand styles
 // ─────────────────────────────────────────────────────────
 
 interface HeroActionProps extends HTMLAttributes<HTMLAnchorElement> {

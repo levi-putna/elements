@@ -13,7 +13,7 @@ export function Page() {
     <>
       <Section type="default" contained>
         <h1>Welcome</h1>
-        <p>White background — the default for most sections.</p>
+        <p>White background: the default for most sections.</p>
       </Section>
 
       <Section type="secondary" contained>
@@ -21,24 +21,24 @@ export function Page() {
       </Section>
 
       <Section type="primary" contained>
-        <p className="text-white">Forest green — hero, footer, or testimonial band.</p>
+        <p className="text-white">Forest green: hero, footer, or testimonial band.</p>
       </Section>
 
       <Section type="alternative" contained>
-        <p>Lime-soft accent — call-to-action strips.</p>
+        <p>Lime-soft accent: call-to-action strips.</p>
       </Section>
     </>
   )
 }`;
 
-const WITHOUT_CONTAINED = `{/* No contained prop — children span full width */}
+const WITHOUT_CONTAINED = `{/* No contained prop: children span full width */}
 <Section type="primary">
   <div className="w-full h-64 flex items-center justify-center">
     Full-bleed hero image or video here
   </div>
 </Section>
 
-{/* contained prop — wraps in max-w-[1200px] with standard padding */}
+{/* contained prop: wraps in max-w-[1200px] with standard padding */}
 <Section type="primary" contained>
   <h1 className="text-white text-4xl font-bold">Build faster.</h1>
 </Section>`;
@@ -92,7 +92,7 @@ const CONTAINER_PROPS = [
 const TYPES = [
   { type: "default", bg: "bg-white", label: "Default / White", usage: "Most sections. White background with forest text." },
   { type: "secondary", bg: "bg-[#EEF2E3]", label: "Secondary", usage: "Off-white. Alternate adjacent sections to create rhythm without heavy contrast." },
-  { type: "primary", bg: "bg-[#043F2E]", label: "Primary", usage: "Forest green with white text. Hero sections, footers, testimonial bands. Use sparingly — max 2–3 per page." },
+  { type: "primary", bg: "bg-[#043F2E]", label: "Primary", usage: "Forest green with white text. Hero sections, footers, testimonial bands. Use sparingly: max 2–3 per page." },
   { type: "alternative", bg: "bg-[#EBF8C2]", label: "Alternative", usage: "Lime-soft. Call-to-action strips or feature highlights." },
 ] as const;
 
@@ -107,7 +107,7 @@ export default function SectionPage() {
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">Section</h1>
         <p className="text-base text-ink-muted leading-relaxed">
           Page section wrapper with typed backgrounds. Keeps Instant Strata colour usage
-          consistent across pages — four named background types, an optional max-width container,
+          consistent across pages: four named background types, an optional max-width container,
           and a semantic <code className="font-mono text-sm bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">as</code> prop for correct HTML structure.
         </p>
       </div>
@@ -182,7 +182,7 @@ export default function SectionPage() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold text-foreground mb-1">Width system — Section + Container</p>
+            <p className="text-sm font-semibold text-foreground mb-1">Width system: Section + Container</p>
             <p className="text-sm text-ink-muted mb-3 leading-relaxed">
               The colour band is full-bleed; <code className="font-mono text-xs bg-secondary px-1.5 py-0.5 rounded-sm text-foreground">Container</code> is
               the single source of truth for content width. Use them together when a band needs both

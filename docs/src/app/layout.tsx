@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Young_Serif } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import { TableOfContents } from "@/components/docs/table-of-contents";
+import { LogoMark } from "@/components/ui/logo";
 
 const youngSerif = Young_Serif({
   variable: "--font-young-serif",
@@ -23,11 +24,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Elements — Instant Strata UI Library",
+    default: "Elements: Instant Strata UI Library",
     template: "%s · Elements",
   },
   description:
-    "A personal UI component library extending shadcn/ui with Instant Strata brand conventions.",
+    "Design system repository for Instant Strata: brand guidelines, UI patterns, and copy-paste components.",
 };
 
 const components = [
@@ -36,12 +37,15 @@ const components = [
     items: [
       { href: "/components/colours", label: "Colours & Accent" },
       { href: "/components/typography", label: "Typography" },
+      { href: "/components/logo", label: "Logo" },
+      { href: "/components/icons", label: "Icons" },
     ],
   },
   {
     label: "Base",
     items: [
       { href: "/components/button", label: "Button" },
+      { href: "/components/avatar", label: "Avatar" },
       { href: "/components/skeleton", label: "Skeleton" },
       { href: "/components/shimmer", label: "Shimmer" },
     ],
@@ -55,15 +59,28 @@ const components = [
     ],
   },
   {
+    label: "Application",
+    items: [
+      { href: "/components/sidebar", label: "Sidebar" },
+      { href: "/components/app-layout", label: "App Layout" },
+    ],
+  },
+  {
     label: "Website",
     items: [
+      { href: "/components/site-header", label: "Site Header" },
       { href: "/components/section", label: "Section" },
+      { href: "/components/card", label: "Card" },
       { href: "/components/hero", label: "Hero" },
+      { href: "/components/statement", label: "Statement" },
       { href: "/components/page-header", label: "Page Header" },
+      { href: "/components/story-grid", label: "Story Grid" },
       { href: "/components/bento", label: "Bento" },
       { href: "/components/infographic", label: "Infographic" },
       { href: "/components/feature-split", label: "Feature Split" },
+      { href: "/components/marketing-section", label: "Marketing Section" },
       { href: "/components/testimonial", label: "Testimonial" },
+      { href: "/components/footer", label: "Footer" },
     ],
   },
 ];
@@ -77,18 +94,18 @@ export default function RootLayout({
       className={`${youngSerif.variable} ${inter.variable} ${jetbrainsMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {/* Top nav — left column width matches sidebar on md+ */}
+        {/* Top nav: left column width matches sidebar on md+ */}
         <header className="sticky top-0 z-40 h-14 border-b border-border bg-white/95 backdrop-blur-sm shrink-0">
           <div className="flex h-full items-stretch">
-            {/* Logo column — bordered cell aligned to sidebar width */}
+            {/* Logo column: bordered cell aligned to sidebar width */}
             <div className="flex items-center gap-3 px-6 md:w-60 md:shrink-0 md:border-r md:border-border md:px-4">
               {/* IS logo mark */}
               <Link
                 href="/"
-                className="flex items-center justify-center w-7 h-7 rounded-sm bg-forest text-white text-base font-display tracking-tight shrink-0 select-none [text-decoration:none]"
+                className="shrink-0 [text-decoration:none]"
                 aria-label="Elements home"
               >
-                IS
+                <LogoMark surface="light" size="md" decorative />
               </Link>
               <span className="text-sm font-semibold text-foreground tracking-tight">
                 Elements
@@ -131,6 +148,16 @@ export default function RootLayout({
           {/* Left sidebar */}
           <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-[#032B1F] bg-[#043F2E]">
             <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+              {/* Overview: return to homepage */}
+              <nav>
+                <Link
+                  href="/"
+                  className="block rounded-sm px-2 py-1.5 text-sm font-medium text-white hover:bg-white/10 transition-colors duration-150 no-underline"
+                >
+                  Overview
+                </Link>
+              </nav>
+
               {components.map((group) => (
                 <div key={group.label}>
                   <p className="text-[10px] font-semibold uppercase tracking-widest text-white/40 px-2 mb-1.5">

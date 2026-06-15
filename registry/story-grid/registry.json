@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "story-grid",
+  "type": "registry:ui",
+  "description": "Three-column editorial story mosaic inspired by Mode's customers page. Featured tiles span two columns with an image; standard tiles are text-only with a logo mark. Distinct from BentoGrid.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/story-grid/story-grid.tsx",
+      "target": "components/ui/story-grid.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "avatar",
+  "type": "registry:ui",
+  "description": "Identity avatar with photo support and initials fallback. Two brand variants (default off-white, primary forest+white) and four sizes. Includes AvatarGroup (overlapping stack) and AvatarGroupCount (+N overflow chip).",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/avatar/avatar.tsx",
+      "target": "components/ui/avatar.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

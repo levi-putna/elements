@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/infographic"
 
 // ─────────────────────────────────────────────────────────
-// FeatureSplit — stepped two-column interlock
+// FeatureSplit: stepped two-column interlock
 //
 // A 2×2 grid where the column ratio flips between rows so
 // the cream ↔ lime seam steps horizontally.
@@ -38,7 +38,7 @@ export interface FeatureSplitProps extends HTMLAttributes<HTMLDivElement> {
   topVisual?: ReactNode
   /** Bottom-left visual slot. Defaults to {@link InfographicEditorPair}. */
   bottomVisual?: ReactNode
-  /** Gap between quadrants — also the visible seam width. */
+  /** Gap between quadrants: also the visible seam width. */
   gap?: "sm" | "md" | "lg"
 }
 
@@ -58,7 +58,7 @@ export const FEATURE_SPLIT_DEFAULT: Pick<FeatureSplitProps, "primary" | "seconda
   primary: {
     heading: "Made for your data team",
     body:
-      "SQL, R, Python and data viz connected in one place — so insights reach stakeholders faster than ever. No rigid data model should stand in the way of the analysis needed to support business decisions, big and small.",
+      "SQL, R, Python and data viz connected in one place: so insights reach stakeholders faster than ever. No rigid data model should stand in the way of the analysis needed to support business decisions, big and small.",
   },
   secondary: {
     heading: "And the teams you work with",
@@ -82,7 +82,7 @@ export const FEATURE_SPLIT_STRATA: Pick<FeatureSplitProps, "primary" | "secondar
 }
 
 /**
- * Stepped two-column feature section — the interlock layout.
+ * Stepped two-column feature section: the interlock layout.
  */
 export function FeatureSplit({
   primary,
@@ -104,17 +104,17 @@ export function FeatureSplit({
       )}
       {...props}
     >
-      {/* Top row — cream column wider */}
+      {/* Top row: cream column wider */}
       <div
         className={cn("grid items-stretch", grid)}
         style={{ gridTemplateColumns: "minmax(0, 1.14fr) minmax(0, 0.86fr)" }}
       >
-        {/* Top-left — primary copy */}
+        {/* Top-left: primary copy */}
         <FeatureSplitCell tone="cream" className="rounded-tl-[20px] h-full">
           <FeatureSplitText heading={primary.heading} body={primary.body} />
         </FeatureSplitCell>
 
-        {/* Top-right — infographic visual */}
+        {/* Top-right: infographic visual */}
         <FeatureSplitCell
           tone="lime"
           padding="sm"
@@ -126,12 +126,12 @@ export function FeatureSplit({
         </FeatureSplitCell>
       </div>
 
-      {/* Bottom row — lime column wider (stepped seam) */}
+      {/* Bottom row: lime column wider (stepped seam) */}
       <div
         className={cn("grid items-stretch", row)}
         style={{ gridTemplateColumns: "minmax(0, 0.86fr) minmax(0, 1.14fr)" }}
       >
-        {/* Bottom-left — infographic visual */}
+        {/* Bottom-left: infographic visual */}
         <FeatureSplitCell
           tone="cream"
           padding="sm"
@@ -142,7 +142,7 @@ export function FeatureSplit({
           </FeatureSplitVisual>
         </FeatureSplitCell>
 
-        {/* Bottom-right — secondary copy */}
+        {/* Bottom-right: secondary copy */}
         <FeatureSplitCell tone="lime" className="rounded-br-[20px] h-full">
           <FeatureSplitText heading={secondary.heading} body={secondary.body} />
         </FeatureSplitCell>
@@ -152,7 +152,7 @@ export function FeatureSplit({
 }
 
 // ─────────────────────────────────────────────────────────
-// FeatureSplitCell — one quadrant panel
+// FeatureSplitCell: one quadrant panel
 // ─────────────────────────────────────────────────────────
 
 export interface FeatureSplitCellProps extends HTMLAttributes<HTMLDivElement> {
@@ -190,7 +190,7 @@ export function FeatureSplitCell({
 }
 
 // ─────────────────────────────────────────────────────────
-// FeatureSplitText — heading + body for a copy quadrant
+// FeatureSplitText: heading + body for a copy quadrant
 // ─────────────────────────────────────────────────────────
 
 export interface FeatureSplitTextProps {
@@ -218,7 +218,7 @@ export function FeatureSplitText({ heading, body, className }: FeatureSplitTextP
 }
 
 // ─────────────────────────────────────────────────────────
-// FeatureSplitVisual — constrains infographics inside a quadrant
+// FeatureSplitVisual: constrains infographics inside a quadrant
 // ─────────────────────────────────────────────────────────
 
 export interface FeatureSplitVisualProps extends HTMLAttributes<HTMLDivElement> {
@@ -248,7 +248,7 @@ export function FeatureSplitVisual({
 }
 
 // ─────────────────────────────────────────────────────────
-// FeatureSplitBleed — optional media overhang (off by default)
+// FeatureSplitBleed: optional media overhang (off by default)
 //
 // Only use when you deliberately want an infographic to spill
 // across the seam. FeatureSplit visual slots no longer use this.

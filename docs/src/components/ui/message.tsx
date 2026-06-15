@@ -423,7 +423,7 @@ export const MessageBranchPage = ({ className, ...props }: MessageBranchPageProp
 };
 
 // ============================================================================
-// MessageResponse — Streamdown with built-in + custom entity plugins
+// MessageResponse: Streamdown with built-in + custom entity plugins
 // ============================================================================
 
 export type MessageResponseProps = ComponentProps<typeof Streamdown>;
@@ -433,7 +433,7 @@ const streamdownPlugins = {
   code,
   math,
   mermaid,
-  // Custom entity plugins — extend this object to add more entity types
+  // Custom entity plugins: extend this object to add more entity types
   person: personPlugin,
   location: locationPlugin,
   "strata-scheme": strataSchemePlugin,

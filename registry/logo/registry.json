@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "logo",
+  "type": "registry:ui",
+  "description": "Instant Strata logo mark and lockup. Rotated IS icon with upright letterforms, with surface variants for light, primary, and dark backgrounds.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/logo/logo.tsx",
+      "target": "components/ui/logo.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}
