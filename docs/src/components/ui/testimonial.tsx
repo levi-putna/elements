@@ -73,7 +73,7 @@ const ctaBg: Record<TestimonialType, string> = {
   dark:        "bg-forest text-lime hover:bg-forest-mid",
 }
 
-/** Solid fill for inverse-radius fillets on the stepped card. */
+/** Card fill for the step corner shadow (must match the Tailwind bg token). */
 const cardFill: Record<TestimonialType, string> = {
   alternative: "#C8F169",
   primary:     "#043F2E",
@@ -89,15 +89,18 @@ const cutoutCols =
   "grid-cols-[140px_1fr] sm:grid-cols-[168px_1fr] md:grid-cols-[196px_1fr]"
 
 /**
- * Inverse-radius fillet where the card steps inward above the cutout.
- * Creates the concave inside corner on the lime (or forest) fill.
+ * Concave fillet at the inner step junction.
+ * A filled quarter-disk sits in the top-right of the cutout cell, bridging the
+ * quote's bottom edge to the attribution's left edge so the re-entrant corner
+ * reads as one continuous, smoothly curved shape. rounded-tr removes the sharp
+ * point; the remaining fan (radius = its own size) is the concave curve.
  */
-function StepFillet({ fill }: { fill: string }) {
+function StepCorner({ fill }: { fill: string }) {
   return (
-    <div
+    <span
       aria-hidden
-      className="pointer-events-none absolute top-0 right-0 size-4 rounded-bl-xl"
-      style={{ boxShadow: `-16px 0 0 0 ${fill}` }}
+      className="pointer-events-none absolute top-0 right-0 z-10 size-3 rounded-tr-xl"
+      style={{ background: fill }}
     />
   )
 }
@@ -135,7 +138,12 @@ function TestimonialCardContent({
   return (
     <div className="relative flex-1 min-w-0">
       {/* Quote area */}
-      <div className={cn("rounded-t-xl px-8 md:px-10 pt-8 md:pt-10 pb-4 md:pb-6", cardBg[type])}>
+      <div
+        className={cn(
+          "rounded-t-xl rounded-bl-xl px-8 md:px-10 pt-8 md:pt-10 pb-4 md:pb-6",
+          cardBg[type]
+        )}
+      >
         <p className={cn("font-display leading-snug", quoteSize, quoteColor[type])}>
           {quote}
         </p>
@@ -145,7 +153,7 @@ function TestimonialCardContent({
       <div className={cn("grid", cutoutCols)}>
         {/* Bottom-left cutout: quote marks sit on section/page background */}
         <div className="relative flex items-end justify-start pb-0">
-          <StepFillet fill={cardFill[type]} />
+          <StepCorner fill={cardFill[type]} />
           <span
             aria-hidden="true"
             className={cn("font-display select-none", markSize, markColor[type])}
@@ -158,7 +166,7 @@ function TestimonialCardContent({
         <div
           className={cn(
             "flex flex-wrap items-end justify-between gap-x-6 gap-y-3",
-            "px-5 sm:px-6 md:px-8 pt-2 pb-5 md:pb-6 rounded-tl-xl rounded-br-xl",
+            "px-5 sm:px-6 md:px-8 pt-2 pb-5 md:pb-6 rounded-bl-xl rounded-br-xl",
             cardBg[type]
           )}
         >

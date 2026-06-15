@@ -13,7 +13,7 @@ const CARD_CODE = `import { Testimonial } from "@/components/ui/testimonial"
   name="Sarah Mitchell"
   role="Senior Strata Manager"
   company="Coastal Strata Co."
-  portrait={{ src: "/img/person/1.jpg", alt: "Sarah Mitchell" }}
+  portrait={{ src: "/img/people/1.jpg", alt: "Sarah Mitchell" }}
   cta={{ label: "Read story", href: "/stories/sarah" }}
   type="alternative"
 />`;
@@ -27,7 +27,7 @@ const CARD_DARK_CODE = `import { Testimonial } from "@/components/ui/testimonial
     name="James O'Brien"
     role="Building Manager"
     company="Harbor View Strata"
-    portrait={{ src: "/img/person/2.jpg", alt: "James O'Brien" }}
+    portrait={{ src: "/img/people/2.jpg", alt: "James O'Brien" }}
     type="dark"
   />
 </Section>`;
@@ -108,7 +108,7 @@ export default function TestimonialPage() {
               name="Sarah Mitchell"
               role="Senior Strata Manager"
               company="Coastal Strata Co."
-              portrait={{ src: "/img/person/1.jpg", alt: "Sarah Mitchell" }}
+              portrait={{ src: "/elements/img/person/1.jpg", alt: "Sarah Mitchell" }}
               cta={{ label: "Read story", href: "#" }}
               type="alternative"
             />
@@ -136,7 +136,7 @@ export default function TestimonialPage() {
               name="James O'Brien"
               role="Building Manager"
               company="Harbor View Strata"
-              portrait={{ src: "/img/person/2.jpg", alt: "James O'Brien" }}
+              portrait={{ src: "/elements/img/person/2.jpg", alt: "James O'Brien" }}
               type="dark"
             />
           </div>
