@@ -34,7 +34,7 @@ const groups: NavGroup[] = [
 
 const HEADER_CODE = `import { AppSidebarHeader } from "@/components/ui/app-shell"
 
-// Sits in the SidebarHeader slot — the primary LogoMark + workspace
+// Sits in the SidebarHeader slot: the primary LogoMark + workspace
 // name, with a dropdown to switch workspaces.
 <AppSidebarHeader
   workspace={{ name: "Instant Strata", plan: "Pro plan" }}
@@ -47,7 +47,7 @@ const HEADER_CODE = `import { AppSidebarHeader } from "@/components/ui/app-shell
 
 const FOOTER_CODE = `import { AppSidebarFooter } from "@/components/ui/app-shell"
 
-// Sits in the SidebarFooter slot — avatar initials + name/email,
+// Sits in the SidebarFooter slot: avatar initials + name/email,
 // opening an account dropdown (upgrade, settings, sign out).
 <AppSidebarFooter
   user={{ name: "Levi Putna", email: "levi@instantstrata.com" }}
@@ -80,7 +80,7 @@ export default function SidebarPage() {
         </p>
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">Sidebar</h1>
         <p className="text-base text-ink-muted leading-relaxed">
-          The Instant Strata application sidebar — built on the shadcn sidebar primitives
+          The Instant Strata application sidebar, built on the shadcn sidebar primitives
           and composed from three branded pieces: a workspace switcher header, the navigation,
           and a user-menu footer. Collapses to an icon rail and becomes a slide-in sheet on
           mobile. See <a href="/components/app-layout">App Layout</a> for the full shell.
@@ -101,7 +101,7 @@ export default function SidebarPage() {
 
       {/* SidebarNav */}
       <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Navigation — SidebarNav</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Navigation: SidebarNav</h2>
         <p className="text-sm text-ink-muted mb-4 leading-relaxed">
           Renders labelled groups of menu items. Each item takes an icon and href; supply an{" "}
           <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">items</code> array
@@ -115,7 +115,7 @@ export default function SidebarPage() {
 
       {/* Header */}
       <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Header — AppSidebarHeader</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Header: AppSidebarHeader</h2>
         <p className="text-sm text-ink-muted mb-4 leading-relaxed">
           The workspace switcher. Drop it in the <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">SidebarHeader</code> slot.
         </p>
@@ -127,7 +127,7 @@ export default function SidebarPage() {
 
       {/* Footer */}
       <section className="pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Footer — AppSidebarFooter</h2>
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Footer: AppSidebarFooter</h2>
         <p className="text-sm text-ink-muted mb-4 leading-relaxed">
           The user menu. Drop it in the <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">SidebarFooter</code> slot.
         </p>

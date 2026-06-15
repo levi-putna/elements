@@ -56,6 +56,24 @@ const components = [
     ],
   },
   {
+    label: "Forms",
+    items: [
+      { href: "/components/forms", label: "Form Layouts" },
+      { href: "/components/field", label: "Field" },
+      { href: "/components/label", label: "Label" },
+      { href: "/components/hint", label: "Hint" },
+      { href: "/components/input", label: "Input" },
+      { href: "/components/textarea", label: "Textarea" },
+      { href: "/components/input-group", label: "Input Group" },
+      { href: "/components/input-otp", label: "Input OTP" },
+      { href: "/components/select", label: "Select" },
+      { href: "/components/combobox", label: "Combobox" },
+      { href: "/components/checkbox", label: "Checkbox" },
+      { href: "/components/radio-group", label: "Radio Group" },
+      { href: "/components/switch", label: "Switch" },
+    ],
+  },
+  {
     label: "AI",
     items: [
       { href: "/components/prompt-input", label: "Prompt Input" },

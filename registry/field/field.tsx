@@ -42,7 +42,7 @@ function FieldLabel({
   ...props
 }: FieldLabelProps) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex w-full items-center justify-between gap-1.5">
       <FieldPrimitive.Label
         data-slot="field-label"
         className={cn(
@@ -59,7 +59,11 @@ function FieldLabel({
           </span>
         )}
       </FieldPrimitive.Label>
-      {hint != null && <Hint required={required}>{hint}</Hint>}
+      {hint != null && (
+        <Hint title={children} required={required}>
+          {hint}
+        </Hint>
+      )}
     </div>
   )
 }
@@ -91,7 +95,7 @@ function FieldSet({ className, ...props }: FieldsetPrimitive.Root.Props) {
   return (
     <FieldsetPrimitive.Root
       data-slot="fieldset"
-      className={cn("flex flex-col gap-4 rounded-lg border border-border p-4", className)}
+      className={cn("flex flex-col gap-4 rounded-sm border border-border p-4", className)}
       {...props}
     />
   )
@@ -104,7 +108,7 @@ interface FieldLegendProps extends FieldsetPrimitive.Legend.Props {
 
 function FieldLegend({ className, hint, children, ...props }: FieldLegendProps) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex w-full items-center justify-between gap-1.5">
       <FieldsetPrimitive.Legend
         data-slot="field-legend"
         className={cn("text-sm font-semibold text-foreground", className)}
@@ -112,7 +116,7 @@ function FieldLegend({ className, hint, children, ...props }: FieldLegendProps) 
       >
         {children}
       </FieldsetPrimitive.Legend>
-      {hint != null && <Hint>{hint}</Hint>}
+      {hint != null && <Hint title={children}>{hint}</Hint>}
     </div>
   )
 }

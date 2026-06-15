@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "input-otp",
+  "type": "registry:ui",
+  "description": "A one-time-password input built on Base UI's OTP Field, with optional slot groups and separators.",
+  "dependencies": ["@base-ui/react", "lucide-react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/input-otp/input-otp.tsx",
+      "target": "components/ui/input-otp.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

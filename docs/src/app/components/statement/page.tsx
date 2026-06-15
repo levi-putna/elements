@@ -45,12 +45,12 @@ export default function StatementPage() {
         </p>
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">Statement</h1>
         <p className="text-base text-ink-muted leading-relaxed">
-          An oversized editorial statement — the closing-manifesto pattern. A bold display
+          An oversized editorial statement: the closing-manifesto pattern. A bold display
           headline making a single claim, with an optional cycle-loop diagram and dual CTAs.
         </p>
       </div>
 
-      {/* Example — primary with cycle */}
+      {/* Example: primary with cycle */}
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">
           With cycle diagram
@@ -97,7 +97,7 @@ export default function StatementPage() {
           </div>
           <div className="overflow-hidden rounded-lg border border-border">
             <Statement type="default" eyebrow="Why Instant Strata">
-              Every building, every levy, every owner — in <em>one workspace</em>.
+              Every building, every levy, every owner, in <em>one workspace</em>.
             </Statement>
           </div>
         </div>

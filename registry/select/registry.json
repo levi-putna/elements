@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "select",
+  "type": "registry:ui",
+  "description": "A select menu built on Base UI: trigger, positioned content, groups, items, and separators.",
+  "dependencies": ["@base-ui/react", "lucide-react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/select/select.tsx",
+      "target": "components/ui/select.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

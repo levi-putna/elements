@@ -128,14 +128,14 @@ export default function BentoPage() {
           <li>
             <strong className="text-foreground">The seam</strong> is the container background. It
             shows through every gap and the equal outer padding, so the frame and the inner gaps
-            are one continuous colour — that&apos;s what the eye reads as the join between cards.
+            are one continuous colour; that&apos;s what the eye reads as the join between cards.
           </li>
           <li>
             <strong className="text-foreground">Radius is managed in two halves.</strong> Cards are
             rounded on every corner by default. Where a card meets a neighbour, that corner is set
             to <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">flush</code>{" "}
             (radius&nbsp;0) so the edge is square, then a <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoNotch</code>{" "}
-            — a small seam-coloured square with its <em>inner</em> corner rounded — is laid over
+            (a small seam-coloured square with its <em>inner</em> corner rounded) is laid over
             that corner. The seam colour bites a concave quarter-circle out of the card. Two cards
             carving the corners they share produces the interlocking &ldquo;pocket&rdquo; that
             defines the mode.com look.

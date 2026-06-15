@@ -25,7 +25,7 @@ const HINT_PROPS = [
 ];
 
 /**
- * Hint documentation — the blue question-icon popover used beside labels.
+ * Hint documentation: the blue question-icon popover used beside labels.
  */
 export default function HintPage() {
   return (
@@ -37,7 +37,7 @@ export default function HintPage() {
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">Hint</h1>
         <p className="text-base text-ink-muted leading-relaxed max-w-2xl">
           A small blue question icon that reveals supporting detail in a popover. Optional everywhere it
-          appears — drop it beside a{" "}
+          appears. Drop it beside a{" "}
           <a href="/components/label" className="text-foreground underline underline-offset-4 hover:text-forest-mid transition-colors">Label</a>{" "}
           or a Field/Fieldset legend. The{" "}
           <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm">required</code> flag adds a

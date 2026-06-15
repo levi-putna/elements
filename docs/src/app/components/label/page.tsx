@@ -35,7 +35,7 @@ const LABEL_PROPS = [
 ];
 
 /**
- * Label documentation — standalone label with required + Hint support.
+ * Label documentation: standalone label with required + Hint support.
  */
 export default function LabelPage() {
   return (

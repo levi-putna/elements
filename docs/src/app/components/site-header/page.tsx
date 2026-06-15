@@ -23,10 +23,10 @@ const items = [
   { title: "Customers", href: "/customers" },
 ]
 
-{/* Logged out — shows the "Get Started" CTA */}
+{/* Logged out: shows the "Get Started" CTA */}
 <SiteHeader items={items} />
 
-{/* Logged in — shows the account menu */}
+{/* Logged in: shows the account menu */}
 <SiteHeader
   items={items}
   user={{ name: "Levi Putna", email: "levi@instantstrata.com" }}
@@ -118,7 +118,7 @@ export default function SiteHeaderPage() {
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Logged in</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
           Pass a <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">user</code> to swap the CTA
-          for the account menu — avatar, name, and a dropdown to open the app or log out.
+          for the account menu: avatar, name, and a dropdown to open the app or log out.
         </p>
         <div className="rounded-sm border border-border overflow-hidden">
           <SiteHeader

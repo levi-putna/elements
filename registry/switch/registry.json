@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "type": "registry:ui",
+  "description": "A switch toggle built on Base UI.",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/switch/switch.tsx",
+      "target": "components/ui/switch.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

@@ -12,7 +12,7 @@ interface LabelProps extends React.ComponentProps<"label"> {
 
 function Label({ className, required, hint, children, ...props }: LabelProps) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex w-full items-center justify-between gap-1.5">
       <label
         data-slot="label"
         className={cn(
@@ -29,7 +29,11 @@ function Label({ className, required, hint, children, ...props }: LabelProps) {
           </span>
         )}
       </label>
-      {hint != null && <Hint required={required}>{hint}</Hint>}
+      {hint != null && (
+        <Hint title={children} required={required}>
+          {hint}
+        </Hint>
+      )}
     </div>
   )
 }

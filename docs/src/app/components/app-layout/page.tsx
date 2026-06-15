@@ -92,10 +92,10 @@ const RESIZABLE_CODE = `import {
 const PIECES = [
   ["SidebarProvider", "Holds open/collapsed state, the ⌘B shortcut, and the mobile sheet. Wrap the whole layout."],
   ["Sidebar", "The sidebar shell. collapsible=\"icon\" collapses to an icon rail; on mobile it becomes a slide-in sheet."],
-  ["AppSidebarHeader", "Workspace switcher in the header slot — lime logo mark, workspace name, and a dropdown to switch workspaces."],
+  ["AppSidebarHeader", "Workspace switcher in the header slot: lime logo mark, workspace name, and a dropdown to switch workspaces."],
   ["SidebarNav", "The navigation. Renders labelled groups; items with sub-items become collapsible sub-navigation."],
-  ["AppSidebarFooter", "User menu in the footer slot — avatar initials, name/email, and an account dropdown."],
-  ["AppHeader", "Top bar inside the content area — holds the SidebarTrigger and a breadcrumb/title slot."],
+  ["AppSidebarFooter", "User menu in the footer slot: avatar initials, name/email, and an account dropdown."],
+  ["AppHeader", "Top bar inside the content area: holds the SidebarTrigger and a breadcrumb/title slot."],
   ["SidebarInset", "The main content region beside the sidebar."],
   ["SidebarRail", "A thin draggable rail on the sidebar edge for toggling collapse."],
 ];
@@ -116,7 +116,7 @@ export default function AppLayoutPage() {
         </p>
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">App Layout</h1>
         <p className="text-base text-ink-muted leading-relaxed">
-          The full application shell — a collapsible sidebar (workspace switcher, navigation,
+          The full application shell: a collapsible sidebar (workspace switcher, navigation,
           user menu) beside a content area with its own header. Built on the shadcn sidebar
           (sidebar-07 pattern) with Instant Strata branding. Drag the handle below to resize
           the layout, or use the trigger in the header to collapse the sidebar to icons.
@@ -171,7 +171,7 @@ export default function AppLayoutPage() {
         <p className="text-sm text-ink-muted mb-3 leading-relaxed">
           The demo above wraps the layout in a{" "}
           <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">ResizablePanelGroup</code>{" "}
-          so you can drag to see how the content reflows — the same technique the shadcn blocks
+          so you can drag to see how the content reflows; the same technique the shadcn blocks
           gallery uses. In production you mount the layout directly at full height.
         </p>
         <CodeBlock code={RESIZABLE_CODE} language="tsx" />

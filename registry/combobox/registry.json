@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "combobox",
+  "type": "registry:ui",
+  "description": "An autocomplete combobox built on Base UI: input, trigger, positioned content, list, items, groups, and empty state.",
+  "dependencies": ["@base-ui/react", "lucide-react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/combobox/combobox.tsx",
+      "target": "components/ui/combobox.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

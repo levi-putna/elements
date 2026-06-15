@@ -12,13 +12,13 @@ const INSTALL = `npx shadcn add https://raw.githubusercontent.com/levi-putna/ele
 
 const VARIANTS_CODE = `import { Avatar } from "@/components/ui/avatar"
 
-{/* default — off-white background, forest text */}
+{/* default: off-white background, forest text */}
 <Avatar name="Levi Putna" />
 
-{/* primary — forest background, white text */}
+{/* primary: forest background, white text */}
 <Avatar name="Levi Putna" variant="primary" />
 
-{/* with a photo — falls back to initials if it fails to load */}
+{/* with a photo: falls back to initials if it fails to load */}
 <Avatar name="Ada Lovelace" src="/img/person/1.jpg" />`;
 
 const GROUP_CODE = `import { AvatarGroup, Avatar, AvatarGroupCount } from "@/components/ui/avatar"
@@ -32,7 +32,7 @@ const GROUP_CODE = `import { AvatarGroup, Avatar, AvatarGroupCount } from "@/com
 
 const AVATAR_PROPS = [
   { name: "src", type: "string", description: "Image source. Falls back to initials if absent or if it fails to load." },
-  { name: "name", type: "string", description: "Person/entity name — used to derive initials and as the image alt text." },
+  { name: "name", type: "string", description: "Person/entity name: used to derive initials and as the image alt text." },
   { name: "fallback", type: "ReactNode", description: "Explicit fallback content, overriding the derived initials." },
   { name: "variant", type: '"default" | "primary"', default: '"default"', description: "default = off-white background with forest text. primary = forest background with white text." },
   { name: "size", type: '"sm" | "md" | "lg" | "xl"', default: '"md"', description: "Avatar dimensions: sm 24px, md 32px, lg 40px, xl 48px." },
@@ -40,7 +40,7 @@ const AVATAR_PROPS = [
 ];
 
 const GROUP_PROPS = [
-  { name: "ring", type: '"background" | "secondary" | "forest"', default: '"background"', description: "Colour of the 2px ring drawn between overlapping avatars — set it to match the surface behind the group." },
+  { name: "ring", type: '"background" | "secondary" | "forest"', default: '"background"', description: "Colour of the 2px ring drawn between overlapping avatars; set it to match the surface behind the group." },
   { name: "children", type: "ReactNode", description: "Avatar elements, optionally ending with an AvatarGroupCount." },
 ];
 

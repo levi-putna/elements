@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "type": "registry:ui",
+  "description": "A multi-line text input built on a native textarea with focus, disabled, and invalid states.",
+  "dependencies": [],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/textarea/textarea.tsx",
+      "target": "components/ui/textarea.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

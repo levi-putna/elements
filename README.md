@@ -47,11 +47,11 @@ npx shadcn init
 ```bash
 git clone https://github.com/levi-putna/elements
 cd elements/docs
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
-The docs site runs at `http://localhost:3000`. This is where you develop and preview components.
+The docs site runs at `http://localhost:3000/elements`. This is where you develop and preview components.
 
 ### Repository structure
 

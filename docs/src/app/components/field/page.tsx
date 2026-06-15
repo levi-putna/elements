@@ -43,7 +43,7 @@ const HINT_USAGE = `<Field>
   >
     Owners corporation
   </FieldLabel>
-  <Input placeholder="SP 12345 — Harbourview" required />
+  <Input placeholder="SP 12345, Harbourview" required />
 </Field>`;
 
 const FIELDSET_USAGE = `import { FieldSet, FieldLegend, FieldGroup, Field, FieldLabel } from "@/components/ui/field"
@@ -80,7 +80,7 @@ const LEGEND_PROPS = [
 ];
 
 /**
- * Field documentation — the foundation that proves the Field / Label / Hint /
+ * Field documentation: the foundation that proves the Field / Label / Hint /
  * required pattern used across the Forms section.
  */
 export default function FieldPage() {
@@ -94,8 +94,7 @@ export default function FieldPage() {
         <p className="text-base text-ink-muted leading-relaxed max-w-2xl">
           The wrapper that ties a label, control, description, and error together. Built on Base UI&apos;s
           Field primitive. Labels support a <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm">required</code>{" "}
-          flag (bold + asterisk) and an optional <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm">hint</code>{" "}
-          — a blue question icon that opens a popover for extra detail.
+          flag (bold + asterisk) and an optional <code className="font-mono bg-secondary px-1 py-0.5 rounded-sm">hint</code>: a blue question icon that opens a popover for extra detail.
         </p>
       </div>
 
@@ -158,7 +157,7 @@ export default function FieldPage() {
             >
               Owners corporation
             </FieldLabel>
-            <Input placeholder="SP 12345 — Harbourview" required />
+            <Input placeholder="SP 12345, Harbourview" required />
           </Field>
         </ComponentPreview>
         <div className="mt-4">
@@ -169,7 +168,7 @@ export default function FieldPage() {
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Fieldset</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed max-w-2xl">
-          Group related fields with a legend. The legend takes an optional hint too — hints are optional
+          Group related fields with a legend. The legend takes an optional hint too; hints are optional
           everywhere they appear.
         </p>
         <ComponentPreview label="FieldSet · legend with hint + grouped fields">

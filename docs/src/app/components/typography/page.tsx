@@ -233,7 +233,7 @@ export default function TypographyPage() {
               <span className="text-[10px] text-ink-muted/60 text-right shrink-0">JetBrains Mono · 400 · 14px</span>
             </div>
             <p className="font-mono text-sm font-normal text-foreground">
-              npx shadcn add https://elements.instant-strata.com/r/button.json
+              npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/button/registry.json
             </p>
           </div>
 
