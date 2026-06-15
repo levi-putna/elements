@@ -41,6 +41,11 @@
   font-display: swap;
 }
 
+@keyframes button-shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(200%); }
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

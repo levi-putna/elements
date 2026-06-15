@@ -99,11 +99,11 @@ export default function RootLayout({
 
         <div className="flex flex-1 min-h-0">
           {/* Left sidebar */}
-          <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-border bg-white">
+          <aside className="hidden md:flex w-60 shrink-0 flex-col border-r border-[#032B1F] bg-[#043F2E]">
             <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6">
               {components.map((group) => (
                 <div key={group.label}>
-                  <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted px-2 mb-1.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-white/40 px-2 mb-1.5">
                     {group.label}
                   </p>
                   <nav className="flex flex-col">
@@ -111,7 +111,7 @@ export default function RootLayout({
                       <Link
                         key={item.href}
                         href={item.href}
-                        className="rounded-sm px-2 py-1.5 text-sm text-ink-muted hover:text-foreground hover:bg-secondary transition-colors duration-150 no-underline"
+                        className="rounded-sm px-2 py-1.5 text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors duration-150 no-underline"
                       >
                         {item.label}
                       </Link>
