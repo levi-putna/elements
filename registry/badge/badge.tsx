@@ -15,6 +15,7 @@ import type { HTMLAttributes } from "react"
 //   default / secondary  · neutral metadata
 //   accent               · positive / active / success
 //   warning              · caution / pending review (text-warning on warning-soft)
+//   info                 · informational / neutral updates (text-info on info-soft)
 //   destructive          · error / overdue / attention
 //   outline              · low-emphasis bordered
 //   mono                 · identifiers (SP, Lot numbers)
@@ -29,6 +30,7 @@ export const badgeVariants = cva(
         secondary: "bg-off-white text-ink-muted",
         accent: "bg-lime-soft text-ink",
         warning: "bg-warning-soft text-warning",
+        info: "bg-info-soft text-info",
         destructive: "bg-danger-soft text-danger",
         outline: "border border-border bg-white text-ink-muted",
         mono: "bg-off-white font-mono uppercase tracking-wide text-ink-muted",
@@ -110,6 +112,7 @@ export const badgeTone = {
   neutral: "default",
   accent: "accent",
   warning: "warning",
+  info: "info",
   danger: "destructive",
   outline: "outline",
   mono: "mono",

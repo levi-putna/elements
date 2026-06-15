@@ -59,6 +59,8 @@ White is the dominant background colour. Forest green and lime are used to creat
 | `--color-danger-soft` | `#F5E0DE` | Error banners and validation backgrounds. Pair with ink text. |
 | `--color-warning` | `#A8651A` | Caution states and pending actions. Warm amber, distinct from lime. |
 | `--color-warning-soft` | `#F8ECDC` | Warning bands and subtle highlights. Pair with `text-warning` on badges and compact labels. |
+| `--color-info` | `#2D6A9F` | Informational states and neutral updates. Muted steel blue, distinct from brand greens. |
+| `--color-info-soft` | `#E0ECF5` | Info banners, notification backgrounds, and callouts. Pair with `text-info` on badges and compact labels. |
 
 ### Semantic Mapping
 
@@ -80,6 +82,8 @@ White is the dominant background colour. Forest green and lime are used to creat
 --danger-soft:          #F5E0DE;
 --warning:              #A8651A;
 --warning-soft:         #F8ECDC;
+--info:                 #2D6A9F;
+--info-soft:            #E0ECF5;
 --destructive:          #C44B47;
 
 --border:               #D4E8C2;
@@ -266,6 +270,7 @@ Foundation label primitive for status pills, identifiers, and metadata. All doma
 |---|---|---|
 | `accent` | Positive / active / success | Active scheme, paid levy, automatable, portal active, in progress |
 | `warning` | Caution / pending review | Onboarding, awaiting review, R-A-S, invited |
+| `info` | Informational / neutral updates | System notices, tips, portal updates |
 | `destructive` | Error / overdue / attention | Needs attention, overdue levy, failed, escalated |
 | `default` | Neutral metadata | Archived, manual, not registered, snoozed |
 | `mono` | Identifiers | SP plan numbers, lot numbers, file extensions |
@@ -277,7 +282,27 @@ Foundation label primitive for status pills, identifiers, and metadata. All doma
 - Status badges use `size="md"` with optional `hideIcon` in dense tables.
 - Danger-soft backgrounds always pair with `text-danger`, never `text-ink`.
 - Warning-soft backgrounds always pair with `text-warning`, never `text-ink`.
+- Info-soft backgrounds always pair with `text-info`, never `text-ink`.
 - `border-radius: 2px` (`rounded-xs`) on all badges.
+
+### Notification
+
+Inline alert banners for toasts, page callouts, and form feedback. Compose `Notification` for consistent status styling.
+
+**Type mapping:**
+
+| Type | Meaning | Examples |
+|---|---|---|
+| `default` | Neutral metadata | Low-priority notes, general reminders |
+| `info` | Informational updates | Portal announcements, feature tips, FYI notices |
+| `warning` | Caution / pending review | Pending approvals, incomplete setup |
+| `danger` | Errors / destructive outcomes | Failed payments, validation errors |
+
+**Rules:**
+- Always pair icons with text. Icons reinforce meaning; they do not replace it.
+- Use `type="danger"` with `role="alert"` for errors that need immediate attention.
+- Info, warning, and danger types use soft tinted backgrounds with saturated headings (`text-info`, `text-warning`, `text-danger`). Body copy uses `text-ink-muted`.
+- `border-radius: 4px` (`rounded-sm`) on all notification banners.
 
 ### Card
 
@@ -631,6 +656,10 @@ export default {
         warning: {
           DEFAULT: "#A8651A",
           soft:    "#F8ECDC",
+        },
+        info: {
+          DEFAULT: "#2D6A9F",
+          soft:    "#E0ECF5",
         },
         border: "#D4E8C2",
       },

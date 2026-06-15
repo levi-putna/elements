@@ -48,6 +48,7 @@ const components = [
     items: [
       { href: "/components/button", label: "Button" },
       { href: "/components/badge", label: "Badge" },
+      { href: "/components/notification", label: "Notification" },
       { href: "/components/avatar", label: "Avatar" },
       { href: "/components/dialog", label: "Dialog" },
       { href: "/components/skeleton", label: "Skeleton" },

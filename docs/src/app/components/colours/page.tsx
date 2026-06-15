@@ -94,9 +94,9 @@ const STATUS_COLOURS = [
     name: "Danger soft",
     token: "--color-danger-soft / bg-danger-soft",
     hex: "#F5E0DE",
-    role: "Alert backgrounds, error banners, and validation callouts. Pair with ink text.",
+    role: "Alert backgrounds, error banners, and validation callouts. Pair with text-danger on badges and compact labels.",
     className: "bg-danger-soft",
-    textClass: "text-ink",
+    textClass: "text-danger",
   },
   {
     name: "Warning",
@@ -113,6 +113,22 @@ const STATUS_COLOURS = [
     role: "Warning bands and subtle highlights. Pair with text-warning on badges and compact labels.",
     className: "bg-warning-soft",
     textClass: "text-warning",
+  },
+  {
+    name: "Info",
+    token: "--color-info / text-info",
+    hex: "#2D6A9F",
+    role: "Informational states, neutral updates, and notification headings. Muted steel blue, distinct from brand greens.",
+    className: "bg-info",
+    textClass: "text-white",
+  },
+  {
+    name: "Info soft",
+    token: "--color-info-soft / bg-info-soft",
+    hex: "#E0ECF5",
+    role: "Info banners, notification backgrounds, and callouts. Pair with text-info on badges and compact labels.",
+    className: "bg-info-soft",
+    textClass: "text-info",
   },
 ] as const;
 
@@ -190,6 +206,11 @@ const FOREGROUND_RULES = [
     token: "text-warning",
     hex: "#A8651A",
     use: "Caution labels and warning icons on light backgrounds. Use danger-soft or warning-soft fills behind copy.",
+  },
+  {
+    token: "text-info",
+    hex: "#2D6A9F",
+    use: "Informational labels and notification headings on light backgrounds. Use info-soft fills behind copy.",
   },
 ] as const;
 
@@ -302,11 +323,12 @@ export default function ColoursPage() {
           Status Colours
         </p>
         <p className="text-sm text-ink-muted leading-relaxed mb-6 max-w-2xl">
-          Danger and warning sit outside the brand greens but share their warmth. Terracotta red
-          and amber echo the organic palette without competing with lime. Use soft tints for
-          backgrounds and the saturated tokens for text, borders, and icons.
+          Danger, warning, and info sit outside the brand greens but share their warmth.
+          Terracotta red, amber, and muted steel blue echo the organic palette without
+          competing with lime. Use soft tints for backgrounds and the saturated tokens
+          for text, borders, and icons.
         </p>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {STATUS_COLOURS.map((colour) => (
             <ColourSwatch key={colour.name} {...colour} />
           ))}
@@ -343,6 +365,8 @@ export default function ColoursPage() {
             { token: "--danger-soft", utility: "bg-danger-soft", value: "#F5E0DE", maps: "Error banners and validation backgrounds" },
             { token: "--warning", utility: "text-warning", value: "#A8651A", maps: "Caution labels and pending states" },
             { token: "--warning-soft", utility: "bg-warning-soft", value: "#F8ECDC", maps: "Warning bands and subtle highlights" },
+            { token: "--info", utility: "text-info", value: "#2D6A9F", maps: "Informational labels and notification headings" },
+            { token: "--info-soft", utility: "bg-info-soft", value: "#E0ECF5", maps: "Info banners and notification backgrounds" },
             { token: "--destructive", utility: "text-destructive", value: "#C44B47", maps: "shadcn/ui alias for danger" },
             { token: "--border", utility: "border-border", value: "#D4E8C2", maps: "Card, input, and divider borders" },
             { token: "--ring", utility: "ring-ring", value: "#C8F169", maps: "Focus rings on interactive elements" },
@@ -496,7 +520,7 @@ export default function ColoursPage() {
           Status Usage
         </p>
 
-        <ComponentPreview label="Danger and warning on light backgrounds">
+        <ComponentPreview label="Danger, warning, and info on light backgrounds">
           <div className="w-full max-w-[640px] space-y-4 py-2">
             {/* Danger alert */}
             <div className="rounded-sm border border-[#EDB8B4] bg-danger-soft px-5 py-4">
@@ -515,6 +539,16 @@ export default function ColoursPage() {
               </p>
               <p className="font-sans text-sm text-ink-muted leading-relaxed">
                 Soft warning background with amber heading and ink-muted body for longer copy.
+              </p>
+            </div>
+
+            {/* Info alert */}
+            <div className="rounded-sm border border-[#A8CCE0] bg-info-soft px-5 py-4">
+              <p className="font-sans text-sm font-semibold text-info mb-1">
+                Owner portal update available
+              </p>
+              <p className="font-sans text-sm text-ink-muted leading-relaxed">
+                Soft info background with steel blue heading and ink-muted body for longer copy.
               </p>
             </div>
 
@@ -629,8 +663,8 @@ export default function ColoursPage() {
             "Borders on light surfaces use the green-tinted border token, not grey.",
             "No more than three dark sections per page. Never two dark sections in a row.",
             "Logo: forest letterforms on lime container (light bg), forest container with white letterforms (primary bg), or lime letterforms on forest container (dark bg). Container rotated 15°; letterforms upright.",
-            "Danger and warning are for status only. Never use them as section backgrounds or brand accents.",
-            "Status backgrounds: danger-soft or warning-soft with saturated text (text-danger or text-warning) on badges and compact labels. Longer callout body copy may use ink-muted.",
+            "Danger, warning, and info are for status only. Never use them as section backgrounds or brand accents.",
+            "Status backgrounds: danger-soft, warning-soft, or info-soft with saturated text (text-danger, text-warning, or text-info) on badges and compact labels. Longer callout body copy may use ink-muted.",
           ].map((rule) => (
             <li key={rule} className="flex gap-3 font-sans text-sm text-ink-muted leading-relaxed">
               <span className="text-lime shrink-0 mt-0.5" aria-hidden="true">-</span>

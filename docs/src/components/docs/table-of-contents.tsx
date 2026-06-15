@@ -18,6 +18,24 @@ function slugify(text: string) {
     .replace(/\s+/g, "-")
 }
 
+/** Ensures heading ids stay unique when demo pages repeat the same title. */
+function ensureUniqueId({ baseId, usedIds }: { baseId: string; usedIds: Set<string> }) {
+  if (!usedIds.has(baseId)) {
+    usedIds.add(baseId)
+    return baseId
+  }
+
+  let suffix = 2
+  let uniqueId = `${baseId}-${suffix}`
+  while (usedIds.has(uniqueId)) {
+    suffix += 1
+    uniqueId = `${baseId}-${suffix}`
+  }
+
+  usedIds.add(uniqueId)
+  return uniqueId
+}
+
 export function TableOfContents() {
   const pathname = usePathname()
   const [headings, setHeadings] = useState<Heading[]>([])
@@ -30,14 +48,17 @@ export function TableOfContents() {
     if (!main) return
 
     const els = Array.from(main.querySelectorAll("h2, h3")) as HTMLElement[]
+    const usedIds = new Set<string>()
     const items: Heading[] = els
       .filter((el) => el.textContent?.trim())
       .map((el) => {
-        if (!el.id) {
-          el.id = slugify(el.textContent ?? "")
+        const baseId = el.id || slugify(el.textContent ?? "")
+        const id = ensureUniqueId({ baseId, usedIds })
+        if (el.id !== id) {
+          el.id = id
         }
         return {
-          id: el.id,
+          id,
           text: el.textContent?.trim() ?? "",
           level: (el.tagName === "H3" ? 3 : 2) as 2 | 3,
         }

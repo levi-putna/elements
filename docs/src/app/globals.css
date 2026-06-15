@@ -45,6 +45,8 @@
   --color-danger-soft:       var(--danger-soft);
   --color-warning:           var(--warning);
   --color-warning-soft:      var(--warning-soft);
+  --color-info:              var(--info);
+  --color-info-soft:         var(--info-soft);
   --color-border:            var(--border);
   --color-input:             var(--input);
   --color-ring:              var(--ring);
@@ -110,6 +112,8 @@
   --danger-soft:             #F5E0DE;
   --warning:                 #A8651A;
   --warning-soft:            #F8ECDC;
+  --info:                    #2D6A9F;
+  --info-soft:               #E0ECF5;
   --destructive:             var(--danger);
 
   /* Borders: very light green tint */
@@ -158,6 +162,8 @@
   --danger-soft:             #3D1F1E;
   --warning:                 #E8B06A;
   --warning-soft:            #3D2E1A;
+  --info:                    #7EB3DC;
+  --info-soft:               #1A3044;
   --destructive:             var(--danger);
 
   --border:                  #1A4D38;

@@ -33,6 +33,13 @@ const components = [
     badge: "Base",
   },
   {
+    href: "/components/notification",
+    label: "Notification",
+    description:
+      "Inline alert banners with default, info, warning, and danger colour themes.",
+    badge: "Base",
+  },
+  {
     href: "/components/button",
     label: "Button",
     description: "Extends the shadcn/ui button with a loading state and spinner.",

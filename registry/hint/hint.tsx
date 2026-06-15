@@ -39,7 +39,7 @@ function Hint({
       <PopoverTrigger
         data-slot="hint-trigger"
         aria-label={label}
-        className="inline-flex size-5 shrink-0 items-center justify-center rounded-full text-blue-600 outline-none transition-colors hover:text-blue-700 focus-visible:ring-3 focus-visible:ring-blue-600/30 [&_svg]:size-4"
+        className="inline-flex size-5 shrink-0 items-center justify-center rounded-full text-info outline-none transition-colors hover:text-info/80 focus-visible:ring-3 focus-visible:ring-info/30 [&_svg]:size-4"
       >
         <CircleHelp />
       </PopoverTrigger>

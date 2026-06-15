@@ -51,7 +51,7 @@ import { SchemeStatusBadge } from "@/components/ui/scheme"
 const BADGE_PROPS = [
   {
     name: "variant",
-    type: '"default" | "secondary" | "accent" | "warning" | "destructive" | "outline" | "mono" | "ghost"',
+    type: '"default" | "secondary" | "accent" | "info" | "warning" | "destructive" | "outline" | "mono" | "ghost"',
     default: '"default"',
     description:
       "Semantic tone. Domain badges map their states onto these variants consistently.",
@@ -79,6 +79,7 @@ const FOUNDATION_VARIANTS = [
   { variant: "default" as const, label: "Default" },
   { variant: "secondary" as const, label: "Secondary" },
   { variant: "accent" as const, label: "Accent" },
+  { variant: "info" as const, label: "Info" },
   { variant: "warning" as const, label: "Warning" },
   { variant: "destructive" as const, label: "Destructive" },
   { variant: "outline" as const, label: "Outline" },

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "notification",
+  "type": "registry:ui",
+  "description": "Inline notification banners with default, info, warning, and danger colour themes.",
+  "dependencies": [
+    "class-variance-authority",
+    "lucide-react"
+  ],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/notification/notification.tsx",
+      "target": "components/ui/notification.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}
