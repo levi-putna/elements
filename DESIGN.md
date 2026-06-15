@@ -1,6 +1,6 @@
 # Instant Strata — Design System
 
-> Independent design specification for Instant Strata. Use this file as the single source of truth for brand decisions when building UI, reviewing designs, or prompting AI tools.
+> Single source of truth for brand, visual design, and component decisions. Use this file when building UI, reviewing designs, or prompting AI tools.
 
 ---
 
@@ -8,12 +8,12 @@
 
 **Name:** Instant Strata  
 **Tagline:** Strata management, simplified.  
-**Personality:** Professional, trustworthy, efficient. Not corporate. Not cold. Friendly expertise.  
-**Voice:** Direct and clear. Confident without being aggressive. Plain language — no legal jargon in the UI.
+**Personality:** Professional, trustworthy, efficient. Not corporate. Not cold. Confident without being aggressive.  
+**Voice:** Plain language. No legal jargon in the UI. Direct and clear.
 
 ### Logo
 
-The mark is the letters **IS** set in a bold weight inside a square container with a small border radius (`4px` / `rounded-sm`). The letterforms fill most of the square — tight, compact, grounded.
+The mark is the letters **IS** set in bold weight inside a square container with `4px` border radius. Tight and compact.
 
 ```
 ┌──────┐
@@ -21,9 +21,12 @@ The mark is the letters **IS** set in a bold weight inside a square container wi
 └──────┘
 ```
 
-- Always use the square container — never the letterform alone
-- On dark backgrounds: white letterforms, lime green container
-- On light backgrounds: dark green letterforms, lime green container
+| Context | Letterforms | Container |
+|---|---|---|
+| White or light background | `--color-forest` | `--color-lime` |
+| Dark background | `#FFFFFF` | `--color-lime` |
+
+- Always use the square container — never the letterforms alone
 - Minimum size: 24×24px
 - Clear space: equal to the container width on all sides
 - Never stretch, rotate, recolour, or add drop shadows
@@ -32,78 +35,91 @@ The mark is the letters **IS** set in a bold weight inside a square container wi
 
 ## Colour System
 
-The palette is built around two greens — a deep forest for authority and depth, and a bright lime for energy and action — with white as the primary canvas.
+White is the dominant background colour. Forest green and lime are used to create emphasis, break apart major sections, and draw attention — not as wallpaper.
+
+**The rule of thumb:** if in doubt, use white. Reach for a coloured section only when you need to signal a transition or create a deliberate moment of emphasis.
 
 ### Core Palette
 
-| Token | Hex | Usage |
+| Token | Hex | Role |
 |---|---|---|
-| `--color-forest` | `#0B2B1A` | Deep section backgrounds, navbar, footers |
-| `--color-forest-mid` | `#164E2E` | Secondary dark backgrounds, card backgrounds on dark |
-| `--color-lime` | `#A3E635` | Primary accent, CTAs, highlights, hover states |
-| `--color-lime-soft` | `#D9F99D` | Light section backgrounds, card fill on dark sections |
-| `--color-white` | `#FFFFFF` | Primary light background, text on dark |
-| `--color-cream` | `#F0F9E6` | Warm section backgrounds, feature card fill |
-| `--color-ink` | `#0B2B1A` | Body text on light backgrounds (same as forest) |
-| `--color-ink-muted` | `#3D6B4F` | Secondary text, labels, captions |
+| `--color-white` | `#FFFFFF` | Primary page background. Default for all content sections. |
+| `--color-off-white` | `#EEF2E3` | Subtle warm tint. Used to softly differentiate adjacent light sections without adding visual weight. |
+| `--color-lime` | `#C8F169` | Brand accent. CTAs, hover states, active indicators, logo container, eyebrow labels. |
+| `--color-lime-soft` | `#EBF8C2` | Lightest green tint. Card fills on white sections, highlight bands, tag backgrounds. |
+| `--color-forest` | `#043F2E` | Deep green. Used sparingly for hero, testimonial, and footer sections. Provides anchoring contrast. |
+| `--color-forest-mid` | `#0A5C3D` | Mid-tone forest. Card backgrounds inside dark sections. |
+| `--color-ink` | `#043F2E` | Body and heading text on light backgrounds. Same value as forest — keeps the palette unified. |
+| `--color-ink-muted` | `#4A7A62` | Secondary text: labels, captions, metadata. |
+| `--color-border` | `#D4E8C2` | Subtle border on cards and inputs. |
 
-### Semantic Colour Mapping
+### Semantic Mapping
 
 ```css
-/* Backgrounds */
---background:          var(--color-white);
---background-section:  var(--color-cream);
---background-dark:     var(--color-forest);
---background-accent:   var(--color-lime-soft);
+--background:           #FFFFFF;
+--background-subtle:    #EEF2E3;
+--background-accent:    #EBF8C2;
+--background-dark:      #043F2E;
 
-/* Text */
---foreground:          var(--color-ink);
---foreground-muted:    var(--color-ink-muted);
---foreground-inverse:  var(--color-white);
+--foreground:           #043F2E;
+--foreground-muted:     #4A7A62;
+--foreground-inverse:   #FFFFFF;
 
-/* Interactive */
---primary:             var(--color-lime);
---primary-foreground:  var(--color-ink);
---primary-hover:       #8BC926;
+--primary:              #C8F169;
+--primary-foreground:   #043F2E;
+--primary-hover:        #B5E050;
 
-/* Border */
---border:              #D1E8C2;
---border-dark:         #1E6B3A;
+--border:               #D4E8C2;
+--border-dark:          rgba(255,255,255,0.12);
 ```
 
-### Section Colour Patterns
+### Section Colour System
 
-Sections alternate to create visual rhythm and separate concepts:
+Most sections use white or off-white. Dark and accent sections are used at most 2–3 times per page to create rhythm, not as the default.
 
-| Section Type | Background | Text | Use for |
+| Type | Background | Text colour | Frequency |
 |---|---|---|---|
-| **Light** | `--color-white` | `--color-ink` | Default content, forms, docs |
-| **Warm** | `--color-cream` | `--color-ink` | Features, benefits, secondary content |
-| **Accent** | `--color-lime-soft` | `--color-ink` | CTAs, highlights, callout sections |
-| **Dark** | `--color-forest` | `--color-white` | Hero, headers, testimonials, footers |
-| **Dark-mid** | `--color-forest-mid` | `--color-white` | Nested cards on dark sections |
+| **Default** | `#FFFFFF` white | `--color-ink` | Most sections |
+| **Subtle** | `#EEF2E3` off-white | `--color-ink` | Alternating light sections |
+| **Accent** | `#EBF8C2` lime-soft | `--color-ink` | CTA bands, callout sections |
+| **Dark** | `#043F2E` forest | `#FFFFFF` | Hero, major testimonial, footer |
 
-Never place two dark sections or two light sections back-to-back without an accent or warm section between them.
+**Cadence example for a landing page:**
+
+```
+Hero          → Dark          (strong opening)
+Social proof  → White         (breathing room)
+Features      → Off-white     (differentiated but light)
+CTA band      → Accent        (lime-soft — draws attention)
+Feature rows  → White         (content, spacious)
+Testimonial   → Dark          (one more dark moment)
+Pricing       → Off-white     (calm, readable)
+Final CTA     → Accent        (closes with energy)
+Footer        → Dark          (grounds the page)
+```
+
+Avoid placing two dark sections back-to-back. Never use more than 3 dark sections on a single page.
 
 ---
 
 ## Typography
 
+A humanist serif for display headings signals expertise and trust. Inter handles everything else — UI, body, labels — cleanly and at scale.
+
 ### Type Scale
 
-The system uses a humanist serif for display headings to convey expertise and trust, paired with a clean geometric sans-serif for everything else.
-
-| Role | Font | Weight | Size (desktop) | Size (mobile) |
+| Role | Font | Weight | Desktop | Mobile |
 |---|---|---|---|---|
-| **Display** | Lora | 700 | 56–72px | 36–48px |
-| **Heading 1** | Lora | 700 | 48px | 32px |
-| **Heading 2** | Lora | 600 | 36px | 28px |
-| **Heading 3** | Inter | 600 | 24px | 20px |
-| **Eyebrow** | Inter | 600 | 11px, ALL CAPS, tracking: 0.1em | — |
-| **Body** | Inter | 400 | 16px, line-height: 1.6 | — |
-| **Body Large** | Inter | 400 | 18px, line-height: 1.7 | — |
-| **Caption / Label** | Inter | 500 | 12px | — |
-| **Mono / Code** | JetBrains Mono | 400 | 14px | — |
+| **Display** | Lora | 700 | 60–72px | 40–48px |
+| **H1** | Lora | 700 | 48px | 32px |
+| **H2** | Lora | 600 | 36px | 26px |
+| **H3** | Inter | 600 | 22px | 18px |
+| **H4** | Inter | 600 | 18px | 16px |
+| **Eyebrow** | Inter | 600 | 11px · ALL CAPS · 0.1em tracking | — |
+| **Body** | Inter | 400 | 16px · 1.65 line-height | — |
+| **Body Large** | Inter | 400 | 18px · 1.7 line-height | — |
+| **Caption** | Inter | 500 | 12px | — |
+| **Mono** | JetBrains Mono | 400 | 14px | — |
 
 ### Font Loading (Next.js)
 
@@ -121,69 +137,76 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const mono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
 });
 ```
 
-### Typographic Rules
+### Typography Rules
 
-- Display headlines can run across 2 lines — this is intentional, creates visual weight
-- Eyebrow labels always precede section headings. Format: `CATEGORY NAME` in lime green or muted colour
-- Never use more than 65 characters per line for body text
-- Serif headlines on dark backgrounds: use white
-- Serif headlines on light/cream backgrounds: use `--color-ink` (dark forest)
-- Avoid centre-aligning body paragraphs
+- Display and H1 headlines intentionally run to 2 lines — this creates weight. Don't fight it.
+- Every major section opens with an eyebrow label followed by a Lora heading.
+- Eyebrow colour: `--color-lime` on dark sections, `--color-ink-muted` on light sections.
+- Body text max width: 65 characters (approx `640px`). Never stretch body copy full-width.
+- Never centre-align paragraphs. Centre only: eyebrows and headings in hero/CTA sections.
+- Headings on white or off-white: `--color-ink`.
+- Headings on dark: `#FFFFFF`.
 
 ---
 
-## Spacing & Layout
+## Spacing & Whitespace
 
-### Base Scale (4px)
+Whitespace is the primary design tool. Sections should feel uncrowded. When in doubt, add more vertical space, not less.
+
+### Base Scale (4px grid)
 
 ```
---space-1:   4px
---space-2:   8px
---space-3:  12px
---space-4:  16px
---space-5:  20px
---space-6:  24px
---space-8:  32px
---space-10: 40px
---space-12: 48px
---space-16: 64px
---space-20: 80px
---space-24: 96px
---space-32: 128px
+4px   · --space-1   · micro gaps, icon padding
+8px   · --space-2   · tight inline spacing
+12px  · --space-3   · small element gaps
+16px  · --space-4   · default element spacing
+24px  · --space-6   · card padding, group spacing
+32px  · --space-8   · section sub-divisions
+48px  · --space-12  · component-level spacing
+64px  · --space-16  · between major content blocks
+96px  · --space-24  · section vertical padding (desktop)
+128px · --space-32  · hero vertical padding
 ```
 
 ### Page Layout
 
 - Max content width: `1200px`
-- Horizontal page padding: `24px` (mobile), `48px` (tablet), `96px` (desktop)
-- Section vertical padding: `80px` (desktop), `48px` (mobile)
+- Horizontal padding: `24px` mobile · `48px` tablet · `96px` desktop
+- Section vertical padding: `96px` desktop · `64px` tablet · `48px` mobile
+- Text content columns: max `740px` for body-heavy sections
 
-### Grid
+### Whitespace Principles
 
-- Default: 12-column grid, `24px` gutters
-- Bento grid sections: free-form grid using `grid-template-areas` — cards span different column counts to create visual interest
-- Card minimum width: `280px`
+1. **Let headings breathe.** `mb-6` minimum below eyebrow, `mb-4` minimum below H2 before body.
+2. **Cards don't touch edges.** Always `24px` internal padding minimum.
+3. **Feature grids:** `32px` gap between cards. Don't compress the grid.
+4. **Hero text:** Left-aligned text column should not exceed 55% of the viewport width on desktop. The right half is either empty (creating space) or holds a visual.
+5. **Don't fill every pixel.** Empty space in a card or section is intentional. Resist adding more content.
 
 ---
 
 ## Border Radius
 
-The brand uses **rectangular forms with a small radius**. This reflects precision and professionalism — distinct from the fully-rounded "bubbly" trend.
+Rectangular with a small radius. Precise and professional.
 
-```css
---radius-xs:  2px   /* Almost square — inputs, tags */
---radius-sm:  4px   /* Default — buttons, cards, badges, logo mark */
---radius-md:  8px   /* Larger cards, modals, panels */
---radius-lg: 12px   /* Section containers, bento grid outer wrapper */
+```
+2px  · --radius-xs  · badges, tags, status pills
+4px  · --radius-sm  · buttons, inputs, logo mark
+8px  · --radius-md  · cards, modals, panels, dropdowns
+12px · --radius-lg  · section containers, bento outer wrapper
 ```
 
-**Rule:** Never use `rounded-full` (pill) on primary UI elements. Use it only for avatar images and status indicators. All buttons, cards, inputs, and the logo use `rounded-sm` (4px).
+**Hard rules:**
+- All interactive elements (buttons, inputs) use `4px`.
+- All cards use `8px`.
+- `border-radius: 9999px` (pill) is reserved for avatar images only.
+- The logo mark always uses `4px`.
 
 ---
 
@@ -191,193 +214,235 @@ The brand uses **rectangular forms with a small radius**. This reflects precisio
 
 ### Button
 
-Primary buttons use the lime green fill with dark ink text. Square-ish corners.
-
 ```tsx
-// Primary
-<Button variant="default">Try for free</Button>         // lime fill, ink text
+// Primary — lime fill, dark text. Used once per section maximum.
+<Button variant="default">Try for free</Button>
 
-// Secondary (outline)
-<Button variant="outline">Request demo</Button>          // transparent, border, ink text
+// Outline — used alongside primary for secondary actions.
+<Button variant="outline">Request demo</Button>
 
-// Ghost (dark context)
-<Button variant="ghost">Learn more →</Button>           // transparent, white text on dark
+// Ghost — text links with directional arrow, no border.
+<Button variant="ghost">See how it works →</Button>
 ```
 
-**Button rules:**
-- Primary: `bg-lime` with `text-ink` — never white text on lime (insufficient contrast)
-- On dark section backgrounds: outline buttons use white border + white text
-- The arrow `→` is often appended to text links and ghost buttons, no icon component needed
-- No pill buttons — use `rounded-sm`
-- Loading state shows spinner inline before label text
+**Rules:**
+- Primary fill is always `--color-lime` with `--color-ink` text. Never white text on lime.
+- On dark sections: outline button uses `border: 1px solid rgba(255,255,255,0.4)` with white text.
+- Arrow `→` on text links is a text character, not an icon component.
+- No pill buttons. `border-radius: 4px` always.
+- Loading state: spinner appears inline, before the label. Label stays visible.
+- Never more than 2 buttons in a CTA group.
 
 ### Card
 
-Cards are the primary content container. They appear in three contexts:
+Three card styles. Each has a clearly defined home context.
 
-**Light card** (on white or cream background):
-- Background: `--color-cream` or `--color-white`
-- Border: `1px solid var(--border)`
-- Radius: `rounded-md` (8px)
-- Padding: `24px`
+**Bordered card** — on white or off-white backgrounds:
+```
+bg: white   border: 1px solid var(--border)   radius: 8px   padding: 24px
+```
 
-**Accent card** (on dark background):
-- Background: `--color-lime-soft`
-- No border
-- Radius: `rounded-md`
-- Text: `--color-ink`
-- Often contains an icon + label at bottom-left
+**Accent card** — on white or off-white backgrounds, for featured/highlighted content:
+```
+bg: --color-lime-soft   border: none   radius: 8px   padding: 24px
+text: --color-ink
+```
 
-**Dark card** (nested inside dark section):
-- Background: `--color-forest-mid`
-- Radius: `rounded-md`
-- Text: white
+**Dark card** — inside a dark section:
+```
+bg: --color-forest-mid   border: none   radius: 8px   padding: 24px
+text: white
+```
+
+Card shadows: use sparingly. `box-shadow: 0 1px 3px rgba(0,0,0,0.08)` only on bordered cards to lift them off a white background. Never use drop shadows on dark or accent cards.
 
 ### Bento Grid
 
-A signature layout pattern. Cards of varying sizes arranged in a grid that is intentionally asymmetric. The outer wrapper has `rounded-lg` (12px). Individual cells have `rounded-md` (8px).
+Signature layout for feature showcase sections. Asymmetric card sizes create hierarchy without needing headings on every card.
 
 ```
-┌─────────────────────────────────────────┐  ← outer: rounded-lg, bg-forest-mid
-│  ┌──────────┐  ┌─────────────────────┐  │
-│  │  Small   │  │                     │  │
-│  │  card    │  │    Wide card        │  │
-│  └──────────┘  │                     │  │
-│  ┌──────────┐  └─────────────────────┘  │
-│  │          │  ┌──────────┐ ┌────────┐  │
-│  │  Tall    │  │  Small   │ │ Small  │  │
-│  │  card    │  │  card    │ │ card   │  │
-│  │          │  └──────────┘ └────────┘  │
-│  └──────────┘                           │
-└─────────────────────────────────────────┘
+┌──────────────────────────────────────────┐  ← outer: rounded-lg (12px)
+│  ┌──────────┐  ┌──────────────────────┐  │
+│  │  Small   │  │                      │  │
+│  │  card    │  │   Wide card          │  │  ← inner cards: rounded-md (8px)
+│  └──────────┘  │                      │  │
+│  ┌──────────┐  └──────────────────────┘  │
+│  │          │  ┌──────────┐  ┌────────┐  │
+│  │  Tall    │  │  Small   │  │ Small  │  │
+│  │  card    │  └──────────┘  └────────┘  │
+│  └──────────┘                            │
+└──────────────────────────────────────────┘
 ```
 
-Each card in a bento grid includes:
-- An icon (24px, `--color-lime` on dark cards, `--color-ink` on light cards)
-- A short label beneath the icon
+- Outer wrapper background: `--color-forest-mid` when inside a dark section, `--color-off-white` on a light section
+- Each cell: icon (24px) at top-left, label at bottom-left
+- Gap between cells: `8px`
+- Used at most once per page
 
-### Eyebrow + Heading Pattern
+### Eyebrow + Section Heading
 
-Used to open every major section:
+Every major section opens with this pattern:
 
 ```tsx
-<section>
-  <p className="text-lime text-xs font-semibold uppercase tracking-widest mb-2">
-    Section category
-  </p>
-  <h2 className="font-display text-4xl font-bold text-white">
-    The headline that matters
-  </h2>
-</section>
+// On a light section
+<p className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">
+  For strata managers
+</p>
+<h2 className="font-display text-4xl font-bold text-ink leading-tight">
+  Everything in one place
+</h2>
+
+// On a dark section
+<p className="text-xs font-semibold uppercase tracking-widest text-lime mb-3">
+  For strata managers
+</p>
+<h2 className="font-display text-4xl font-bold text-white leading-tight">
+  Everything in one place
+</h2>
 ```
+
+### Feature Row (Alternating)
+
+Two-column layout: text left + visual right, then next row flips. Used in the white and off-white sections for detailed feature explanation.
+
+```
+[  Text column (45%)  ]  [  Visual/screenshot (55%)  ]
+[  Visual (55%)  ]  [  Text column (45%)  ]
+```
+
+- Text column: eyebrow, H3, body (max 2 short paragraphs), optional CTA link
+- Visual: screenshot or illustration in a `rounded-md` container, subtle border
+- Vertical gap between rows: `96px`
 
 ### Testimonial Block
 
-Oversized decorative quotation mark (the `"` character) rendered in `--color-lime` at 120px+, positioned behind the quote card as a graphic element.
+Oversized quotation mark as a graphic device, positioned behind the quote card.
 
 ```tsx
-<div className="relative">
-  {/* Decorative mark */}
-  <span className="absolute -bottom-4 left-0 text-[120px] font-bold leading-none text-lime select-none">
+<div className="relative py-12">
+  <span
+    aria-hidden="true"
+    className="absolute bottom-0 left-0 font-display text-[160px] font-bold leading-none text-lime/30 select-none"
+  >
     "
   </span>
-  {/* Quote card */}
-  <div className="rounded-md bg-lime-soft p-8 relative z-10">
-    <p className="text-ink text-xl leading-relaxed">{quote}</p>
-    <div className="mt-6 flex items-center justify-between">
+  <div className="relative z-10 rounded-md bg-lime-soft p-10 max-w-2xl">
+    <p className="font-display text-xl font-semibold leading-relaxed text-ink">
+      {quote}
+    </p>
+    <div className="mt-8 flex items-center justify-between">
       <div>
-        <p className="font-semibold text-ink">{name}</p>
+        <p className="font-semibold text-sm text-ink">{name}</p>
         <p className="text-sm text-ink-muted">{role}</p>
       </div>
-      <Logo />
+      <img src={logoSrc} alt={company} className="h-6 opacity-60" />
     </div>
   </div>
 </div>
 ```
 
-### Logo Strip (Social Proof)
+Used inside a dark section so the lime-soft card pops against the forest background.
 
-Horizontal strip of logos, muted to white or `--color-lime-soft` opacity. No borders, no cards.
+### Social Proof Strip
+
+Logo strip on a white or dark background. Logos rendered at `opacity-40` (dark bg) or `opacity-30` (light bg) — greyscale. No borders, no cards.
 
 ### Section Divider
 
-No horizontal rules. Section breaks are created purely through **alternating background colours**. The contrast between section colours is the divider.
+No `<hr>` tags. Section transitions are created entirely by alternating background colours.
 
 ---
 
 ## Iconography
 
-- Style: **Lucide React** — stroke-based, 1.5px stroke weight, no fill
-- Size: `16px` inline, `20px` feature icons, `24px` bento grid icons
-- Colour: Inherits from context. On lime backgrounds: `--color-ink`. On dark: white or lime.
-- Never mix icon styles (no filled icons alongside stroke icons)
+- **Library:** Lucide React
+- **Style:** Stroke only, `strokeWidth={1.5}`. Never filled icons.
+- **Sizes:** `16px` inline text · `20px` UI controls · `24px` feature cards · `32px` section icons
+- **Colour on light backgrounds:** `--color-ink` or `--color-lime`
+- **Colour on dark backgrounds:** `white` or `--color-lime`
 
 ---
 
-## Imagery & Illustration
+## Imagery
 
-- Photography: Real people working, warm natural light, collaborative settings
-- Photos are cropped and used as floating elements, not full-bleed backgrounds
-- Never use stock-looking posed photography
-- Photo containers: `rounded-md` with slight overlap onto adjacent card/section
+- Real people in real work environments. Warm, natural light. Collaborative.
+- Never full-bleed background images. Photos sit as content elements.
+- Photo containers: `rounded-md` (`8px`). No drop shadows.
+- Photos in feature rows: slight overlap across the section boundary for depth.
+- Aspect ratios: `4:3` for feature illustrations, `1:1` for testimonial portraits.
 
 ---
 
 ## Motion
 
-Minimal. This is a professional tool, not a consumer app.
+Professional tool. Motion is subtle and purposeful — never decorative.
 
-- Hover transitions: `150ms ease`
-- Section entry: fade up `200ms`, `translateY(8px)` start
-- No parallax
-- No auto-playing animations
-- Loading spinner: single ring, `800ms` linear spin
+| Interaction | Duration | Easing |
+|---|---|---|
+| Button hover | `150ms` | `ease` |
+| Card hover | `150ms` | `ease` |
+| Dropdown open | `120ms` | `ease-out` |
+| Section entry (scroll) | `300ms` | `ease-out` |
+| Loading spinner | `700ms` | `linear` |
+
+Section entry animation: `opacity: 0 → 1`, `translateY: 12px → 0`. No bounce, no spring.
 
 ---
 
 ## Dark Section Rules
 
-When a section has `background: --color-forest`:
+When `background: --color-forest`:
 
-1. All headings: `color: white`
-2. Body text: `color: rgba(255,255,255,0.80)`
-3. Primary button: `bg-lime text-ink` (unchanged)
-4. Outline button: `border-white text-white hover:bg-white/10`
-5. Borders: `border-white/15`
-6. Cards within dark sections use `--color-forest-mid` background
-7. The accent card in a dark section uses `--color-lime-soft` background with `--color-ink` text
-
----
-
-## Page Structure Patterns
-
-### Landing Page Section Order
-
-```
-1. Hero            → dark (forest)     — headline, subtext, 2 CTAs
-2. Social Proof    → dark (forest)     — logo strip
-3. Feature Bento   → dark (forest)     — bento grid with lime-soft cards
-4. CTA Band        → lime-soft         — short punchy CTA, 2 buttons
-5. Feature Detail  → white             — alternating text+visual rows
-6. Feature Detail  → cream             — continues alternating
-7. Testimonial     → mid-forest        — quote + person + logo
-8. Pricing         → white or cream    — pricing cards
-9. FAQ             → cream             — accordion
-10. Final CTA      → lime-soft         — large heading + 2 buttons
-11. Footer         → forest (darkest)  — links, logo, legal
-```
-
-### Docs / Internal App Pages
-
-- Light mode default (white background)
-- Left sidebar navigation
-- Content max-width: `740px`
-- Headings: Inter (not Lora) for readability at small sizes
-- Code blocks: dark (`--color-forest`) with lime syntax highlighting
+1. Headings: `color: white`
+2. Body: `color: rgba(255,255,255,0.75)`
+3. Eyebrows: `color: --color-lime`
+4. Primary button: `bg-lime text-ink` (unchanged)
+5. Outline button: `border-white/40 text-white hover:bg-white/10`
+6. Borders: `rgba(255,255,255,0.12)`
+7. Cards: use `--color-forest-mid` background
+8. Accent cards: use `--color-lime-soft` background with `--color-ink` text
+9. Links: `--color-lime` with `hover:underline`
 
 ---
 
-## Tailwind Config Reference
+## Page Structure
+
+### Landing Page
+
+```
+1. Nav             → transparent over dark hero
+2. Hero            → Dark · Lora headline · subtext · 2 CTAs · right-side visual
+3. Social Proof    → White · logo strip · minimal, spacious
+4. Features Bento  → Off-white · eyebrow + H2 left · bento grid right
+5. Feature Rows    → White · 2–3 alternating text+visual rows
+6. CTA Band        → Accent (lime-soft) · short bold heading · 2 CTAs
+7. Feature Rows    → Off-white · continues feature detail
+8. Testimonial     → Dark · quote card + oversized quote mark
+9. Pricing         → White · 3-column cards
+10. FAQ            → Off-white · accordion
+11. Final CTA      → Accent (lime-soft) · big heading + 2 CTAs
+12. Footer         → Dark · links, logo, legal
+```
+
+### App / Dashboard Pages
+
+- Light mode, white background always
+- Left sidebar: `240px` wide, `--color-off-white` background, `1px` right border
+- Content area: white, `24px` padding
+- Max content width for text-heavy pages: `740px`
+- Headings: Inter only (Lora is for marketing, not dense UI)
+
+### Docs Pages
+
+- White background
+- Left nav sidebar
+- `740px` max content width
+- Code blocks: `--color-forest` background, `--color-lime` for keywords
+- No decorative elements — clean, functional
+
+---
+
+## Tailwind Config
 
 ```ts
 // tailwind.config.ts
@@ -388,18 +453,19 @@ export default {
     extend: {
       colors: {
         forest: {
-          DEFAULT: "#0B2B1A",
-          mid:     "#164E2E",
+          DEFAULT: "#043F2E",
+          mid:     "#0A5C3D",
         },
         lime: {
-          DEFAULT: "#A3E635",
-          soft:    "#D9F99D",
+          DEFAULT: "#C8F169",
+          soft:    "#EBF8C2",
         },
-        cream:  "#F0F9E6",
+        "off-white": "#EEF2E3",
         ink: {
-          DEFAULT: "#0B2B1A",
-          muted:   "#3D6B4F",
+          DEFAULT: "#043F2E",
+          muted:   "#4A7A62",
         },
+        border: "#D4E8C2",
       },
       fontFamily: {
         display: ["var(--font-display)", "Georgia", "serif"],
@@ -412,6 +478,10 @@ export default {
         md:  "8px",
         lg:  "12px",
       },
+      maxWidth: {
+        content: "1200px",
+        prose:   "740px",
+      },
     },
   },
 } satisfies Config;
@@ -419,16 +489,23 @@ export default {
 
 ---
 
-## AI Prompt Reference
+## AI Prompt Snippet
 
-When using AI tools to build UI for Instant Strata, include this brief:
+Include this block when prompting AI tools to build Instant Strata UI:
 
-> **Brand:** Instant Strata — strata property management platform.  
-> **Palette:** Deep forest green (`#0B2B1A`), bright lime green (`#A3E635`), lime-soft (`#D9F99D`), cream (`#F0F9E6`), white.  
-> **Typography:** Lora serif for headlines, Inter for UI and body text.  
-> **Style:** Rectangular forms (4px border radius on all interactive elements). Professional, clean, not corporate. Alternating light/dark sections. Bento grid layouts for feature showcases.  
-> **Buttons:** Lime fill + dark text for primary. White border + white text for outline on dark backgrounds. No pill shapes.  
-> **Logo:** IS letterforms inside a small-radius square. Lime background.
+> **Brand:** Instant Strata — strata property management platform.
+>
+> **Colours:** White (`#FFFFFF`) is the dominant background. Off-white (`#EEF2E3`) for subtle section alternation. Lime (`#C8F169`) is the brand accent — buttons, eyebrows, highlights. Forest green (`#043F2E`) for dark sections (hero, testimonial, footer) and all text. Lime-soft (`#EBF8C2`) for accent sections and card fills.
+>
+> **Typography:** Lora serif for all display and section headings. Inter for UI, body, and labels.
+>
+> **Style:** Rectangular forms — `4px` radius on buttons and inputs, `8px` on cards. No pill shapes. Generous whitespace. Professional but not corporate.
+>
+> **Sections:** Most content sections are white or off-white. Dark sections (forest) used sparingly — hero, one testimonial, footer. Lime-soft accent sections used for CTA bands. Max 3 dark sections per page.
+>
+> **Buttons:** Lime fill + dark text for primary. Outline (dark border on light, white border on dark) for secondary. No pill shapes.
+>
+> **Logo:** IS letterforms in a `4px` radius square. Lime container, dark letterforms on light backgrounds.
 
 ---
 
@@ -437,3 +514,4 @@ When using AI tools to build UI for Instant Strata, include this brief:
 | Date | Change |
 |---|---|
 | 2026-06-15 | Initial specification |
+| 2026-06-15 | Revised — white as dominant background, dark sections used sparingly, updated colours to match Mode reference palette, expanded whitespace guidance |
