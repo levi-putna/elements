@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Lora } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-});
-
-const lora = Lora({
-  variable: "--font-lora",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -54,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${lora.variable} ${jetbrainsMono.variable} h-full`}
+      className={`${inter.variable} ${jetbrainsMono.variable} h-full`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {/* Top nav */}
@@ -63,7 +57,7 @@ export default function RootLayout({
             {/* IS logo mark */}
             <Link
               href="/"
-              className="flex items-center justify-center w-7 h-7 rounded-sm bg-lime text-forest text-xs font-bold tracking-tight shrink-0 select-none"
+              className="flex items-center justify-center w-7 h-7 rounded-sm bg-lime text-forest text-sm font-bold font-display tracking-tight shrink-0 select-none [text-decoration:none]"
               aria-label="Elements home"
             >
               IS
@@ -76,7 +70,7 @@ export default function RootLayout({
           <nav className="flex items-center gap-5">
             <Link
               href="/"
-              className="text-sm text-ink-muted hover:text-foreground transition-colors duration-150"
+              className="text-sm text-ink-muted hover:text-foreground transition-colors duration-150 no-underline"
             >
               Docs
             </Link>
@@ -84,7 +78,7 @@ export default function RootLayout({
               href="https://github.com/levi-putna/elements"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-ink-muted hover:text-foreground transition-colors duration-150 flex items-center gap-1.5"
+              className="text-sm text-ink-muted hover:text-foreground transition-colors duration-150 flex items-center gap-1.5 no-underline"
             >
               <svg
                 className="size-4"
@@ -117,7 +111,7 @@ export default function RootLayout({
                       <Link
                         key={item.href}
                         href={item.href}
-                        className="rounded-sm px-2 py-1.5 text-sm text-ink-muted hover:text-foreground hover:bg-secondary transition-colors duration-150"
+                        className="rounded-sm px-2 py-1.5 text-sm text-ink-muted hover:text-foreground hover:bg-secondary transition-colors duration-150 no-underline"
                       >
                         {item.label}
                       </Link>

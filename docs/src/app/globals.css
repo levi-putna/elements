@@ -2,12 +2,51 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* ── Grenette (Grilli Type) ─────────────────────────────
+   Place font files in docs/public/fonts/.
+   Purchase and download from https://www.grillitype.com/typeface/gt-grenette
+   Expected file names:
+     Grenette-Regular.woff2
+     Grenette-RegularItalic.woff2
+     Grenette-Medium.woff2
+     Grenette-Bold.woff2
+   Until files are present Georgia is used as fallback.
+   ──────────────────────────────────────────────────── */
+@font-face {
+  font-family: "Grenette";
+  src: url("/elements/fonts/Grenette-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Grenette";
+  src: url("/elements/fonts/Grenette-RegularItalic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Grenette";
+  src: url("/elements/fonts/Grenette-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Grenette";
+  src: url("/elements/fonts/Grenette-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   /* Fonts */
   --font-sans:    var(--font-inter);
-  --font-display: var(--font-lora);
+  --font-display: "Grenette", "Georgia", serif;
   --font-mono:    var(--font-jetbrains-mono);
 
   /* Colour aliases into Tailwind utilities */
@@ -115,6 +154,17 @@
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans), system-ui, sans-serif;
   }
+  a {
+    color: var(--foreground);
+    text-decoration-line: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-lime);
+    transition: color 150ms ease, text-decoration-color 150ms ease;
+  }
+  a:hover {
+    color: var(--color-forest-mid);
+    text-decoration-color: var(--color-forest-mid);
+  }
 }
 
 /* Docs-specific typography helpers */
@@ -148,12 +198,5 @@
     color: #4A7A62;
     margin-bottom: 1rem;
   }
-  .docs-prose a {
-    color: var(--foreground);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .docs-prose a:hover {
-    color: var(--color-forest-mid);
-  }
+  /* docs-prose links inherit from base layer — no override needed */
 }

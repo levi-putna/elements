@@ -104,15 +104,25 @@ Avoid placing two dark sections back-to-back. Never use more than 3 dark section
 
 ## Typography
 
-A humanist serif for display headings signals expertise and trust. Inter handles everything else — UI, body, labels — cleanly and at scale.
+A refined serif for display headings signals expertise and trust. Inter handles everything else — UI, body, labels — cleanly and at scale.
+
+### Typefaces
+
+| Role | Typeface | Source |
+|---|---|---|
+| **Display / Headings** | Grenette | [Grilli Type](https://www.grillitype.com/typeface/gt-grenette) — commercial licence |
+| **UI / Body / Labels** | Inter | Google Fonts — free |
+| **Code** | JetBrains Mono | Google Fonts — free |
+
+Grenette's ink-trap details and warm proportions give headings authority without coldness. Georgia is the fallback until font files are in place.
 
 ### Type Scale
 
 | Role | Font | Weight | Desktop | Mobile |
 |---|---|---|---|---|
-| **Display** | Lora | 700 | 60–72px | 40–48px |
-| **H1** | Lora | 700 | 48px | 32px |
-| **H2** | Lora | 600 | 36px | 26px |
+| **Display** | Grenette | 700 | 60–72px | 40–48px |
+| **H1** | Grenette | 700 | 48px | 32px |
+| **H2** | Grenette | 500 | 36px | 26px |
 | **H3** | Inter | 600 | 22px | 18px |
 | **H4** | Inter | 600 | 18px | 16px |
 | **Eyebrow** | Inter | 600 | 11px · ALL CAPS · 0.1em tracking | — |
@@ -121,37 +131,40 @@ A humanist serif for display headings signals expertise and trust. Inter handles
 | **Caption** | Inter | 500 | 12px | — |
 | **Mono** | JetBrains Mono | 400 | 14px | — |
 
-### Font Loading (Next.js)
+### Font Setup
+
+Grenette is loaded via CSS `@font-face` in `globals.css`. Place purchased `.woff2` files in `docs/public/fonts/`:
+
+```
+docs/public/fonts/
+  Grenette-Regular.woff2
+  Grenette-RegularItalic.woff2
+  Grenette-Medium.woff2
+  Grenette-Bold.woff2
+```
+
+Inter and JetBrains Mono are loaded via `next/font/google`:
 
 ```tsx
-import { Lora, Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 
-const lora = Lora({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-});
-
-const inter = Inter({
-  variable: "--font-sans",
-  subsets: ["latin"],
-});
-
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const mono = JetBrains_Mono({ variable: "--font-jetbrains-mono", subsets: ["latin"] });
 ```
 
 ### Typography Rules
 
 - Display and H1 headlines intentionally run to 2 lines — this creates weight. Don't fight it.
-- Every major section opens with an eyebrow label followed by a Lora heading.
+- Every major section opens with an eyebrow label followed by a Grenette heading.
 - Eyebrow colour: `--color-lime` on dark sections, `--color-ink-muted` on light sections.
 - Body text max width: 65 characters (approx `640px`). Never stretch body copy full-width.
 - Never centre-align paragraphs. Centre only: eyebrows and headings in hero/CTA sections.
 - Headings on white or off-white: `--color-ink`.
 - Headings on dark: `#FFFFFF`.
+
+### Logo Typography
+
+The **IS** logo mark uses Grenette Bold inside the lime square container. The serif letterforms give the mark weight and brand character at small sizes.
 
 ---
 
@@ -411,7 +424,7 @@ When `background: --color-forest`:
 
 ```
 1. Nav             → transparent over dark hero
-2. Hero            → Dark · Lora headline · subtext · 2 CTAs · right-side visual
+2. Hero            → Dark · Grenette headline · subtext · 2 CTAs · right-side visual
 3. Social Proof    → White · logo strip · minimal, spacious
 4. Features Bento  → Off-white · eyebrow + H2 left · bento grid right
 5. Feature Rows    → White · 2–3 alternating text+visual rows
@@ -430,7 +443,7 @@ When `background: --color-forest`:
 - Left sidebar: `240px` wide, `--color-off-white` background, `1px` right border
 - Content area: white, `24px` padding
 - Max content width for text-heavy pages: `740px`
-- Headings: Inter only (Lora is for marketing, not dense UI)
+- Headings: Inter only (Grenette is for marketing, not dense UI)
 
 ### Docs Pages
 
@@ -468,7 +481,7 @@ export default {
         border: "#D4E8C2",
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
+        display: ["Grenette", "Georgia", "serif"],
         sans:    ["var(--font-sans)", "system-ui", "sans-serif"],
         mono:    ["var(--font-mono)", "monospace"],
       },
@@ -497,7 +510,7 @@ Include this block when prompting AI tools to build Instant Strata UI:
 >
 > **Colours:** White (`#FFFFFF`) is the dominant background. Off-white (`#EEF2E3`) for subtle section alternation. Lime (`#C8F169`) is the brand accent — buttons, eyebrows, highlights. Forest green (`#043F2E`) for dark sections (hero, testimonial, footer) and all text. Lime-soft (`#EBF8C2`) for accent sections and card fills.
 >
-> **Typography:** Lora serif for all display and section headings. Inter for UI, body, and labels.
+> **Typography:** Grenette (Grilli Type) serif for all display and section headings. Inter for UI, body, and labels. Logo mark uses Grenette Bold inside the lime square.
 >
 > **Style:** Rectangular forms — `4px` radius on buttons and inputs, `8px` on cards. No pill shapes. Generous whitespace. Professional but not corporate.
 >
