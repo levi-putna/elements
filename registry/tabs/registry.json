@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs",
+  "type": "registry:ui",
+  "description": "A set of layered sections of content built on Base UI.",
+  "dependencies": ["@base-ui/react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/tabs/tabs.tsx",
+      "target": "components/ui/tabs.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

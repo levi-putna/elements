@@ -4,6 +4,7 @@ import { DocsPage } from "@/components/docs/docs-page";
 /* ─── Specimen text ───────────────────────────────────── */
 const ALPHABET = "Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz";
 const NUMERALS = "0 1 2 3 4 5 6 7 8 9";
+const GLYPH_SUFFIX = ': " "';
 
 export default function TypographyPage() {
   return (
@@ -50,7 +51,7 @@ export default function TypographyPage() {
               {ALPHABET}
             </p>
             <p className="font-display text-sm text-foreground/50 tracking-wide mt-1">
-              {NUMERALS} &amp; ! @ # $ % &amp; * ( ): " "
+              {NUMERALS} &amp; ! @ # $ % &amp; * ( ){GLYPH_SUFFIX}
             </p>
           </div>
           <div className="px-8 py-3 bg-secondary border-t border-border flex items-center gap-6">
@@ -82,7 +83,7 @@ export default function TypographyPage() {
               {ALPHABET}
             </p>
             <p className="font-sans text-sm text-foreground/50 tracking-wide mt-1">
-              {NUMERALS} &amp; ! @ # $ % &amp; * ( ): " "
+              {NUMERALS} &amp; ! @ # $ % &amp; * ( ){GLYPH_SUFFIX}
             </p>
           </div>
           <div className="px-8 py-3 bg-secondary border-t border-border flex items-center gap-6">
@@ -101,13 +102,13 @@ export default function TypographyPage() {
               01_AB
             </p>
             <p className="font-mono text-sm text-foreground mb-8 leading-relaxed">
-              <span className="text-[#C8F169]">const</span> strata = <span className="text-[#C8F169]">await</span> scheme.getLevies(&#123; plan: <span className="text-ink-muted">"SP12345"</span> &#125;)
+              <span className="text-[#C8F169]">const</span> strata = <span className="text-[#C8F169]">await</span> scheme.getLevies(&#123; plan: <span className="text-ink-muted">&quot;SP12345&quot;</span> &#125;)
             </p>
             <p className="font-mono text-sm text-foreground/50">
               {ALPHABET}
             </p>
             <p className="font-mono text-sm text-foreground/50 mt-1">
-              {NUMERALS} &amp; ! @ # $ % &amp; * ( ): " "
+              {NUMERALS} &amp; ! @ # $ % &amp; * ( ){GLYPH_SUFFIX}
             </p>
           </div>
           <div className="px-8 py-3 bg-secondary border-t border-border flex items-center gap-6">

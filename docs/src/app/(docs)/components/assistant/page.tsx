@@ -114,6 +114,81 @@ export function AssistantPage({
   )
 }`;
 
+const THIN_LAYOUT = `"use client"
+
+import { PlusIcon } from "lucide-react"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+// …Conversation, Message, PromptInput imports…
+
+export function AssistantSidebar({
+  messages,
+  status,
+  onSubmit,
+  onNewChat,
+  onStop,
+}: {
+  messages: { id: string; role: "user" | "assistant"; text: string }[]
+  status: ChatStatus
+  onSubmit: ({ text }: { text: string }) => void
+  onNewChat: () => void
+  onStop?: () => void
+}) {
+  const lastMessage = messages.at(-1)
+
+  return (
+    <aside className="flex h-full w-80 shrink-0 flex-col border-l border-border bg-background">
+      {/* Compact header: icon-only new chat */}
+      <header className="flex shrink-0 items-center justify-between border-b border-border px-3 py-2">
+        <p className="text-sm font-semibold text-foreground">Assistant</p>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <button
+                  type="button"
+                  onClick={onNewChat}
+                  aria-label="New chat"
+                  className="inline-flex size-8 items-center justify-center rounded-sm border border-border hover:bg-muted"
+                >
+                  <PlusIcon className="size-4" />
+                </button>
+              }
+            />
+            <TooltipContent side="bottom">New chat</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </header>
+
+      <Conversation className="flex-1">
+        <ConversationContent className="gap-4 p-3">
+          {/* messages… */}
+        </ConversationContent>
+        <ConversationScrollButton />
+      </Conversation>
+
+      <div className="shrink-0 px-3 pb-3">
+        <PromptInput onSubmit={onSubmit}>
+          <PromptInputTextarea placeholder="Ask anything…" />
+          <PromptInputFooter>
+            <PromptInputSubmit status={status} onStop={onStop} />
+          </PromptInputFooter>
+        </PromptInput>
+      </div>
+    </aside>
+  )
+}
+
+// Mount beside your main app shell:
+<div className="flex h-svh">
+  <main className="min-w-0 flex-1 overflow-auto">{children}</main>
+  <AssistantSidebar … />
+</div>`;
+
 const WITH_AI_SDK = `"use client"
 
 import { useChat } from "ai/react"
@@ -253,6 +328,47 @@ export default function AssistantPage() {
         </p>
         <div className="rounded-sm border border-border overflow-hidden">
           <AssistantPreview />
+        </div>
+      </section>
+
+      {/* Thin sidebar preview */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">
+          Thin sidebar
+        </h2>
+        <p className="text-sm text-ink-muted mb-5 leading-relaxed">
+          A 320px panel for a right sidebar or slide-over. The header drops the subtitle,{" "}
+          <strong className="font-semibold text-foreground">New chat</strong> becomes an icon
+          with a tooltip, and the composer omits the model selector so the input stays usable at
+          narrow widths.
+        </p>
+        <div className="rounded-sm border border-border overflow-hidden">
+          <div className="flex h-[min(70vh,560px)]">
+            {/* Faux main app content */}
+            <div className="flex min-w-0 flex-1 flex-col bg-secondary/40 p-6">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-2">
+                Main application
+              </p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">Scheme dashboard</h3>
+              <p className="text-sm text-ink-muted leading-relaxed max-w-md">
+                The assistant docks on the right while managers work in the primary view. Use{" "}
+                <code className="font-mono text-xs bg-background px-1 py-0.5 rounded-sm">
+                  thin
+                </code>{" "}
+                on <code className="font-mono text-xs bg-background px-1 py-0.5 rounded-sm">AssistantPreview</code>{" "}
+                or copy the layout below.
+              </p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2 max-w-lg">
+                <div className="h-24 rounded-sm border border-border bg-background" />
+                <div className="h-24 rounded-sm border border-border bg-background" />
+                <div className="h-24 rounded-sm border border-border bg-background sm:col-span-2" />
+              </div>
+            </div>
+            <AssistantPreview thin className="border-l border-border" />
+          </div>
+        </div>
+        <div className="mt-4">
+          <CodeBlock code={THIN_LAYOUT} language="tsx" />
         </div>
       </section>
 

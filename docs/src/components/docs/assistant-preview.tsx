@@ -28,6 +28,12 @@ import {
   type PromptInputMessage,
 } from "@/components/ui/prompt-input"
 import { cn } from "@/lib/utils"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import type { ChatStatus } from "ai"
 import { CheckIcon, CopyIcon, PlusIcon, RefreshCcwIcon, SparklesIcon } from "lucide-react"
 import { nanoid } from "nanoid"
@@ -48,6 +54,8 @@ const SUGGESTIONS = [
   "Write a haiku about strata living",
   "Explain how the Conversation component works",
 ]
+
+const THIN_SUGGESTIONS = ["What can you do?", "Markdown example"]
 
 const MODELS = [
   { value: "opus", label: "Claude Opus 4.8" },
@@ -119,6 +127,8 @@ This is a self-contained demo, so I'm echoing rather than reasoning — but in a
 export interface AssistantPreviewProps {
   /** When true, fills the viewport height for the full-screen preview route. */
   fullScreen?: boolean
+  /** Compact sidebar width for panels docked beside main app content. */
+  thin?: boolean
   /** Show a link back to the assistant docs (full-screen preview only). */
   showDocsLink?: boolean
   className?: string
@@ -129,6 +139,7 @@ export interface AssistantPreviewProps {
  */
 export function AssistantPreview({
   fullScreen = false,
+  thin = false,
   showDocsLink = fullScreen,
   className,
 }: AssistantPreviewProps) {
@@ -213,35 +224,69 @@ export function AssistantPreview({
 
   const isBusy = status === "streaming" || status === "submitted"
   const lastMessage = messages.at(-1)
+  const suggestions = thin ? THIN_SUGGESTIONS : SUGGESTIONS
 
   return (
     <div
       className={cn(
         "flex flex-col bg-background",
-        fullScreen ? "h-dvh" : "h-[min(70vh,640px)]",
+        thin && "w-80 shrink-0",
+        fullScreen ? "h-dvh" : thin ? "h-full min-h-[480px]" : "h-[min(70vh,640px)]",
         className
       )}
     >
       {/* Header */}
-      <header className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
-        <div className="flex items-center gap-2">
-          <div className="flex size-7 items-center justify-center rounded-sm bg-foreground text-background">
-            <SparklesIcon className="size-4" />
+      <header
+        className={cn(
+          "flex shrink-0 items-center justify-between border-b border-border",
+          thin ? "px-3 py-2" : "px-4 py-3"
+        )}
+      >
+        <div className="flex min-w-0 items-center gap-2">
+          <div
+            className={cn(
+              "flex shrink-0 items-center justify-center rounded-sm bg-foreground text-background",
+              thin ? "size-6" : "size-7"
+            )}
+          >
+            <SparklesIcon className={thin ? "size-3.5" : "size-4"} />
           </div>
-          <div className="leading-tight">
+          <div className={cn("min-w-0 leading-tight", thin && "truncate")}>
             <p className="text-sm font-semibold text-foreground">Assistant</p>
-            <p className="text-xs text-muted-foreground">Elements demo · mocked replies</p>
+            {!thin && (
+              <p className="text-xs text-muted-foreground">Elements demo · mocked replies</p>
+            )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={newChat}
-            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
-          >
-            <PlusIcon className="size-3.5" />
-            New chat
-          </button>
+        <div className="flex shrink-0 items-center gap-2">
+          {thin ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  render={
+                    <button
+                      type="button"
+                      onClick={newChat}
+                      aria-label="New chat"
+                      className="inline-flex size-8 items-center justify-center rounded-sm border border-border text-foreground transition-colors hover:bg-muted"
+                    >
+                      <PlusIcon className="size-4" />
+                    </button>
+                  }
+                />
+                <TooltipContent side="bottom">New chat</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
+            <button
+              type="button"
+              onClick={newChat}
+              className="inline-flex items-center gap-1.5 rounded-sm border border-border px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              <PlusIcon className="size-3.5" />
+              New chat
+            </button>
+          )}
           {showDocsLink && (
             <Link
               href="/components/assistant"
@@ -255,26 +300,50 @@ export function AssistantPreview({
 
       {/* Conversation */}
       <Conversation className="flex-1">
-        <ConversationContent className="mx-auto w-full max-w-3xl">
+        <ConversationContent
+          className={cn(
+            "mx-auto w-full",
+            thin ? "gap-4 p-3" : "max-w-3xl gap-8 p-4"
+          )}
+        >
           {messages.length === 0 ? (
-            <ConversationEmptyState className={fullScreen ? "min-h-[60vh]" : "min-h-[320px]"}>
+            <ConversationEmptyState
+              className={
+                fullScreen ? "min-h-[60vh]" : thin ? "min-h-[240px]" : "min-h-[320px]"
+              }
+            >
               <div className="flex flex-col items-center gap-3">
-                <div className="flex size-12 items-center justify-center rounded-sm bg-muted text-muted-foreground">
-                  <SparklesIcon className="size-6" />
+                <div
+                  className={cn(
+                    "flex items-center justify-center rounded-sm bg-muted text-muted-foreground",
+                    thin ? "size-10" : "size-12"
+                  )}
+                >
+                  <SparklesIcon className={thin ? "size-5" : "size-6"} />
                 </div>
                 <div className="space-y-1 text-center">
-                  <h3 className="font-medium text-sm">How can I help you today?</h3>
+                  <h3 className="font-medium text-sm">How can I help?</h3>
                   <p className="text-muted-foreground text-sm">
-                    Ask anything below, or start with one of these:
+                    {thin
+                      ? "Ask below or pick a starter:"
+                      : "Ask anything below, or start with one of these:"}
                   </p>
                 </div>
-                <div className="mt-2 flex flex-wrap justify-center gap-2">
-                  {SUGGESTIONS.map((s) => (
+                <div
+                  className={cn(
+                    "mt-2 flex gap-2",
+                    thin ? "w-full flex-col" : "flex-wrap justify-center"
+                  )}
+                >
+                  {suggestions.map((s) => (
                     <button
                       key={s}
                       type="button"
                       onClick={() => send(s)}
-                      className="rounded-sm border border-border px-3 py-1.5 text-xs text-foreground transition-colors hover:bg-muted"
+                      className={cn(
+                        "rounded-sm border border-border text-xs text-foreground transition-colors hover:bg-muted",
+                        thin ? "w-full px-3 py-2 text-left" : "px-3 py-1.5"
+                      )}
                     >
                       {s}
                     </button>
@@ -284,15 +353,19 @@ export function AssistantPreview({
             </ConversationEmptyState>
           ) : (
             messages.map((message) => (
-              <Message key={message.id} from={message.role}>
-                <MessageContent>
+              <Message
+                key={message.id}
+                from={message.role}
+                className={thin ? "max-w-full gap-1.5" : undefined}
+              >
+                <MessageContent className={thin ? "text-xs" : undefined}>
                   <MessageResponse
                     isAnimating={status === "streaming" && message.id === lastMessage?.id}
                   >
                     {message.text}
                   </MessageResponse>
                 </MessageContent>
-                {message.role === "assistant" && message.text && (
+                {message.role === "assistant" && message.text && !thin && (
                   <MessageActions className="opacity-0 transition-opacity group-hover:opacity-100">
                     <MessageAction
                       tooltip={copiedId === message.id ? "Copied" : "Copy"}
@@ -319,31 +392,35 @@ export function AssistantPreview({
       </Conversation>
 
       {/* Composer */}
-      <div className="shrink-0 px-4 pb-4">
-        <div className="mx-auto w-full max-w-3xl">
+      <div className={cn("shrink-0", thin ? "px-3 pb-3" : "px-4 pb-4")}>
+        <div className={cn("mx-auto w-full", !thin && "max-w-3xl")}>
           <PromptInput onSubmit={handleSubmit}>
-            <PromptInputTextarea placeholder="Message the assistant…" />
-            <PromptInputFooter>
-              <PromptInputTools>
-                <PromptInputSelect
-                  value={model}
-                  onValueChange={(value) => setModel(value as string)}
-                >
-                  <PromptInputSelectTrigger>
-                    <PromptInputSelectValue>
-                      {MODELS.find((m) => m.value === model)?.label}
-                    </PromptInputSelectValue>
-                  </PromptInputSelectTrigger>
-                  <PromptInputSelectContent>
-                    {MODELS.map((m) => (
-                      <PromptInputSelectItem key={m.value} value={m.value}>
-                        {m.label}
-                      </PromptInputSelectItem>
-                    ))}
-                  </PromptInputSelectContent>
-                </PromptInputSelect>
-                <PromptInputSpeech />
-              </PromptInputTools>
+            <PromptInputTextarea
+              placeholder={thin ? "Ask anything…" : "Message the assistant…"}
+            />
+            <PromptInputFooter className={thin ? "justify-end" : undefined}>
+              {!thin && (
+                <PromptInputTools>
+                  <PromptInputSelect
+                    value={model}
+                    onValueChange={(value) => setModel(value as string)}
+                  >
+                    <PromptInputSelectTrigger>
+                      <PromptInputSelectValue>
+                        {MODELS.find((m) => m.value === model)?.label}
+                      </PromptInputSelectValue>
+                    </PromptInputSelectTrigger>
+                    <PromptInputSelectContent>
+                      {MODELS.map((m) => (
+                        <PromptInputSelectItem key={m.value} value={m.value}>
+                          {m.label}
+                        </PromptInputSelectItem>
+                      ))}
+                    </PromptInputSelectContent>
+                  </PromptInputSelect>
+                  <PromptInputSpeech />
+                </PromptInputTools>
+              )}
               <PromptInputSubmit status={status} onStop={stopStreaming} />
             </PromptInputFooter>
           </PromptInput>

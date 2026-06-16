@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-input",
+  "type": "registry:ui",
+  "description": "Date, time, date-time and date-range inputs with a calendar dropdown, configurable display and value formats.",
+  "dependencies": ["react-day-picker", "date-fns", "lucide-react"],
+  "registryDependencies": ["calendar", "popover", "button", "input", "utils"],
+  "files": [
+    {
+      "path": "registry/date-input/date-input.tsx",
+      "target": "components/ui/date-input.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

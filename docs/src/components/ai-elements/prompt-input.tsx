@@ -24,6 +24,7 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
+  inputGroupButtonElement,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
 import {
@@ -1133,15 +1134,13 @@ export const PromptInputButton = ({
   const newSize =
     size ?? (Children.count(props.children) > 1 ? "sm" : "icon-sm");
 
-  const button = (
-    <InputGroupButton
-      className={cn(className)}
-      size={newSize}
-      type="button"
-      variant={variant}
-      {...props}
-    />
-  );
+  const button = inputGroupButtonElement({
+    className: cn(className),
+    size: newSize,
+    type: "button",
+    variant,
+    ...props,
+  });
 
   if (!tooltip) {
     return button;
@@ -1154,7 +1153,7 @@ export const PromptInputButton = ({
 
   return (
     <Tooltip>
-      <TooltipTrigger>{button}</TooltipTrigger>
+      <TooltipTrigger render={button} />
       <TooltipContent side={side}>
         {tooltipContent}
         {shortcut && (

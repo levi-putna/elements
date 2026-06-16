@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert-dialog",
+  "type": "registry:ui",
+  "description": "Modal dialog that interrupts the user with important content and expects a response. Built on shadcn/ui and Base UI, with an optional media block and destructive styling.",
+  "dependencies": [
+    "@base-ui/react",
+    "class-variance-authority"
+  ],
+  "registryDependencies": ["utils", "button"],
+  "files": [
+    {
+      "path": "registry/alert-dialog/alert-dialog.tsx",
+      "target": "components/ui/alert-dialog.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

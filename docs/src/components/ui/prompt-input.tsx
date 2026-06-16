@@ -24,8 +24,10 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
+  inputGroupButtonVariants,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -74,6 +76,7 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react";
 
 // ============================================================================
@@ -426,7 +429,10 @@ export const PromptInputActionAddScreenshot = ({
 // Speech Recognition Button
 // ============================================================================
 
-export type PromptInputSpeechProps = ComponentProps<typeof InputGroupButton> & {
+export type PromptInputSpeechProps = Omit<
+  ComponentProps<typeof InputGroupButton>,
+  "ref"
+> & {
   onTranscript?: (text: string) => void;
   tooltip?: PromptInputButtonTooltip;
 };
@@ -441,9 +447,12 @@ export const PromptInputSpeech = ({
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const controller = useOptionalPromptInputController();
 
-  const supported =
-    typeof window !== "undefined" &&
-    ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
+  const supported = useSyncExternalStore(
+    () => () => {},
+    () =>
+      "SpeechRecognition" in window || "webkitSpeechRecognition" in window,
+    () => false
+  );
 
   const toggle = useCallback(() => {
     if (!supported) return;
@@ -483,12 +492,17 @@ export const PromptInputSpeech = ({
   if (!supported) return null;
 
   const button = (
-    <InputGroupButton
-      aria-label={isListening ? "Stop recording" : "Start voice input"}
-      className={cn(isListening && "text-destructive", className)}
-      onClick={toggle}
+    <Button
       type="button"
+      data-size="xs"
       variant="ghost"
+      className={cn(
+        inputGroupButtonVariants({ size: "xs" }),
+        isListening && "text-destructive",
+        className
+      )}
+      aria-label={isListening ? "Stop recording" : "Start voice input"}
+      onClick={toggle}
       {...props}
     >
       {isListening ? (
@@ -496,7 +510,7 @@ export const PromptInputSpeech = ({
       ) : (
         <Mic className="size-4" />
       )}
-    </InputGroupButton>
+    </Button>
   );
 
   const resolvedTooltip =
@@ -509,7 +523,7 @@ export const PromptInputSpeech = ({
 
   return (
     <Tooltip>
-      <TooltipTrigger>{button}</TooltipTrigger>
+      <TooltipTrigger render={button} />
       <TooltipContent side={side}>{tooltipContent}</TooltipContent>
     </Tooltip>
   );
@@ -970,7 +984,10 @@ export type PromptInputButtonTooltip =
       side?: ComponentProps<typeof TooltipContent>["side"];
     };
 
-export type PromptInputButtonProps = ComponentProps<typeof InputGroupButton> & {
+export type PromptInputButtonProps = Omit<
+  ComponentProps<typeof InputGroupButton>,
+  "ref"
+> & {
   tooltip?: PromptInputButtonTooltip;
 };
 
@@ -984,11 +1001,11 @@ export const PromptInputButton = ({
   const newSize = size ?? (Children.count(props.children) > 1 ? "sm" : "icon-sm");
 
   const button = (
-    <InputGroupButton
-      className={cn(className)}
-      size={newSize}
+    <Button
       type="button"
+      data-size={newSize}
       variant={variant}
+      className={cn(inputGroupButtonVariants({ size: newSize }), className)}
       {...props}
     />
   );
@@ -1001,7 +1018,7 @@ export const PromptInputButton = ({
 
   return (
     <Tooltip>
-      <TooltipTrigger>{button}</TooltipTrigger>
+      <TooltipTrigger render={button} />
       <TooltipContent side={side}>
         {tooltipContent}
         {shortcut && <span className="ml-2 text-muted-foreground">{shortcut}</span>}

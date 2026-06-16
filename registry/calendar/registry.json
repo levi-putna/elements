@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "calendar",
+  "type": "registry:ui",
+  "description": "A date-field calendar built on React DayPicker with Base UI styling.",
+  "dependencies": ["react-day-picker", "date-fns", "lucide-react"],
+  "registryDependencies": ["button", "utils"],
+  "files": [
+    {
+      "path": "registry/calendar/calendar.tsx",
+      "target": "components/ui/calendar.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

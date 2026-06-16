@@ -93,6 +93,25 @@ function InputGroupButton({
   VariantProps<typeof inputGroupButtonVariants> & {
     type?: "button" | "submit" | "reset"
   }) {
+  return inputGroupButtonElement({
+    type,
+    variant,
+    size,
+    className,
+    ...props,
+  })
+}
+
+function inputGroupButtonElement({
+  className,
+  type = "button",
+  variant = "ghost",
+  size = "xs",
+  ...props
+}: Omit<React.ComponentProps<typeof Button>, "size" | "type"> &
+  VariantProps<typeof inputGroupButtonVariants> & {
+    type?: "button" | "submit" | "reset"
+  }) {
   return (
     <Button
       type={type}
@@ -152,6 +171,8 @@ export {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
+  inputGroupButtonElement,
+  inputGroupButtonVariants,
   InputGroupText,
   InputGroupInput,
   InputGroupTextarea,

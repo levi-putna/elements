@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { startTransition, useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
@@ -64,8 +64,10 @@ export function TableOfContents() {
         }
       })
 
-    setHeadings(items)
-    setActiveId(items[0]?.id ?? "")
+    startTransition(() => {
+      setHeadings(items)
+      setActiveId(items[0]?.id ?? "")
+    })
   }, [pathname])
 
   // Intersection observer: tracks which heading is in view

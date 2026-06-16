@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-display",
+  "type": "registry:ui",
+  "description": "DateBadge and DateTag for displaying dates in a given format and time zone, with a hover comparison to the viewer's local zone.",
+  "dependencies": ["date-fns", "@date-fns/tz", "lucide-react"],
+  "registryDependencies": ["badge", "hover-card", "utils"],
+  "files": [
+    {
+      "path": "registry/date-display/date-display.tsx",
+      "target": "components/ui/date-display.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

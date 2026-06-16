@@ -269,7 +269,7 @@ export function OwnerCorrespondenceBadge({
 // OwnerCommitteeBadge: committee member indicator
 // ─────────────────────────────────────────────────────────
 
-export interface OwnerCommitteeBadgeProps extends HTMLAttributes<HTMLSpanElement> {}
+export type OwnerCommitteeBadgeProps = HTMLAttributes<HTMLSpanElement>
 
 /**
  * Badge for owners who serve on the committee.
