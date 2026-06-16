@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils"
+import { assetPath, cn } from "@/lib/utils"
 import { ChevronRight, Play } from "lucide-react"
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react"
 import { FeatureCard } from "@/components/ui/card"
@@ -617,7 +617,7 @@ export interface MarketingTourThumbnailProps extends AnchorHTMLAttributes<HTMLAn
  * Playable tour thumbnail with forest overlay and play icon.
  */
 export function MarketingTourThumbnail({
-  imageSrc = "/img/building/2.webp",
+  imageSrc = assetPath("/img/building/2.webp"),
   imageAlt = "Product tour preview",
   className,
   children,

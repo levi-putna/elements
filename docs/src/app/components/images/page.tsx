@@ -2,7 +2,6 @@ import { CodeBlock } from "@/components/docs/code-block";
 import { ComponentPreview } from "@/components/docs/component-preview";
 import { DocsPage } from "@/components/docs/docs-page";
 import { AuthBrandPanel } from "@/components/ui/auth-layout";
-import { HeroVisual } from "@/components/ui/hero";
 import { MarketingTourThumbnail } from "@/components/ui/marketing-section";
 import { PageHeaderFeaturedImage } from "@/components/ui/page-header";
 import { LogoMark } from "@/components/ui/logo";
@@ -160,20 +159,6 @@ export function LoginPage() {
  *   3. Centred brand copy (white + lime eyebrow)
  */`;
 
-const NOTCH_MASK = `/*
- * Concave corner mask (HeroVisual)
- *
- * A small cap element sits in the corner with ONE rounded corner,
- * filled with the parent section colour. It carves an inward curve
- * so the photo interlocks with adjacent brand blocks.
- */
-
-// Hero: forest cap on the photo's top-right
-<span
-  aria-hidden="true"
-  className="absolute right-0 top-0 z-10 h-7 w-7 rounded-bl-[28px] bg-forest"
-/>`;
-
 const ASSET_PATH = `import { assetPath } from "@/lib/utils"
 
 // Without basePath → "/img/building/1.webp"
@@ -237,52 +222,6 @@ function OverlayDemo({
   );
 }
 
-type NotchCorner = "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
-
-const NOTCH_CAP: Record<NotchCorner, string> = {
-  topLeft: "left-0 top-0 rounded-br-[28px]",
-  topRight: "right-0 top-0 rounded-bl-[28px]",
-  bottomLeft: "bottom-0 left-0 rounded-tr-[28px]",
-  bottomRight: "bottom-0 right-0 rounded-tl-[28px]",
-};
-
-/** Concave notch demo matching HeroVisual. */
-function NotchDemo({
-  notches,
-  capColour = "bg-forest",
-  surface = "dark",
-}: {
-  notches: NotchCorner[];
-  capColour?: string;
-  surface?: "dark" | "light";
-}) {
-  return (
-    <div
-      className={cn(
-        "relative aspect-[4/3] w-full max-w-sm overflow-hidden rounded-2xl",
-        surface === "dark" ? "bg-forest" : "bg-white"
-      )}
-    >
-      <div className="relative m-4 h-[calc(100%-2rem)] overflow-hidden rounded-2xl bg-forest-mid">
-        <img
-          src={`${IMG}/people/1.webp`}
-          alt="Strata managers reviewing a building portfolio"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-
-        {/* Concave corner caps */}
-        {notches.map((corner) => (
-          <span
-            key={corner}
-            aria-hidden="true"
-            className={cn("absolute z-10 h-7 w-7", capColour, NOTCH_CAP[corner])}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /** Aspect ratio reference tiles. */
 function AspectRatioTile({
   ratio,
@@ -323,7 +262,7 @@ export default function ImagesPage() {
           Images
         </h1>
         <p className="text-base text-ink-muted leading-relaxed max-w-prose">
-          Guidelines for photography, overlays, masks, and asset paths across
+          Guidelines for photography, overlays, and asset paths across
           Instant Strata. Patterns follow shadcn-style composition (rounded
           frames, object-cover, semantic overlays) and editorial layouts seen on
           sites like{" "}
@@ -598,48 +537,16 @@ export default function ImagesPage() {
         </div>
       </section>
 
-      {/* Masks */}
+      {/* Component examples */}
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">
-          Masks and notches
+          Component examples
         </h2>
-        <p className="text-sm text-ink-muted leading-relaxed max-w-prose mb-4">
-          Concave corner masks fuse photos with adjacent brand blocks. A small
-          cap element with a single rounded corner is filled with the section
-          background colour, carving an inward curve. This is the signature
-          detail on the hero ribbon and featured customer portraits.
-        </p>
         <p className="text-sm text-ink-muted leading-relaxed max-w-prose mb-6">
-          Hover-scale on thumbnails (
-          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">
-            group-hover:scale-[1.02]
-          </code>
-          ) adds life without breaking the calm product tone. Keep duration at
-          150–300ms.
+          Common image treatments used across marketing and product surfaces.
         </p>
 
         <div className="grid gap-8 md:grid-cols-2">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">
-              Hero interlock (top-right notch)
-            </p>
-            <NotchDemo notches={["topRight"]} />
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-3">
-              HeroVisual component
-            </p>
-            <div className="max-w-sm">
-              <HeroVisual
-                src={`${IMG}/people/1.webp`}
-                alt="Strata managers reviewing a building portfolio"
-                className="aspect-[4/3]"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-8 grid gap-8 md:grid-cols-2">
           <ComponentPreview label="Tour thumbnail: forest/40 + play control">
             <div className="w-full max-w-sm">
               <MarketingTourThumbnail href="#">
@@ -659,10 +566,6 @@ export default function ImagesPage() {
               </div>
             </div>
           </ComponentPreview>
-        </div>
-
-        <div className="mt-6">
-          <CodeBlock code={NOTCH_MASK} language="tsx" />
         </div>
       </section>
 
@@ -717,7 +620,7 @@ export default function ImagesPage() {
             text. Empty alt is only for purely decorative images.
           </li>
           <li>
-            Overlay divs and notch caps are decorative:{" "}
+            Overlay divs are decorative:{" "}
             <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">
               aria-hidden=&quot;true&quot;
             </code>
@@ -810,7 +713,7 @@ export default function ImagesPage() {
             <tbody>
               {[
                 ["AuthBrandPanel", "Full cover, bg-forest/50, dark brightness"],
-                ["HeroVisual", "rounded-2xl, concave top-right notch"],
+                ["HeroVisual", "rounded-2xl, object-cover"],
                 ["PageHeaderFeaturedImage", "4:5 portrait, logo badge"],
                 ["PageHeaderEditorialImage", "Tall editorial, rounded-2xl"],
                 ["StoryGridFeatured", "Side image in rounded-xl frame"],
