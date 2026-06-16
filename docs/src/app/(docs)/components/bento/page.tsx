@@ -4,8 +4,6 @@ import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
 import {
   BentoGrid,
-  BentoCell,
-  BentoNotch,
   BentoFeatureCell,
   BentoContentCell,
   BentoVisualCell,
@@ -27,24 +25,15 @@ const SHOWCASE_CODE = `import {
 } from "@/components/ui/bento"
 import { Code2, LineChart, BarChart3, Boxes, LayoutDashboard, Database } from "lucide-react"
 
-// 12-column base grid. Cells span a slice of it; flush + notches
-// carve the concave interlock where cards meet.
+// 12-column base grid. Cells span a slice of it.
 <BentoGrid seam="default" cols={12} rowHeight={168} gap={12}>
-  <BentoFeatureCell icon={<Code2 />}        label="Ad hoc analysis"      tone="secondary" colSpan={7} flush={["br"]}      notches={["br"]} />
-  <BentoFeatureCell icon={<LineChart />}    label="Advanced analytics"   tone="primary"   colSpan={5} rowSpan={2} flush={["bl"]} notches={["bl"]} />
+  <BentoFeatureCell icon={<Code2 />}        label="Ad hoc analysis"      tone="secondary" colSpan={7} />
+  <BentoFeatureCell icon={<LineChart />}    label="Advanced analytics"   tone="primary"   colSpan={5} rowSpan={2} />
   <BentoFeatureCell icon={<BarChart3 />}    label="Self-serve reporting" tone="secondary" colSpan={4} />
-  <BentoFeatureCell icon={<Boxes />}        label="Custom data apps"     tone="secondary" colSpan={3} flush={["tr", "br"]} notches={["tr", "br"]} />
-  <BentoFeatureCell icon={<LayoutDashboard />} label="Interactive dashboards" tone="secondary" colSpan={7} flush={["tr"]} notches={["tr"]} />
-  <BentoFeatureCell icon={<Database />}     label="Explorable datasets"  tone="secondary" colSpan={5} flush={["tl"]} notches={["tl"]} />
+  <BentoFeatureCell icon={<Boxes />}        label="Custom data apps"     tone="secondary" colSpan={3} />
+  <BentoFeatureCell icon={<LayoutDashboard />} label="Interactive dashboards" tone="secondary" colSpan={7} />
+  <BentoFeatureCell icon={<Database />}     label="Explorable datasets"  tone="secondary" colSpan={5} />
 </BentoGrid>`;
-
-const NOTCH_CODE = `// A concave corner: flatten the card corner, then drop a
-// seam-coloured BentoNotch over it. The notch's inner corner is
-// rounded, so the seam colour bites a quarter-circle out of the card.
-<BentoCell tone="primary" colSpan={4} flush={["br"]}>
-  {/* …content… */}
-  <BentoNotch corner="br" size={22} />
-</BentoCell>`;
 
 const CONTENT_CODE = `import {
   BentoGrid,
@@ -63,7 +52,7 @@ const CONTENT_CODE = `import {
 </BentoGrid>`;
 
 const GRID_PROPS = [
-  { name: "seam", type: '"default" | "secondary" | "primary" | "alternative"', default: '"default"', description: "Background of the container. Shows through every gap and the outer padding, and is the colour the notches paint, so it reads as the seam between cards." },
+  { name: "seam", type: '"default" | "secondary" | "primary" | "alternative"', default: '"default"', description: "Background of the container. Shows through every gap and the outer padding, so it reads as the seam between cards." },
   { name: "cols", type: "number", default: "12", description: "Base columns. Cells span a slice of these via colSpan." },
   { name: "rowHeight", type: "number", default: "168", description: "Height (px) of one grid row. Cells with rowSpan get multiples of this." },
   { name: "gap", type: "number", default: "12", description: "Gap between cells (px). Reused as the outer padding so the frame is even on every side." },
@@ -75,14 +64,7 @@ const CELL_PROPS = [
   { name: "colSpan", type: "number", default: "1", description: "Columns this cell spans, of the grid's cols." },
   { name: "rowSpan", type: "number", default: "1", description: "Rows this cell spans." },
   { name: "radius", type: "number", default: "18", description: "Corner radius of the card (px)." },
-  { name: "flush", type: '("tl" | "tr" | "bl" | "br")[]', default: "[]", description: "Corners to flatten to radius 0 where the card butts against a neighbour. Pair each with a BentoNotch to carve the concave interlock." },
-  { name: "clip", type: "boolean", default: "false", description: "Clip overflowing content (images). Off by default so notches can render outside the box." },
-];
-
-const NOTCH_PROPS = [
-  { name: "corner", type: '"tl" | "tr" | "bl" | "br"', description: "Which corner of the parent cell to carve. The parent must be a BentoCell (position: relative)." },
-  { name: "size", type: "number", default: "22", description: "Radius of the concave quarter-circle carve (px)." },
-  { name: "seam", type: "string", description: "Override the carve colour. Defaults to the grid's seam colour, supplied via context." },
+  { name: "clip", type: "boolean", default: "false", description: "Clip overflowing content (images)." },
 ];
 
 const FEATURE_PROPS = [
@@ -90,7 +72,6 @@ const FEATURE_PROPS = [
   { name: "label", type: "string", description: "Primary label pinned to the bottom-left." },
   { name: "body", type: "string", description: "Optional supporting text under the label." },
   { name: "visual", type: "ReactNode", description: "Optional chart / screenshot placed between icon and label." },
-  { name: "notches", type: '("tl" | "tr" | "bl" | "br")[]', default: "[]", description: "Convenience: renders a BentoNotch at each listed corner." },
 ];
 
 export default function BentoPage() {
@@ -103,9 +84,8 @@ export default function BentoPage() {
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">Bento</h1>
         <p className="text-base text-ink-muted leading-relaxed">
           A standalone bento grid in the style of mode.com&apos;s &ldquo;Beyond BI&rdquo; section.
-          Feature cards span a 12-column base grid; where they meet, corners are flattened and a
-          seam-coloured notch carves a concave interlock, so the cards read as routed into one
-          another rather than floating in a plain grid.
+          Feature cards span a 12-column base grid with rounded corners and a seam-coloured gap
+          between them.
         </p>
       </div>
 
@@ -131,27 +111,20 @@ export default function BentoPage() {
             are one continuous colour; that&apos;s what the eye reads as the join between cards.
           </li>
           <li>
-            <strong className="text-foreground">Radius is managed in two halves.</strong> Cards are
-            rounded on every corner by default. Where a card meets a neighbour, that corner is set
-            to <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">flush</code>{" "}
-            (radius&nbsp;0) so the edge is square, then a <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoNotch</code>{" "}
-            (a small seam-coloured square with its <em>inner</em> corner rounded) is laid over
-            that corner. The seam colour bites a concave quarter-circle out of the card. Two cards
-            carving the corners they share produces the interlocking &ldquo;pocket&rdquo; that
-            defines the mode.com look.
+            <strong className="text-foreground">Cards stay rounded.</strong> Every cell keeps its
+            corner radius on all four corners. The seam shows through the gaps between them.
           </li>
         </ul>
       </section>
 
-      {/* ── Showcase: interlocking feature grid ── */}
+      {/* ── Showcase: feature grid ── */}
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">Feature grid</h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
-          Six capabilities on a 12-column grid, with one tall accent card and concave notches at the
-          interior junctions.
+          Six capabilities on a 12-column grid, with one tall accent card.
         </p>
 
-        <ComponentPreview label="default seam · interlocking feature cards">
+        <ComponentPreview label="default seam · feature cards">
           <BentoGrid seam="default" cols={12} rowHeight={168} gap={12} className="w-full">
             <BentoFeatureCell
               icon={<Code2 />}
@@ -159,8 +132,6 @@ export default function BentoPage() {
               body="SQL, R and Python in one notebook."
               tone="secondary"
               colSpan={7}
-              flush={["br"]}
-              notches={["br"]}
             />
             <BentoFeatureCell
               icon={<LineChart />}
@@ -169,8 +140,6 @@ export default function BentoPage() {
               tone="primary"
               colSpan={5}
               rowSpan={2}
-              flush={["bl"]}
-              notches={["bl"]}
             />
             <BentoFeatureCell
               icon={<BarChart3 />}
@@ -183,54 +152,23 @@ export default function BentoPage() {
               label="Custom data apps"
               tone="secondary"
               colSpan={3}
-              flush={["tr", "br"]}
-              notches={["tr", "br"]}
             />
             <BentoFeatureCell
               icon={<LayoutDashboard />}
               label="Interactive dashboards"
               tone="secondary"
               colSpan={7}
-              flush={["tr"]}
-              notches={["tr"]}
             />
             <BentoFeatureCell
               icon={<Database />}
               label="Explorable datasets"
               tone="secondary"
               colSpan={5}
-              flush={["tl"]}
-              notches={["tl"]}
             />
           </BentoGrid>
         </ComponentPreview>
         <div className="mt-4">
           <CodeBlock code={SHOWCASE_CODE} language="tsx" />
-        </div>
-      </section>
-
-      {/* ── The notch in isolation ── */}
-      <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">The notch</h2>
-        <p className="text-sm text-ink-muted mb-5 leading-relaxed">
-          A single concave corner. The card&apos;s bottom-right is flattened, then a seam-coloured{" "}
-          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">BentoNotch</code>{" "}
-          carves the curve back in.
-        </p>
-
-        <ComponentPreview label="one cell · one notch">
-          <BentoGrid seam="default" cols={2} rowHeight={160} gap={12} className="w-full">
-            <BentoCell tone="primary" colSpan={1} flush={["br"]} className="flex items-end p-6 text-white">
-              <span className="text-sm font-medium">Concave bottom-right</span>
-              <BentoNotch corner="br" size={22} />
-            </BentoCell>
-            <BentoCell tone="secondary" colSpan={1} className="flex items-end p-6">
-              <span className="text-sm font-medium">Plain card</span>
-            </BentoCell>
-          </BentoGrid>
-        </ComponentPreview>
-        <div className="mt-4">
-          <CodeBlock code={NOTCH_CODE} language="tsx" />
         </div>
       </section>
 
@@ -293,11 +231,6 @@ export default function BentoPage() {
       <section className="mb-10 pt-10 border-t border-border">
         <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoCell Props</h2>
         <PropTable props={CELL_PROPS} />
-      </section>
-
-      <section className="mb-10 pt-10 border-t border-border">
-        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-4">BentoNotch Props</h2>
-        <PropTable props={NOTCH_PROPS} />
       </section>
 
       <section className="pt-10 border-t border-border">

@@ -2,9 +2,6 @@
 
 import { cn } from "@/lib/utils"
 import {
-  createContext,
-  useContext,
-  type CSSProperties,
   type HTMLAttributes,
   type ReactNode,
 } from "react"
@@ -12,11 +9,8 @@ import {
 // ─────────────────────────────────────────────────────────
 // Tones
 //
-// Cards (cells) sit on top of a "seam" — the grid's background,
-// which also shows through every gap and the outer padding. The
-// concave notch corners are painted in the seam colour so cells
-// appear routed into one another, the way mode.com builds its
-// "Beyond BI as you know it" grid.
+// Cards (cells) sit on top of a "seam": the grid's background,
+// which also shows through every gap and the outer padding.
 // ─────────────────────────────────────────────────────────
 
 export type BentoTone =
@@ -43,23 +37,12 @@ const seamBg: Record<BentoSeam, string> = {
   alternative: "bg-[#EBF8C2]",
 }
 
-const seamHex: Record<BentoSeam, string> = {
-  default: "#FFFFFF",
-  secondary: "#EEF2E3",
-  primary: "#043F2E",
-  alternative: "#EBF8C2",
-}
-
-// The seam colour is shared down the tree so notches can paint
-// themselves without every call site repeating the hex value.
-const SeamContext = createContext<string>(seamHex.default)
-
 // ─────────────────────────────────────────────────────────
 // BentoGrid
 // ─────────────────────────────────────────────────────────
 
 interface BentoGridProps extends HTMLAttributes<HTMLDivElement> {
-  /** Background of the container — also the seam/gap and notch colour. */
+  /** Background of the container, also the seam/gap colour. */
   seam?: BentoSeam
   /** Number of base columns. Cells span a portion of these. */
   cols?: number
@@ -83,37 +66,30 @@ export function BentoGrid({
   ...props
 }: BentoGridProps) {
   return (
-    <SeamContext.Provider value={seamHex[seam]}>
+    <div
+      className={cn(seamBg[seam], className)}
+      style={{ padding: gap, borderRadius: rounded, ...style }}
+      {...props}
+    >
       <div
-        className={cn(seamBg[seam], className)}
-        style={{ padding: gap, borderRadius: rounded, ...style }}
-        {...props}
+        className="grid"
+        style={{
+          gap,
+          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+          gridAutoRows: `${rowHeight}px`,
+        }}
       >
-        <div
-          className="grid"
-          style={{
-            gap,
-            gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-            gridAutoRows: `${rowHeight}px`,
-          }}
-        >
-          {children}
-        </div>
+        {children}
       </div>
-    </SeamContext.Provider>
+    </div>
   )
 }
 
 // ─────────────────────────────────────────────────────────
 // BentoCell
 //
-// A single card. Rounded on every corner by default; list corners
-// in `flush` to flatten them where a card butts up against a
-// neighbour, then drop a <BentoNotch> at that corner to carve the
-// concave interlock.
+// A single card, rounded on every corner by default.
 // ─────────────────────────────────────────────────────────
-
-type Corner = "tl" | "tr" | "bl" | "br"
 
 interface BentoCellProps extends HTMLAttributes<HTMLDivElement> {
   tone?: BentoTone
@@ -123,17 +99,8 @@ interface BentoCellProps extends HTMLAttributes<HTMLDivElement> {
   rowSpan?: number
   /** Corner radius of the card (px). */
   radius?: number
-  /** Corners to flatten (radius 0) where the card meets another. */
-  flush?: Corner[]
-  /** Clip overflowing content (images). Off by default so notches show. */
+  /** Clip overflowing content (images). */
   clip?: boolean
-}
-
-const flushKey: Record<Corner, keyof CSSProperties> = {
-  tl: "borderTopLeftRadius",
-  tr: "borderTopRightRadius",
-  bl: "borderBottomLeftRadius",
-  br: "borderBottomRightRadius",
 }
 
 export function BentoCell({
@@ -141,16 +108,12 @@ export function BentoCell({
   colSpan = 1,
   rowSpan = 1,
   radius = 18,
-  flush = [],
   clip = false,
   className,
   style,
   children,
   ...props
 }: BentoCellProps) {
-  const radii: Record<string, number> = { borderRadius: radius }
-  for (const corner of flush) radii[flushKey[corner] as string] = 0
-
   return (
     <div
       className={cn(
@@ -162,64 +125,13 @@ export function BentoCell({
       style={{
         gridColumn: `span ${colSpan} / span ${colSpan}`,
         gridRow: `span ${rowSpan} / span ${rowSpan}`,
-        ...radii,
+        borderRadius: radius,
         ...style,
       }}
       {...props}
     >
       {children}
     </div>
-  )
-}
-
-// ─────────────────────────────────────────────────────────
-// BentoNotch
-//
-// A seam-coloured square laid over one corner of its parent cell.
-// The *inner* corner is rounded, so the seam colour carves a
-// concave quarter-circle out of the card — the interlock detail.
-// The parent must be position:relative (BentoCell is). Pair with
-// a `flush` corner on the cell so the carve sits on a square edge.
-// ─────────────────────────────────────────────────────────
-
-interface BentoNotchProps {
-  corner: Corner
-  /** Radius of the concave carve (px). */
-  size?: number
-  /** Override the seam colour (defaults to the grid's seam). */
-  seam?: string
-  className?: string
-}
-
-const notchPos: Record<Corner, CSSProperties> = {
-  tl: { top: 0, left: 0 },
-  tr: { top: 0, right: 0 },
-  bl: { bottom: 0, left: 0 },
-  br: { bottom: 0, right: 0 },
-}
-
-// Round the corner facing *into* the card body.
-const notchInner: Record<Corner, keyof CSSProperties> = {
-  tl: "borderBottomRightRadius",
-  tr: "borderBottomLeftRadius",
-  bl: "borderTopRightRadius",
-  br: "borderTopLeftRadius",
-}
-
-export function BentoNotch({ corner, size = 22, seam, className }: BentoNotchProps) {
-  const ctxSeam = useContext(SeamContext)
-  return (
-    <span
-      aria-hidden="true"
-      className={cn("pointer-events-none absolute z-10", className)}
-      style={{
-        width: size,
-        height: size,
-        background: seam ?? ctxSeam,
-        [notchInner[corner]]: size,
-        ...notchPos[corner],
-      }}
-    />
   )
 }
 
@@ -236,9 +148,6 @@ interface BentoFeatureCellProps extends BentoCellProps {
   body?: string
   /** Optional visual (chart, screenshot, illustration) above the label. */
   visual?: ReactNode
-  /** Notches to render — one per interlocking corner. */
-  notches?: Corner[]
-  notchSize?: number
 }
 
 export function BentoFeatureCell({
@@ -246,8 +155,6 @@ export function BentoFeatureCell({
   label,
   body,
   visual,
-  notches = [],
-  notchSize,
   tone = "secondary",
   className,
   children,
@@ -266,9 +173,6 @@ export function BentoFeatureCell({
         {body && <p className="mt-1.5 text-sm leading-relaxed opacity-60">{body}</p>}
       </div>
       {children}
-      {notches.map((corner) => (
-        <BentoNotch key={corner} corner={corner} size={notchSize} />
-      ))}
     </BentoCell>
   )
 }

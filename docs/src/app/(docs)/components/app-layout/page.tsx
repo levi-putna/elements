@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { CodeBlock } from "@/components/docs/code-block";
 import { DocsPage } from "@/components/docs/docs-page";
 import { PropTable } from "@/components/docs/prop-table";
@@ -114,7 +116,16 @@ export default function AppLayoutPage() {
         <p className="text-[10px] font-semibold uppercase tracking-widest text-ink-muted mb-3">
           Components / Application
         </p>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">App Layout</h1>
+        <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">App Layout</h1>
+          <Link
+            href="/preview/app"
+            className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-secondary transition-colors duration-150 no-underline shrink-0"
+          >
+            Open full-screen preview
+            <ArrowUpRight className="size-3.5" />
+          </Link>
+        </div>
         <p className="text-base text-ink-muted leading-relaxed">
           The full application shell: a collapsible sidebar (workspace switcher, navigation,
           user menu) beside a content area with its own header. Built on the shadcn sidebar

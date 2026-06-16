@@ -46,6 +46,13 @@ const components = [
     badge: "Base",
   },
   {
+    href: "/components/assistant",
+    label: "Assistant",
+    description:
+      "Full-height chat layout composing Conversation, Message, and Prompt Input. Includes a live preview.",
+    badge: "AI",
+  },
+  {
     href: "/components/prompt-input",
     label: "Prompt Input",
     description:
