@@ -84,7 +84,7 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
               user={{
                 name: "Levi Putna",
                 email: "levi@instantstrata.com",
-                avatar: "/elements/img/person/1.jpg",
+                avatar: "/elements/img/person/1.webp",
               }}
             />
             <SidebarRail />

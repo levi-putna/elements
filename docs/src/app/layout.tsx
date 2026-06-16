@@ -42,6 +42,7 @@ const components = [
       { href: "/components/logo", label: "Logo" },
       { href: "/components/favicon", label: "Favicon" },
       { href: "/components/icons", label: "Icons" },
+      { href: "/components/images", label: "Images" },
     ],
   },
   {
@@ -92,7 +93,12 @@ const components = [
       { href: "/components/lot", label: "Lot" },
       { href: "/components/owner", label: "Owner" },
       { href: "/components/task", label: "Task" },
+      { href: "/components/authentication", label: "Authentication" },
     ],
+  },
+  {
+    label: "Email",
+    items: [{ href: "/emails/authentication", label: "Authentication emails" }],
   },
   {
     label: "Website",

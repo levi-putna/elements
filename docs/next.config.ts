@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   basePath: "/elements",
   trailingSlash: true,
   images: { unoptimized: true },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: "/elements",
+  },
 };
 
 export default nextConfig;

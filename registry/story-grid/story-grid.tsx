@@ -202,7 +202,7 @@ export const STORY_GRID_DEFAULT: Array<
     href: "#",
     title: "Harbourview Towers transforms committee reporting across 120 lots",
     logo: <StoryGridLogo>Harbourview</StoryGridLogo>,
-    imageSrc: "/img/building/1.jpeg",
+    imageSrc: "/img/building/1.webp",
     imageAlt: "Harbourview Towers strata committee meeting",
   },
   {
@@ -234,7 +234,7 @@ export const STORY_GRID_DEFAULT: Array<
     href: "#",
     title: "Metro Strata increases owner satisfaction with daily building metrics",
     logo: <StoryGridLogo>Metro Strata</StoryGridLogo>,
-    imageSrc: "/img/building/3.jpg",
+    imageSrc: "/img/building/3.webp",
     imageAlt: "Metro Strata building management dashboard review",
   },
 ]

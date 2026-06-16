@@ -617,7 +617,7 @@ export interface MarketingTourThumbnailProps extends AnchorHTMLAttributes<HTMLAn
  * Playable tour thumbnail with forest overlay and play icon.
  */
 export function MarketingTourThumbnail({
-  imageSrc = "/img/building/2.jpg",
+  imageSrc = "/img/building/2.webp",
   imageAlt = "Product tour preview",
   className,
   children,

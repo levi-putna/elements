@@ -51,7 +51,7 @@ const BLOG_FEATURED_USAGE = `import { BlogCardFeatured } from "@/components/ui/c
   category="Product updates"
   title="Beyond spreadsheets: introducing levy forecasting"
   excerpt="Levy forecasting helps you map out a budget structure before diving into the details."
-  imageSrc="/img/building/2.jpg"
+  imageSrc="/img/building/2.webp"
   imageAlt="Strata manager reviewing levy forecast dashboard"
 />`;
 
@@ -77,9 +77,9 @@ const BLOG_GRID_USAGE = `import { CardGrid, BlogCard } from "@/components/ui/car
     excerpt="Levy forecasting helps you map out a budget structure…"
     date="31 January 2024"
     readTime="8 min read"
-    imageSrc="/img/building/1.jpeg"
+    imageSrc="/img/building/1.webp"
     imageAlt="Levy forecasting dashboard"
-    author={{ name: "Samantha Novak", role: "Product Design Lead", avatarSrc: "/img/people/1.jpg" }}
+    author={{ name: "Samantha Novak", role: "Product Design Lead", avatarSrc: "/img/people/1.webp" }}
   />
 </CardGrid>`;
 

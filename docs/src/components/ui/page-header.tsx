@@ -17,7 +17,7 @@ import type { HTMLAttributes, ReactNode } from "react"
 // PageHeaderFeatured: Mode /customers featured spotlight
 //
 //   · white canvas
-//   · left column: portrait photo with logo notch
+//   · left column: portrait photo with logo badge
 //   · right column: eyebrow, Young Serif title, body, CTA
 // ─────────────────────────────────────────────────────────
 
@@ -308,7 +308,7 @@ export interface PageHeaderFeaturedProps extends HTMLAttributes<HTMLElement> {
 
 /**
  * Featured spotlight header inspired by Mode&apos;s featured customer block.
- * Portrait photo with logo notch on the left; eyebrow, title, body and CTA on the right.
+ * Portrait photo with logo badge on the left; eyebrow, title, body and CTA on the right.
  */
 export function PageHeaderFeatured({
   eyebrow = "Featured customer",
@@ -368,7 +368,7 @@ export function PageHeaderFeatured({
 export interface PageHeaderFeaturedImageProps extends HTMLAttributes<HTMLDivElement> {
   src: string
   alt: string
-  /** Logo or mark rendered in the top-right notch. */
+  /** Logo or mark rendered in the top-right corner. */
   logo?: ReactNode
   imgClassName?: string
 }
@@ -397,17 +397,9 @@ export function PageHeaderFeaturedImage({
           alt={alt}
           className={cn("absolute inset-0 h-full w-full object-cover", imgClassName)}
         />
-
-        {/* Concave top-right notch: forest cap carves room for the logo badge */}
-        {logo && (
-          <span
-            aria-hidden="true"
-            className="absolute right-0 top-0 z-10 h-16 w-28 rounded-bl-2xl bg-white"
-          />
-        )}
       </div>
 
-      {/* Logo badge overlapping the notch */}
+      {/* Logo badge */}
       {logo && (
         <div className="absolute right-4 top-4 z-20 max-w-[45%]">
           {logo}

@@ -125,7 +125,7 @@ export default function SiteHeaderPage() {
             items={NAV_ITEMS}
             sticky={false}
             appHref="#"
-            user={{ name: "Levi Putna", email: "levi@instantstrata.com", avatar: "/elements/img/person/1.jpg" }}
+            user={{ name: "Levi Putna", email: "levi@instantstrata.com", avatar: "/elements/img/person/1.webp" }}
           />
           <div className="bg-off-white px-6 py-16 text-center text-sm text-ink-muted">
             Page content

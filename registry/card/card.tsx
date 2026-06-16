@@ -534,7 +534,7 @@ export const BLOG_CARD_FEATURED_DEFAULT = {
   title: "Beyond spreadsheets: introducing levy forecasting for strata managers",
   excerpt:
     "Levy forecasting helps you map out a budget structure before diving into the details. See how it assists managers make faster decisions with clearer cashflow visibility.",
-  imageSrc: "/img/building/2.jpg",
+  imageSrc: "/img/building/2.webp",
   imageAlt: "Strata manager reviewing levy forecast dashboard",
 } as const
 
@@ -571,12 +571,12 @@ export const BLOG_CARD_GRID_DEFAULT = [
       "Levy forecasting helps you map out a budget structure before diving into the details.",
     date: "31 January 2024",
     readTime: "8 min read",
-    imageSrc: "/img/building/1.jpeg",
+    imageSrc: "/img/building/1.webp",
     imageAlt: "Levy forecasting dashboard on laptop",
     author: {
       name: "Samantha Novak",
       role: "Product Design Lead",
-      avatarSrc: "/img/people/1.jpg",
+      avatarSrc: "/img/people/1.webp",
     },
   },
   {
@@ -587,12 +587,12 @@ export const BLOG_CARD_GRID_DEFAULT = [
       "Instant Strata took a leap forward with brand controls, providing managers with a powerful toolkit for consistent building communications.",
     date: "8 January 2024",
     readTime: "4 min read",
-    imageSrc: "/img/building/4.jpg",
+    imageSrc: "/img/building/4.webp",
     imageAlt: "Owner communication template preview",
     author: {
       name: "Christine Sotelo",
       role: "Director of Product Marketing",
-      avatarSrc: "/img/people/2.jpg",
+      avatarSrc: "/img/people/2.webp",
     },
   },
   {
@@ -603,12 +603,12 @@ export const BLOG_CARD_GRID_DEFAULT = [
       "A note from our founders on how Instant Strata's journey is shaping the next generation of strata management software.",
     date: "26 June 2023",
     readTime: "6 min read",
-    imageSrc: "/img/building/5.jpg",
+    imageSrc: "/img/building/5.webp",
     imageAlt: "Instant Strata team meeting",
     author: {
       name: "Benn Stancil",
       role: "CTO and Co-founder",
-      avatarSrc: "/img/people/3.jpg",
+      avatarSrc: "/img/people/3.webp",
     },
   },
 ] as const

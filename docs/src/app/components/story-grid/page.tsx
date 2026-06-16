@@ -25,7 +25,7 @@ export function CustomerStories() {
         href="/stories/harbourview"
         title="Harbourview Towers transforms committee reporting across 120 lots"
         logo={<StoryGridLogo>Harbourview</StoryGridLogo>}
-        imageSrc="/img/building/1.jpeg"
+        imageSrc="/img/building/1.webp"
         imageAlt="Harbourview Towers committee meeting"
       />
       <StoryGridCard

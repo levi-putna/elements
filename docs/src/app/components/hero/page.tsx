@@ -20,7 +20,7 @@ export function Page() {
       }
       visual={
         <HeroVisual
-          src="/img/people/1.jpg"
+          src="/img/people/1.webp"
           alt="Strata managers reviewing a building portfolio"
         />
       }
@@ -207,7 +207,7 @@ export default function HeroPage() {
             }
             visual={
               <HeroVisual
-                src="/elements/img/people/1.jpg"
+                src="/elements/img/people/1.webp"
                 alt="Strata managers reviewing a building portfolio"
               />
             }

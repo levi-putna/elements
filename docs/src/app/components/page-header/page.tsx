@@ -50,7 +50,7 @@ export function CustomersPage() {
       }
       visual={
         <PageHeaderEditorialImage
-          src="/img/people/2.jpg"
+          src="/img/people/2.webp"
           alt="Strata managers collaborating in a bright office"
         />
       }
@@ -74,7 +74,7 @@ export function FeaturedStory() {
       }
       visual={
         <PageHeaderFeaturedImage
-          src="/img/people/3.jpg"
+          src="/img/people/3.webp"
           alt="Harbourview strata manager on site"
           logo={<span className="text-sm font-semibold text-forest">Harbourview</span>}
         />
@@ -125,7 +125,7 @@ const FEATURED_PROPS = [
 const FEATURED_IMAGE_PROPS = [
   { name: "src", type: "string", description: "Image source URL." },
   { name: "alt", type: "string", description: "Accessible alt text for the photo." },
-  { name: "logo", type: "ReactNode", description: "Logo or mark rendered in the top-right notch." },
+  { name: "logo", type: "ReactNode", description: "Logo or mark rendered in the top-right corner." },
   { name: "className", type: "string", description: "Classes on the portrait wrapper." },
   { name: "imgClassName", type: "string", description: "Classes on the inner img element." },
 ];
@@ -221,7 +221,7 @@ export default function PageHeaderPage() {
             }
             visual={
               <PageHeaderEditorialImage
-                src="/elements/img/people/2.jpg"
+                src="/elements/img/people/2.webp"
                 alt="Strata managers collaborating in a bright office"
               />
             }
@@ -235,7 +235,7 @@ export default function PageHeaderPage() {
           Featured header
         </h2>
         <p className="text-sm text-ink-muted mb-6 leading-relaxed max-w-2xl">
-          White background with a portrait photo and logo notch on the left,
+          White background with a portrait photo and logo badge on the left,
           eyebrow, title, body and CTA on the right: matching Mode&apos;s
           featured customer spotlight below the logo strip.
         </p>
@@ -248,7 +248,7 @@ export default function PageHeaderPage() {
             }
             visual={
               <PageHeaderFeaturedImage
-                src="/elements/img/people/3.jpg"
+                src="/elements/img/people/3.webp"
                 alt="Harbourview strata manager on site"
                 logo={<StoryGridLogo>Harbourview</StoryGridLogo>}
               />

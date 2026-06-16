@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "auth",
+  "type": "registry:ui",
+  "description": "Authentication flows for Instant Strata: two-column layout with cover image and brand panel, plus login/join forms with Google, Microsoft, and magic-link PIN verification.",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": [
+    "utils",
+    "logo",
+    "button",
+    "field",
+    "input",
+    "input-otp",
+    "separator"
+  ],
+  "files": [
+    {
+      "path": "registry/auth/auth-layout.tsx",
+      "target": "components/ui/auth-layout.tsx",
+      "type": "registry:ui"
+    },
+    {
+      "path": "registry/auth/auth-form.tsx",
+      "target": "components/ui/auth-form.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

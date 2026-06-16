@@ -19,14 +19,14 @@ const VARIANTS_CODE = `import { Avatar } from "@/components/ui/avatar"
 <Avatar name="Levi Putna" variant="primary" />
 
 {/* with a photo: falls back to initials if it fails to load */}
-<Avatar name="Ada Lovelace" src="/img/person/1.jpg" />`;
+<Avatar name="Ada Lovelace" src="/img/person/1.webp" />`;
 
 const GROUP_CODE = `import { AvatarGroup, Avatar, AvatarGroupCount } from "@/components/ui/avatar"
 
 <AvatarGroup>
-  <Avatar name="Ada Lovelace" src="/img/person/1.jpg" />
-  <Avatar name="Grace Hopper" src="/img/person/2.jpg" />
-  <Avatar name="Alan Turing" src="/img/person/3.jpg" />
+  <Avatar name="Ada Lovelace" src="/img/person/1.webp" />
+  <Avatar name="Grace Hopper" src="/img/person/2.webp" />
+  <Avatar name="Alan Turing" src="/img/person/3.webp" />
   <AvatarGroupCount count={5} />
 </AvatarGroup>`;
 
@@ -51,10 +51,10 @@ const COUNT_PROPS = [
 ];
 
 const PEOPLE = [
-  "/elements/img/person/1.jpg",
-  "/elements/img/person/2.jpg",
-  "/elements/img/person/3.jpg",
-  "/elements/img/person/1.jpg",
+  "/elements/img/person/1.webp",
+  "/elements/img/person/2.webp",
+  "/elements/img/person/3.webp",
+  "/elements/img/person/1.webp",
 ];
 
 export default function AvatarPage() {
