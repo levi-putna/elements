@@ -2,13 +2,13 @@
 
 import {
   LayoutDashboard,
+  MessageSquare,
+  AlertCircle,
+  Calendar,
+  ClipboardList,
   Building2,
-  Receipt,
-  Wrench,
   Users,
-  FileText,
-  Settings2,
-  LifeBuoy,
+  Settings,
   Home,
 } from "lucide-react"
 
@@ -32,34 +32,33 @@ import {
   SidebarNav,
   type NavGroup,
 } from "@/components/ui/app-shell"
+import {
+  SidebarOnboarding,
+  type OnboardingStep,
+} from "@/components/ui/onboarding"
 
 const NAV: NavGroup[] = [
   {
-    label: "Platform",
     items: [
       { title: "Dashboard", href: "#", icon: LayoutDashboard, isActive: true },
-      {
-        title: "Buildings",
-        href: "#",
-        icon: Building2,
-        items: [
-          { title: "All schemes", href: "#" },
-          { title: "Add scheme", href: "#" },
-        ],
-      },
-      { title: "Levies", href: "#", icon: Receipt },
-      { title: "Maintenance", href: "#", icon: Wrench },
-      { title: "Owners", href: "#", icon: Users },
-      { title: "Documents", href: "#", icon: FileText },
+      { title: "Inbox", href: "#", icon: MessageSquare },
+      { title: "Issues", href: "#", icon: AlertCircle },
+      { title: "Meetings", href: "#", icon: Calendar },
+      { title: "Tasks", href: "#", icon: ClipboardList },
+      { title: "Schemes", href: "#", icon: Building2 },
+      { title: "Contacts", href: "#", icon: Users },
+      { title: "Settings", href: "#", icon: Settings },
     ],
   },
-  {
-    label: "Workspace",
-    items: [
-      { title: "Settings", href: "#", icon: Settings2 },
-      { title: "Support", href: "#", icon: LifeBuoy },
-    ],
-  },
+]
+
+// Setup checklist surfaced in the sidebar footer until onboarding is done.
+const ONBOARDING: OnboardingStep[] = [
+  { title: "Create your workspace", href: "#", status: "complete" },
+  { title: "Add your first scheme", href: "#", status: "complete" },
+  { title: "Invite a committee member", href: "#", status: "current" },
+  { title: "Connect your bank feed", href: "#", status: "todo" },
+  { title: "Import owner contacts", href: "#", status: "todo" },
 ]
 
 function Shell({ withContent = true }: { withContent?: boolean }) {
@@ -80,6 +79,8 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
             <SidebarContent>
               <SidebarNav groups={NAV} />
             </SidebarContent>
+            {/* Onboarding checklist: sits just above the account menu */}
+            <SidebarOnboarding steps={ONBOARDING} />
             <AppSidebarFooter
               user={{
                 name: "Levi Putna",

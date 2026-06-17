@@ -1,7 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { ChevronRight, ChevronsUpDown, LogOut, Settings, Sparkles } from "lucide-react"
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsUpDown,
+  LifeBuoy,
+  LogOut,
+  Settings,
+  Sparkles,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Avatar } from "@/components/ui/avatar"
@@ -45,8 +53,15 @@ export interface NavItem {
   icon?: React.ElementType
   /** Marks the active route. */
   isActive?: boolean
-  /** Optional collapsible sub-navigation. */
+  /** Optional inline collapsible sub-navigation (expands in place). */
   items?: NavSubItem[]
+  /**
+   * Optional second-tier navigation. When present, the item "drills in":
+   * clicking it slides the root nav out and this panel in, with a back
+   * header to return. Use for sections like Settings that have their own
+   * deep navigation. Takes precedence over `items`.
+   */
+  panel?: NavPanel
 }
 
 export interface NavGroup {
@@ -55,12 +70,22 @@ export interface NavGroup {
   items: NavItem[]
 }
 
+export interface NavPanel {
+  /** Title shown beside the back button at the top of the panel. */
+  title: string
+  /** Groups of links rendered inside the panel (icons supported). */
+  groups: NavGroup[]
+}
+
 // ─────────────────────────────────────────────────────────
 // SidebarNav: the sidebar navigation
 //
 // Renders one or more labelled groups of menu items. Items with
-// an `items` array become collapsible sub-navigation (sidebar-07
-// style). Pass an active flag to highlight the current route.
+// an `items` array become inline collapsible sub-navigation
+// (sidebar-07 style). Items with a `panel` "drill in" to a
+// second-tier stacked navigation (Vercel-dashboard style): the
+// root slides out, the panel slides in with a back header.
+// Pass an active flag to highlight the current route.
 // ─────────────────────────────────────────────────────────
 
 export interface SidebarNavProps {
@@ -69,6 +94,29 @@ export interface SidebarNavProps {
 }
 
 export function SidebarNav({ groups, className }: SidebarNavProps) {
+  // Only pay for the stack machinery when an item actually drills in.
+  const hasPanels = React.useMemo(
+    () => groups.some((g) => g.items.some((i) => i.panel)),
+    [groups]
+  )
+
+  if (!hasPanels) {
+    return <SidebarGroups groups={groups} className={className} />
+  }
+
+  return <StackedSidebarNav groups={groups} className={className} />
+}
+
+/** Flat rendering of nav groups — the single-tier case and each stack level. */
+function SidebarGroups({
+  groups,
+  className,
+  onDrill,
+}: {
+  groups: NavGroup[]
+  className?: string
+  onDrill?: (item: NavItem) => void
+}) {
   return (
     <>
       {groups.map((group, i) => (
@@ -76,7 +124,7 @@ export function SidebarNav({ groups, className }: SidebarNavProps) {
           {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
           <SidebarMenu className="gap-1">
             {group.items.map((item) => (
-              <SidebarNavItem key={item.title} item={item} />
+              <SidebarNavItem key={item.title} item={item} onDrill={onDrill} />
             ))}
           </SidebarMenu>
         </SidebarGroup>
@@ -85,10 +133,34 @@ export function SidebarNav({ groups, className }: SidebarNavProps) {
   )
 }
 
-function SidebarNavItem({ item }: { item: NavItem }) {
+function SidebarNavItem({
+  item,
+  onDrill,
+}: {
+  item: NavItem
+  onDrill?: (item: NavItem) => void
+}) {
   const [open, setOpen] = React.useState(item.isActive ?? false)
   const Icon = item.icon
 
+  // Drill-in item: opens a second-tier stacked panel.
+  if (item.panel) {
+    return (
+      <SidebarMenuItem>
+        <SidebarMenuButton
+          isActive={item.isActive}
+          tooltip={item.title}
+          onClick={() => onDrill?.(item)}
+        >
+          {Icon && <Icon />}
+          <span>{item.title}</span>
+          <ChevronRight className="ml-auto text-sidebar-foreground/50" />
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    )
+  }
+
+  // Plain link.
   if (!item.items?.length) {
     return (
       <SidebarMenuItem>
@@ -104,6 +176,7 @@ function SidebarNavItem({ item }: { item: NavItem }) {
     )
   }
 
+  // Inline collapsible sub-navigation.
   return (
     <SidebarMenuItem>
       <SidebarMenuButton
@@ -137,6 +210,128 @@ function SidebarNavItem({ item }: { item: NavItem }) {
 }
 
 // ─────────────────────────────────────────────────────────
+// StackedSidebarNav: two-tier stacked navigation
+//
+// Holds a stack of nav levels. The root level and any pushed
+// panel are layered in the same grid cell and cross-fade /
+// slide horizontally — root exits left, panel enters from the
+// right (and reverses on back). Both directions ease-out so the
+// arriving level decelerates and settles into place. Fast
+// (300ms), and fully disabled under prefers-reduced-motion.
+// ─────────────────────────────────────────────────────────
+
+function StackedSidebarNav({ groups, className }: SidebarNavProps) {
+  // Open straight into a panel if its drill item is the active route.
+  const initial = React.useMemo(() => {
+    for (const group of groups) {
+      for (const item of group.items) {
+        if (item.panel && item.isActive) return item.panel
+      }
+    }
+    return null
+  }, [groups])
+
+  // `panel` is the panel kept mounted (null only at rest on root).
+  // `view` is where we're animating *to* — drives the enter/exit.
+  const [panel, setPanel] = React.useState<NavPanel | null>(initial)
+  const [view, setView] = React.useState<"root" | "panel">(
+    initial ? "panel" : "root"
+  )
+  const backRef = React.useRef<HTMLButtonElement>(null)
+
+  const push = React.useCallback((item: NavItem) => {
+    if (!item.panel) return
+    setPanel(item.panel)
+    // Two frames before flipping view: the first rAF still runs before paint, so
+    // a single rAF would commit translate-x-0 in the same frame as the new
+    // panel content and the slide would snap. Back works because the panel was
+    // already painted on-screen; forward needs one painted frame off-screen first.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setView("panel")
+        requestAnimationFrame(() => backRef.current?.focus())
+      })
+    })
+  }, [])
+
+  const pop = React.useCallback(() => setView("root"), [])
+
+  // Escape pops the panel — matches the back button.
+  React.useEffect(() => {
+    if (view !== "panel") return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") pop()
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [view, pop])
+
+  // Both levels share one grid cell and travel the full width in lockstep —
+  // the active one sits at 0, the inactive one is pushed a full panel-width
+  // off-screen. With the container clipped, that reads as a filmstrip slide:
+  // the parent leaves to the left exactly as the child arrives from the right.
+  const layer =
+    "[grid-area:1/1] min-w-0 transition-transform duration-300 " +
+    "ease-out motion-reduce:transition-none data-[active=false]:pointer-events-none"
+
+  return (
+    <div className="grid overflow-hidden">
+      {/* Root level — slides fully out to the left when a panel is open. */}
+      <div
+        data-active={view === "root"}
+        aria-hidden={view !== "root"}
+        className={cn(layer, "data-[active=false]:-translate-x-full")}
+      >
+        <SidebarGroups groups={groups} className={className} onDrill={push} />
+      </div>
+
+      {/* Pushed panel — always mounted so it sits pre-painted off the right
+          edge; that lets it slide in reliably (a freshly mounted layer would
+          just snap). Content is cleared only after it has slid back out. */}
+      <div
+        data-active={view === "panel"}
+        aria-hidden={view !== "panel"}
+        onTransitionEnd={(e) => {
+          // Only the panel layer's *own* slide finishing should clear it.
+          // onTransitionEnd bubbles, so without this guard a child button's
+          // hover/layout transition would fire mid-pop and clear the content
+          // before it finished sliding away (making "back" look abrupt).
+          if (
+            e.target === e.currentTarget &&
+            (e.propertyName === "translate" || e.propertyName === "transform") &&
+            view === "root"
+          ) {
+            setPanel(null)
+          }
+        }}
+        className={cn(layer, "translate-x-full data-[active=true]:translate-x-0")}
+      >
+        {panel && (
+          <>
+            <SidebarGroup className={className}>
+              <SidebarMenu className="gap-1">
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    ref={backRef}
+                    tooltip="Back"
+                    onClick={pop}
+                    className="font-medium"
+                  >
+                    <ChevronLeft />
+                    <span>{panel.title}</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroup>
+            <SidebarGroups groups={panel.groups} className={className} />
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────
 // AppSidebarHeader: branded workspace switcher
 //
 // Lives in the SidebarHeader slot. A lime logo mark + workspace
@@ -159,27 +354,58 @@ export function AppSidebarHeader({
   workspaces = [],
   onSelect,
 }: AppSidebarHeaderProps) {
+  const { state } = useSidebar()
+  const collapsed = state === "collapsed"
+
   return (
-    <SidebarHeader>
-      <SidebarMenu>
-        <SidebarMenuItem>
+    <SidebarHeader
+      className={cn(
+        "h-14 shrink-0 gap-0 border-b border-border bg-white p-0 text-sidebar-foreground",
+        collapsed && "flex items-center justify-center"
+      )}
+      style={
+        {
+          // Light tokens so the workspace switcher reads on the white band
+          // even when the sidebar below uses forest/dark tokens.
+          "--sidebar-foreground": "#043F2E",
+          "--sidebar-accent": "#EEF2E3",
+          "--sidebar-accent-foreground": "#043F2E",
+        } as React.CSSProperties
+      }
+    >
+      <SidebarMenu className={cn("h-full", collapsed && "h-auto w-auto")}>
+        <SidebarMenuItem className={cn("h-full", collapsed && "h-auto")}>
           <DropdownMenu>
             <DropdownMenuTrigger
               render={
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[popup-open]:bg-sidebar-accent data-[popup-open]:text-sidebar-accent-foreground"
+                  tooltip={collapsed ? workspace.name : undefined}
+                  className={cn(
+                    "data-[popup-open]:bg-sidebar-accent data-[popup-open]:text-sidebar-accent-foreground",
+                    collapsed
+                      ? "size-8 justify-center gap-0 rounded-md p-0"
+                      : "h-full rounded-none px-4"
+                  )}
                 >
-                  <LogoMark surface="primary" size="md" decorative />
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">{workspace.name}</span>
-                    {workspace.plan && (
-                      <span className="truncate text-xs text-sidebar-foreground/60">
-                        {workspace.plan}
-                      </span>
-                    )}
-                  </div>
-                  <ChevronsUpDown className="ml-auto" />
+                  <LogoMark
+                    surface="primary"
+                    size={collapsed ? "sm" : "md"}
+                    decorative
+                  />
+                  {!collapsed && (
+                    <>
+                      <div className="grid flex-1 text-left text-sm leading-tight">
+                        <span className="truncate font-semibold">{workspace.name}</span>
+                        {workspace.plan && (
+                          <span className="truncate text-xs text-sidebar-foreground/60">
+                            {workspace.plan}
+                          </span>
+                        )}
+                      </div>
+                      <ChevronsUpDown className="ml-auto" />
+                    </>
+                  )}
                 </SidebarMenuButton>
               }
             />
@@ -221,10 +447,16 @@ export interface AppUser {
 
 export interface AppSidebarFooterProps {
   user: AppUser
+  /** Optional href for the Support item in the account menu. */
+  supportHref?: string
   onSignOut?: () => void
 }
 
-export function AppSidebarFooter({ user, onSignOut }: AppSidebarFooterProps) {
+export function AppSidebarFooter({
+  user,
+  supportHref = "#",
+  onSignOut,
+}: AppSidebarFooterProps) {
   return (
     <SidebarFooter>
       <SidebarMenu>
@@ -266,6 +498,10 @@ export function AppSidebarFooter({ user, onSignOut }: AppSidebarFooterProps) {
                 <DropdownMenuItem>
                   <Settings />
                   Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem render={<a href={supportHref} />}>
+                  <LifeBuoy />
+                  Support
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

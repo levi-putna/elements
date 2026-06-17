@@ -21,23 +21,28 @@ import {
   SidebarNav,
   type NavGroup,
 } from "@/components/ui/app-shell"
-import { LayoutDashboard, Building2, Receipt } from "lucide-react"
+import {
+  LayoutDashboard,
+  MessageSquare,
+  AlertCircle,
+  Calendar,
+  ClipboardList,
+  Building2,
+  Users,
+  Settings,
+} from "lucide-react"
 
 const nav: NavGroup[] = [
   {
-    label: "Platform",
     items: [
       { title: "Dashboard", href: "/", icon: LayoutDashboard, isActive: true },
-      {
-        title: "Buildings",
-        href: "/buildings",
-        icon: Building2,
-        items: [
-          { title: "All schemes", href: "/buildings" },
-          { title: "Add scheme", href: "/buildings/new" },
-        ],
-      },
-      { title: "Levies", href: "/levies", icon: Receipt },
+      { title: "Inbox", href: "/inbox", icon: MessageSquare },
+      { title: "Issues", href: "/issues", icon: AlertCircle },
+      { title: "Meetings", href: "/meetings", icon: Calendar },
+      { title: "Tasks", href: "/tasks", icon: ClipboardList },
+      { title: "Schemes", href: "/schemes", icon: Building2 },
+      { title: "Contacts", href: "/contacts", icon: Users },
+      { title: "Settings", href: "/settings", icon: Settings },
     ],
   },
 ]

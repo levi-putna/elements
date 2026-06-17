@@ -4,14 +4,20 @@ import type * as React from "react"
 import Link from "next/link"
 import {
   LayoutDashboard,
+  MessageSquare,
+  AlertCircle,
+  Calendar,
+  ClipboardList,
   Building2,
-  Receipt,
-  Wrench,
   Users,
-  FileText,
-  Settings2,
-  LifeBuoy,
+  Settings,
   Home,
+  SlidersHorizontal,
+  CreditCard,
+  Bell,
+  ShieldCheck,
+  Plug,
+  UserCog,
 } from "lucide-react"
 
 import {
@@ -28,37 +34,62 @@ import {
   AppSidebarHeader,
   SidebarNav,
   type NavGroup,
+  type NavPanel,
 } from "@/components/ui/app-shell"
+import {
+  SidebarOnboarding,
+  type OnboardingStep,
+} from "@/components/ui/onboarding"
 import { assetPath } from "@/lib/utils"
 import { Dashboard } from "@/components/preview/dashboard"
 
+// Second-tier navigation that "Settings" drills into. Only Settings uses
+// the stacked pattern for now — every other item is a flat link.
+const SETTINGS_PANEL: NavPanel = {
+  title: "Settings",
+  groups: [
+    {
+      label: "Workspace",
+      items: [
+        { title: "General", href: "#", icon: SlidersHorizontal, isActive: true },
+        { title: "Members", href: "#", icon: Users },
+        { title: "Billing", href: "#", icon: CreditCard },
+        { title: "Integrations", href: "#", icon: Plug },
+      ],
+    },
+    {
+      label: "Account",
+      items: [
+        { title: "Profile", href: "#", icon: UserCog },
+        { title: "Notifications", href: "#", icon: Bell },
+        { title: "Security", href: "#", icon: ShieldCheck },
+      ],
+    },
+  ],
+}
+
 const NAV: NavGroup[] = [
   {
-    label: "Platform",
     items: [
       { title: "Dashboard", href: "#", icon: LayoutDashboard, isActive: true },
-      {
-        title: "Buildings",
-        href: "#",
-        icon: Building2,
-        items: [
-          { title: "All schemes", href: "#" },
-          { title: "Add scheme", href: "#" },
-        ],
-      },
-      { title: "Levies", href: "#", icon: Receipt },
-      { title: "Maintenance", href: "#", icon: Wrench },
-      { title: "Owners", href: "#", icon: Users },
-      { title: "Documents", href: "#", icon: FileText },
+      { title: "Inbox", href: "#", icon: MessageSquare },
+      { title: "Issues", href: "#", icon: AlertCircle },
+      { title: "Meetings", href: "#", icon: Calendar },
+      { title: "Tasks", href: "#", icon: ClipboardList },
+      { title: "Schemes", href: "#", icon: Building2 },
+      { title: "Contacts", href: "#", icon: Users },
+      { title: "Settings", href: "#", icon: Settings, panel: SETTINGS_PANEL },
     ],
   },
-  {
-    label: "Workspace",
-    items: [
-      { title: "Settings", href: "#", icon: Settings2 },
-      { title: "Support", href: "#", icon: LifeBuoy },
-    ],
-  },
+]
+
+// Setup checklist surfaced in the sidebar footer until onboarding is done.
+const ONBOARDING: OnboardingStep[] = [
+  { title: "Create your workspace", href: "#", status: "complete" },
+  { title: "Add your first scheme", href: "#", status: "complete" },
+  { title: "Invite a committee member", href: "#", status: "current" },
+  { title: "Connect your bank feed", href: "#", status: "todo" },
+  { title: "Import owner contacts", href: "#", status: "todo" },
 ]
 
 /**
@@ -88,30 +119,18 @@ export function AppPreview() {
         {/* text-current + no-underline neutralise the docs site's global
             anchor styling so sidebar links read correctly on forest. */}
         <Sidebar collapsible="icon" className="[&_a]:text-current [&_a]:no-underline">
-          {/* Original workspace-switcher header, placed on a white container.
-              The light sidebar tokens are scoped here so its text reads on
-              white while the rest of the sidebar stays forest. */}
-          <div
-            className="border-b border-border bg-white text-sidebar-foreground"
-            style={
-              {
-                "--sidebar-foreground": "#043F2E",
-                "--sidebar-accent": "#EEF2E3",
-                "--sidebar-accent-foreground": "#043F2E",
-              } as React.CSSProperties
-            }
-          >
-            <AppSidebarHeader
-              workspace={{ name: "Instant Strata", plan: "Pro plan" }}
-              workspaces={[
-                { name: "Instant Strata", plan: "Pro plan" },
-                { name: "Harbour Body Corp", plan: "Free plan" },
-              ]}
-            />
-          </div>
+          <AppSidebarHeader
+            workspace={{ name: "Instant Strata", plan: "Pro plan" }}
+            workspaces={[
+              { name: "Instant Strata", plan: "Pro plan" },
+              { name: "Harbour Body Corp", plan: "Free plan" },
+            ]}
+          />
           <SidebarContent>
             <SidebarNav groups={NAV} />
           </SidebarContent>
+          {/* Onboarding checklist: sits just above the account menu */}
+          <SidebarOnboarding steps={ONBOARDING} />
           <AppSidebarFooter
             user={{
               name: "Levi Putna",

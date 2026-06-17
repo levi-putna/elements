@@ -6,24 +6,28 @@ import { SidebarDemo } from "@/components/docs/app-shell-demo";
 const INSTALL = `npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/app-shell/registry.json`;
 
 const NAV_CODE = `import { SidebarNav, type NavGroup } from "@/components/ui/app-shell"
-import { LayoutDashboard, Building2, Receipt } from "lucide-react"
+import {
+  LayoutDashboard,
+  MessageSquare,
+  AlertCircle,
+  Calendar,
+  ClipboardList,
+  Building2,
+  Users,
+  Settings,
+} from "lucide-react"
 
 const groups: NavGroup[] = [
   {
-    label: "Platform",
     items: [
       { title: "Dashboard", href: "/", icon: LayoutDashboard, isActive: true },
-      {
-        title: "Buildings",
-        href: "/buildings",
-        icon: Building2,
-        // Items with sub-items become collapsible sub-navigation.
-        items: [
-          { title: "All schemes", href: "/buildings" },
-          { title: "Add scheme", href: "/buildings/new" },
-        ],
-      },
-      { title: "Levies", href: "/levies", icon: Receipt },
+      { title: "Inbox", href: "/inbox", icon: MessageSquare },
+      { title: "Issues", href: "/issues", icon: AlertCircle },
+      { title: "Meetings", href: "/meetings", icon: Calendar },
+      { title: "Tasks", href: "/tasks", icon: ClipboardList },
+      { title: "Schemes", href: "/schemes", icon: Building2 },
+      { title: "Contacts", href: "/contacts", icon: Users },
+      { title: "Settings", href: "/settings", icon: Settings },
     ],
   },
 ]
@@ -48,9 +52,10 @@ const HEADER_CODE = `import { AppSidebarHeader } from "@/components/ui/app-shell
 const FOOTER_CODE = `import { AppSidebarFooter } from "@/components/ui/app-shell"
 
 // Sits in the SidebarFooter slot: avatar initials + name/email,
-// opening an account dropdown (upgrade, settings, sign out).
+// opening an account dropdown (upgrade, settings, support, sign out).
 <AppSidebarFooter
   user={{ name: "Levi Putna", email: "levi@instantstrata.com" }}
+  supportHref="/support"
   onSignOut={() => signOut()}
 />`;
 
@@ -67,6 +72,7 @@ const HEADER_PROPS = [
 
 const FOOTER_PROPS = [
   { name: "user", type: "{ name, email, avatar? }", description: "The signed-in user. Falls back to initials when no avatar URL is given." },
+  { name: "supportHref", type: "string", default: '"#"', description: "Href for the Support item in the account dropdown." },
   { name: "onSignOut", type: "() => void", description: "Called when the user selects Sign out." },
 ];
 

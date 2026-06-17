@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "onboarding",
+  "type": "registry:ui",
+  "description": "A low-key onboarding checklist for the sidebar footer. Collapsed it shows a progress ring and an 'N of M complete' summary; expanded it lists each setup step with its status and a link to action it. Shrinks to a single progress ring when the sidebar collapses to icons.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "utils",
+    "sidebar"
+  ],
+  "files": [
+    {
+      "path": "registry/onboarding/onboarding.tsx",
+      "target": "components/ui/onboarding.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

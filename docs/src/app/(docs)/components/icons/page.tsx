@@ -86,13 +86,15 @@ const ICON_CATEGORIES: IconCategory[] = [
       "Primary app navigation, workspace switcher, and global actions. Keep one icon per top-level route.",
     icons: [
       { icon: LayoutDashboard, name: "LayoutDashboard", use: "Home dashboard, overview" },
-      { icon: Building2, name: "Building2", use: "Buildings and schemes" },
-      { icon: Receipt, name: "Receipt", use: "Levies, invoices, billing" },
-      { icon: Users, name: "Users", use: "Owners, residents, contacts" },
       { icon: MessageSquare, name: "MessageSquare", use: "Inbox, correspondence" },
+      { icon: AlertCircle, name: "AlertCircle", use: "Issues, defects, attention needed" },
       { icon: Calendar, name: "Calendar", use: "Meetings, AGMs, events" },
-      { icon: FileText, name: "FileText", use: "Documents library" },
+      { icon: ClipboardList, name: "ClipboardList", use: "Tasks, work orders, checklists" },
+      { icon: Building2, name: "Building2", use: "Schemes and buildings" },
+      { icon: Users, name: "Users", use: "Owners, residents, contacts" },
       { icon: Settings, name: "Settings", use: "Workspace settings" },
+      { icon: Receipt, name: "Receipt", use: "Levies, invoices, billing" },
+      { icon: FileText, name: "FileText", use: "Documents library" },
       { icon: Search, name: "Search", use: "Global search" },
       { icon: Bell, name: "Bell", use: "Notifications" },
     ],
@@ -400,11 +402,13 @@ export default function IconsPage() {
             <nav className="w-full max-w-[240px] rounded-sm border border-border bg-off-white p-2" aria-label="Example sidebar">
               {[
                 { icon: LayoutDashboard, label: "Dashboard", active: true },
-                { icon: Building2, label: "Buildings" },
-                { icon: Receipt, label: "Levies" },
-                { icon: Users, label: "Owners" },
-                { icon: Wrench, label: "Maintenance" },
-                { icon: BookOpen, label: "Help" },
+                { icon: MessageSquare, label: "Inbox" },
+                { icon: AlertCircle, label: "Issues" },
+                { icon: Calendar, label: "Meetings" },
+                { icon: ClipboardList, label: "Tasks" },
+                { icon: Building2, label: "Schemes" },
+                { icon: Users, label: "Contacts" },
+                { icon: Settings, label: "Settings" },
               ].map(({ icon: Icon, label, active }) => (
                 <a
                   key={label}
