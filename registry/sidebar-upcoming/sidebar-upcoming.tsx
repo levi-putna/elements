@@ -12,7 +12,7 @@ import {
 import { ArrowRight, AlertCircle, Banknote, Calendar, ChevronDown, ClipboardCheck, Users, type LucideIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { useSidebar } from "@/components/ui/sidebar"
+import { SidebarGroupLabel, useSidebar } from "@/components/ui/sidebar"
 
 // ─────────────────────────────────────────────────────────
 // SidebarUpcoming: a low-key upcoming events strip for the sidebar
@@ -132,6 +132,43 @@ export function selectUpcomingEvents({
 }
 
 /**
+ * Groups a sorted event list by calendar day, preserving chronological order.
+ */
+export function groupUpcomingEventsByDay({
+  events,
+  reference = new Date(),
+}: {
+  events: UpcomingEvent[]
+  reference?: Date
+}): Array<{ date: string; label: string; items: UpcomingEvent[] }> {
+  const itemsByDate = new Map<string, UpcomingEvent[]>()
+
+  for (const event of events) {
+    const bucket = itemsByDate.get(event.date) ?? []
+    bucket.push(event)
+    itemsByDate.set(event.date, bucket)
+  }
+
+  const groups: Array<{ date: string; label: string; items: UpcomingEvent[] }> = []
+  const seenDates = new Set<string>()
+
+  for (const event of events) {
+    if (seenDates.has(event.date)) {
+      continue
+    }
+
+    seenDates.add(event.date)
+    groups.push({
+      date: event.date,
+      label: formatUpcomingDayLabel({ date: event.date, reference }),
+      items: itemsByDate.get(event.date) ?? [],
+    })
+  }
+
+  return groups
+}
+
+/**
  * Upcoming events for the sidebar: today plus the next few days.
  */
 export function SidebarUpcoming({
@@ -161,6 +198,15 @@ export function SidebarUpcoming({
   const visibleEvents = React.useMemo(
     () => eventsInHorizon.slice(0, maxItems),
     [eventsInHorizon, maxItems]
+  )
+
+  const visibleGroups = React.useMemo(
+    () =>
+      groupUpcomingEventsByDay({
+        events: visibleEvents,
+        reference,
+      }),
+    [reference, visibleEvents]
   )
 
   const totalCount = eventsInHorizon.length
@@ -208,44 +254,49 @@ export function SidebarUpcoming({
       {/* Event rows */}
       {open ? (
         <>
-          <ul className="flex flex-col gap-px px-2 pb-1">
-            {visibleEvents.map((event) => {
-              const Icon = EVENT_KIND_ICONS[event.kind ?? "meeting"]
-              const meta = [event.time, event.scheme].filter(Boolean).join(" · ")
+          <div className="flex flex-col gap-2 px-2 pb-1">
+            {visibleGroups.map((group) => (
+              <div key={group.date}>
+                {/* Day grouping label */}
+                <SidebarGroupLabel className="h-6 px-2 text-[10px] font-semibold uppercase tracking-widest text-sidebar-foreground/40">
+                  {group.label}
+                </SidebarGroupLabel>
 
-              return (
-                <li key={event.id}>
-                  <a
-                    href={event.href}
-                    className="flex items-start gap-2 rounded-md px-2 py-1.5 text-sidebar-foreground/75 transition-colors duration-150 hover:bg-sidebar-accent/40 hover:text-sidebar-accent-foreground"
-                  >
-                    {/* Day column */}
-                    <span className="w-[4.5rem] shrink-0 pt-px text-[10px] font-medium leading-tight text-sidebar-foreground/45">
-                      {formatUpcomingDayLabel({ date: event.date, reference })}
-                    </span>
+                <ul className="flex flex-col gap-px">
+                  {group.items.map((event) => {
+                    const Icon = EVENT_KIND_ICONS[event.kind ?? "meeting"]
+                    const meta = [event.time, event.scheme]
+                      .filter(Boolean)
+                      .join(" · ")
 
-                    {/* Title + meta */}
-                    <span className="flex min-w-0 flex-1 items-start gap-1.5">
-                      <Icon
-                        className="mt-0.5 size-3 shrink-0 text-sidebar-foreground/35"
-                        aria-hidden
-                      />
-                      <span className="min-w-0 flex-1">
-                        <span className="block truncate text-xs leading-snug text-sidebar-foreground/85">
-                          {event.title}
-                        </span>
-                        {meta ? (
-                          <span className="block truncate text-[10px] leading-snug text-sidebar-foreground/45">
-                            {meta}
+                    return (
+                      <li key={event.id}>
+                        <a
+                          href={event.href}
+                          className="flex items-start gap-2 rounded-md px-2 py-1.5 text-sidebar-foreground/75 transition-colors duration-150 hover:bg-sidebar-accent/40 hover:text-sidebar-accent-foreground"
+                        >
+                          <Icon
+                            className="mt-0.5 size-3.5 shrink-0 text-sidebar-foreground/35"
+                            aria-hidden
+                          />
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-xs leading-snug text-sidebar-foreground/85">
+                              {event.title}
+                            </span>
+                            {meta ? (
+                              <span className="block truncate text-[10px] leading-snug text-sidebar-foreground/45">
+                                {meta}
+                              </span>
+                            ) : null}
                           </span>
-                        ) : null}
-                      </span>
-                    </span>
-                  </a>
-                </li>
-              )
-            })}
-          </ul>
+                        </a>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
 
           {/* View all */}
           {viewAllHref ? (
