@@ -281,7 +281,7 @@ function SidebarSearchTrigger({
             type="button"
             tooltip="Search"
             onClick={onOpen}
-            className="cursor-text"
+            className="h-8 cursor-text border border-sidebar-border/30 bg-sidebar-accent/45 shadow-none hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground data-[active=true]:bg-sidebar-accent/45"
           >
             <Search />
             <span className="flex-1 truncate text-left text-sidebar-foreground/40">
