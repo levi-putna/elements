@@ -2,18 +2,14 @@
 
 import {
   AlertTriangle,
-  CalendarClock,
   CheckCircle2,
   Eye,
-  FileCheck2,
   FileText,
   Hourglass,
   Mail,
   MessageSquareWarning,
   Scale,
-  ShieldCheck,
   Sparkles,
-  Users,
   Wrench,
 } from "lucide-react"
 
@@ -31,7 +27,7 @@ import {
   WidgetListItem,
   WidgetTitle,
 } from "@/components/ui/widget"
-import { AiBriefing, PortfolioHud } from "@/components/preview/portfolio-hud"
+import { DashboardCommandHeader, Horizon, type ScheduleEvent } from "@/components/preview/portfolio-hud"
 
 // ─────────────────────────────────────────────────────────
 // Preview data: a strata manager's portfolio at 8am
@@ -54,6 +50,91 @@ const DAY_PLAN = {
     estimatedReviewMinutes: 12,
   },
 } as const
+
+/** Reference date for the preview dashboard. */
+const PREVIEW_DATE = new Date("2026-06-17")
+
+/** Calendar events for the HUD schedule strip and Horizon picker. */
+const SCHEDULE_EVENTS: ScheduleEvent[] = [
+  {
+    id: "sched_review",
+    title: "Clear review queue",
+    date: "2026-06-17",
+    time: "Now",
+    kind: "meeting",
+    tone: "accent",
+    href: "#ai-review",
+  },
+  {
+    id: "sched_committee",
+    title: "Committee meeting",
+    subtitle: "Harbour View · lift quotes",
+    date: "2026-06-17",
+    time: "10:00",
+    kind: "meeting",
+    href: "#",
+  },
+  {
+    id: "sched_hub",
+    title: "Strata Hub lodgement",
+    subtitle: "Northbridge Estate",
+    date: "2026-06-17",
+    time: "14:00",
+    kind: "deadline",
+    href: "#",
+  },
+  {
+    id: "sched_levy",
+    title: "Levy reminders send",
+    subtitle: "All schemes",
+    date: "2026-06-16",
+    time: "9:00 am",
+    kind: "levy",
+    href: "#",
+  },
+  {
+    id: "sched_contractor",
+    title: "Contractor site visit",
+    subtitle: "Harbour View · lift motor",
+    date: "2026-06-15",
+    time: "11:00 am",
+    kind: "inspection",
+    href: "#",
+  },
+  {
+    id: "sched_insurance",
+    title: "Insurance renewal due",
+    subtitle: "Sunset Gardens",
+    date: "2026-06-18",
+    kind: "deadline",
+    href: "#",
+  },
+  {
+    id: "sched_inspection",
+    title: "Maintenance inspection",
+    subtitle: "Lot 14",
+    date: "2026-06-19",
+    time: "2:30 pm",
+    kind: "inspection",
+    href: "#",
+  },
+  {
+    id: "sched_agm",
+    title: "AGM",
+    subtitle: "Parkside Residences · notice due in 14 days",
+    date: "2026-06-20",
+    kind: "agm",
+    href: "#",
+  },
+  {
+    id: "sched_budget",
+    title: "Budget review deadline",
+    subtitle: "Sunset Gardens",
+    date: "2026-06-21",
+    kind: "deadline",
+    href: "#",
+  },
+]
 
 /** AI morning brief content. */
 const AI_BRIEF = {
@@ -221,52 +302,6 @@ const WAITING_ON_OTHERS: WaitingRow[] = [
   },
 ]
 
-interface UpcomingRow {
-  icon: typeof CalendarClock
-  iconTone: "default" | "accent" | "warning" | "danger" | "info"
-  title: string
-  meta: string
-  when: string
-  badge: { label: string; variant: "destructive" | "warning" | "info" | "accent" }
-  imminent?: boolean
-}
-
-const UPCOMING: UpcomingRow[] = [
-  {
-    icon: Users,
-    iconTone: "warning",
-    title: "Committee meeting",
-    meta: "Harbour View Towers · lift quote review",
-    when: "Tomorrow · 10:00am",
-    badge: { label: "Meeting", variant: "warning" },
-    imminent: true,
-  },
-  {
-    icon: CalendarClock,
-    iconTone: "warning",
-    title: "AGM",
-    meta: "Parkside Residences · notice due in 14 days",
-    when: "28 Jul",
-    badge: { label: "AGM", variant: "warning" },
-  },
-  {
-    icon: ShieldCheck,
-    iconTone: "info",
-    title: "Building insurance renewal",
-    meta: "The Quarter · current policy expires",
-    when: "26 days",
-    badge: { label: "Renewal", variant: "info" },
-  },
-  {
-    icon: FileCheck2,
-    iconTone: "info",
-    title: "Quarterly levy notices",
-    meta: "Northbridge Estate · 64 lots",
-    when: "5 Jul",
-    badge: { label: "Levies", variant: "info" },
-  },
-]
-
 interface ActivityRow {
   icon: typeof Mail
   iconTone: "default" | "accent" | "warning" | "danger" | "info"
@@ -363,20 +398,20 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* Compact HUD: day progress, portfolio health, AI queue */}
-      <PortfolioHud
+      {/* Command header: HUD, AI brief, and today schedule */}
+      <DashboardCommandHeader
         attention={DAY_PLAN.attention}
         portfolio={DAY_PLAN.portfolio}
         ai={DAY_PLAN.ai}
-      />
-
-      {/* AI morning brief: what happened overnight */}
-      <AiBriefing
-        summary={AI_BRIEF.summary}
-        highlights={[...AI_BRIEF.highlights]}
-        readyForReview={DAY_PLAN.ai.readyForReview}
-        estimatedReviewMinutes={DAY_PLAN.ai.estimatedReviewMinutes}
-        reviewHref="#ai-review"
+        briefing={{
+          summary: AI_BRIEF.summary,
+          highlights: [...AI_BRIEF.highlights],
+          readyForReview: DAY_PLAN.ai.readyForReview,
+          estimatedReviewMinutes: DAY_PLAN.ai.estimatedReviewMinutes,
+          reviewHref: "#ai-review",
+        }}
+        events={SCHEDULE_EVENTS}
+        reference={PREVIEW_DATE}
       />
 
       {/* Tier 1a: AI review queue, the inbox-zero fast lane */}
@@ -485,42 +520,7 @@ export function Dashboard() {
         </div>
 
         <div className="space-y-4 lg:col-span-1">
-          <Widget>
-            <WidgetHeader>
-              <WidgetTitle icon={CalendarClock}>Upcoming</WidgetTitle>
-              <WidgetAction href="#">Calendar</WidgetAction>
-            </WidgetHeader>
-            <WidgetContent flush>
-              <WidgetList>
-                {UPCOMING.map((row) => (
-                  <WidgetListItem
-                    key={row.title}
-                    icon={row.icon}
-                    iconTone={row.iconTone}
-                    title={row.title}
-                    meta={row.meta}
-                    href="#"
-                    trailing={
-                      <>
-                        <Badge variant={row.badge.variant} size="sm">
-                          {row.badge.label}
-                        </Badge>
-                        <span
-                          className={
-                            row.imminent
-                              ? "text-xs font-medium text-warning"
-                              : "text-xs text-ink-muted"
-                          }
-                        >
-                          {row.when}
-                        </span>
-                      </>
-                    }
-                  />
-                ))}
-              </WidgetList>
-            </WidgetContent>
-          </Widget>
+          <Horizon events={SCHEDULE_EVENTS} reference={PREVIEW_DATE} />
         </div>
 
         <div className="space-y-4 lg:col-span-1">
