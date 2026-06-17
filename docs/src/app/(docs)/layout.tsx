@@ -68,6 +68,7 @@ const components = [
       { href: "/components/lot", label: "Lot" },
       { href: "/components/owner", label: "Owner" },
       { href: "/components/task", label: "Task" },
+      { href: "/components/widgets", label: "Widgets" },
       { href: "/components/authentication", label: "Authentication" },
     ],
   },

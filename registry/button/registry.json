@@ -2,13 +2,15 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "button",
   "type": "registry:ui",
-  "description": "An extended button component with loading state, built on top of the shadcn/ui button.",
+  "description": "Triggers an action or event — form submission, dialog confirmation, a call-to-action. Built on Base UI's button primitive with an added `loading` state.",
   "dependencies": [
     "@base-ui/react",
     "class-variance-authority",
     "lucide-react"
   ],
-  "registryDependencies": ["utils"],
+  "registryDependencies": [
+    "utils"
+  ],
   "files": [
     {
       "path": "registry/button/button.tsx",

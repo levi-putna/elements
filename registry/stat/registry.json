@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "stat",
+  "type": "registry:ui",
+  "description": "A dashboard KPI tile: a single headline value with a label, tinted icon chip, directional trend delta, and supporting caption.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "registry/stat/stat.tsx",
+      "target": "components/ui/stat.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

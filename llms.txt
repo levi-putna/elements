@@ -1,0 +1,14 @@
+# Instant Strata Elements
+
+> UI element library for the Instant Strata strata-management platform.
+> Components are owned source (shadcn distribution, Base UI primitives).
+> Each element's full agent docs live at registry/<name>/<name>.md.
+
+## Elements
+
+### actions
+- [button](registry/button/button.md): Trigger an action (submit, confirm, CTA)
+### data-display
+- [stat](registry/stat/stat.md): Show a headline KPI number with a trend
+### layout
+- [widget](registry/widget/widget.md): Frame a dashboard panel or list of summary rows

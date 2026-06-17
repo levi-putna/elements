@@ -1,5 +1,6 @@
 "use client"
 
+import type * as React from "react"
 import Link from "next/link"
 import {
   LayoutDashboard,
@@ -29,6 +30,7 @@ import {
   type NavGroup,
 } from "@/components/ui/app-shell"
 import { assetPath } from "@/lib/utils"
+import { Dashboard } from "@/components/preview/dashboard"
 
 const NAV: NavGroup[] = [
   {
@@ -67,15 +69,46 @@ const NAV: NavGroup[] = [
 export function AppPreview() {
   return (
     <TooltipProvider>
-      <SidebarProvider className="h-svh">
-        <Sidebar collapsible="icon">
-          <AppSidebarHeader
-            workspace={{ name: "Instant Strata", plan: "Pro plan" }}
-            workspaces={[
-              { name: "Instant Strata", plan: "Pro plan" },
-              { name: "Harbour Body Corp", plan: "Free plan" },
-            ]}
-          />
+      <SidebarProvider
+        className="h-svh"
+        style={
+          {
+            // Forest sidebar to match the docs navigation theme.
+            "--sidebar": "#043F2E",
+            "--sidebar-foreground": "#EEF2E3",
+            "--sidebar-primary": "#C8F169",
+            "--sidebar-primary-foreground": "#043F2E",
+            "--sidebar-accent": "#0A5C3D",
+            "--sidebar-accent-foreground": "#FFFFFF",
+            "--sidebar-border": "#032B1F",
+            "--sidebar-ring": "#C8F169",
+          } as React.CSSProperties
+        }
+      >
+        {/* text-current + no-underline neutralise the docs site's global
+            anchor styling so sidebar links read correctly on forest. */}
+        <Sidebar collapsible="icon" className="[&_a]:text-current [&_a]:no-underline">
+          {/* Original workspace-switcher header, placed on a white container.
+              The light sidebar tokens are scoped here so its text reads on
+              white while the rest of the sidebar stays forest. */}
+          <div
+            className="border-b border-border bg-white text-sidebar-foreground"
+            style={
+              {
+                "--sidebar-foreground": "#043F2E",
+                "--sidebar-accent": "#EEF2E3",
+                "--sidebar-accent-foreground": "#043F2E",
+              } as React.CSSProperties
+            }
+          >
+            <AppSidebarHeader
+              workspace={{ name: "Instant Strata", plan: "Pro plan" }}
+              workspaces={[
+                { name: "Instant Strata", plan: "Pro plan" },
+                { name: "Harbour Body Corp", plan: "Free plan" },
+              ]}
+            />
+          </div>
           <SidebarContent>
             <SidebarNav groups={NAV} />
           </SidebarContent>
@@ -112,23 +145,8 @@ export function AppPreview() {
               <span className="font-medium text-foreground">Dashboard</span>
             </nav>
           </AppHeader>
-          <div className="flex-1 overflow-auto p-4">
-            <div className="grid auto-rows-min gap-3 md:grid-cols-3">
-              {[
-                { t: "Active schemes", v: 48 },
-                { t: "Open levies", v: 23 },
-                { t: "Maintenance jobs", v: 16 },
-              ].map(({ t, v }) => (
-                <div
-                  key={t}
-                  className="rounded-lg border border-border bg-secondary/40 p-4"
-                >
-                  <p className="text-xs text-ink-muted">{t}</p>
-                  <p className="mt-1 font-display text-2xl text-foreground">{v}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-3 rounded-lg border border-border bg-secondary/40 min-h-48" />
+          <div className="flex-1 overflow-auto bg-white p-4 md:p-6">
+            <Dashboard />
           </div>
         </SidebarInset>
       </SidebarProvider>

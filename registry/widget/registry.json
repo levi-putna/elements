@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "widget",
+  "type": "registry:ui",
+  "description": "The dashboard panel kit: a bordered card shell, a reusable summary list row, and a responsive grid for laying out an app home / overview screen.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "registry/widget/widget.tsx",
+      "target": "components/ui/widget.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}
