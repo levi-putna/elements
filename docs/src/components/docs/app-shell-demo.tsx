@@ -1,16 +1,7 @@
 "use client"
 
-import {
-  LayoutDashboard,
-  MessageSquare,
-  AlertCircle,
-  Calendar,
-  ClipboardList,
-  Building2,
-  Users,
-  Settings,
-  Home,
-} from "lucide-react"
+import * as React from "react"
+import { Home } from "lucide-react"
 
 import {
   Sidebar,
@@ -30,45 +21,32 @@ import {
   AppSidebarFooter,
   AppSidebarHeader,
   SidebarNav,
-  type NavGroup,
 } from "@/components/ui/app-shell"
+import { SidebarOnboarding } from "@/components/ui/onboarding"
+import { SidebarUpcoming } from "@/components/ui/sidebar-upcoming"
 import {
-  SidebarOnboarding,
-  type OnboardingStep,
-} from "@/components/ui/onboarding"
-
-const NAV: NavGroup[] = [
-  {
-    items: [
-      { title: "Dashboard", href: "#", icon: LayoutDashboard, isActive: true },
-      { title: "Inbox", href: "#", icon: MessageSquare },
-      { title: "Issues", href: "#", icon: AlertCircle },
-      { title: "Meetings", href: "#", icon: Calendar },
-      { title: "Tasks", href: "#", icon: ClipboardList },
-      { title: "Schemes", href: "#", icon: Building2 },
-      { title: "Contacts", href: "#", icon: Users },
-      { title: "Settings", href: "#", icon: Settings },
-    ],
-  },
-]
-
-// Setup checklist surfaced in the sidebar footer until onboarding is done.
-const ONBOARDING: OnboardingStep[] = [
-  { title: "Create your workspace", href: "#", status: "complete" },
-  { title: "Add your first scheme", href: "#", status: "complete" },
-  { title: "Invite a committee member", href: "#", status: "current" },
-  { title: "Connect your bank feed", href: "#", status: "todo" },
-  { title: "Import owner contacts", href: "#", status: "todo" },
-]
+  APP_SHELL_NAV,
+  APP_SHELL_ONBOARDING,
+  APP_SHELL_SEARCH_EXTRAS,
+  APP_SHELL_SIDEBAR_THEME,
+  getAppShellUpcomingEvents,
+} from "@/lib/app-shell-nav"
 
 function Shell({ withContent = true }: { withContent?: boolean }) {
+  const upcomingEvents = React.useMemo(() => getAppShellUpcomingEvents(), [])
   return (
     // A transformed ancestor makes the sidebar's `fixed` container resolve
     // against this box instead of the viewport, so the demo stays contained.
     <div className="relative h-[600px] w-full overflow-hidden [transform:translateZ(0)]">
       <TooltipProvider>
-        <SidebarProvider className="!min-h-0 h-full w-full">
-          <Sidebar collapsible="icon" className="!h-full">
+        <SidebarProvider
+          className="!min-h-0 h-full w-full"
+          style={APP_SHELL_SIDEBAR_THEME}
+        >
+          <Sidebar
+            collapsible="icon"
+            className="!h-full [&_a]:text-current [&_a]:no-underline"
+          >
             <AppSidebarHeader
               workspace={{ name: "Instant Strata", plan: "Pro plan" }}
               workspaces={[
@@ -76,11 +54,22 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
                 { name: "Harbour Body Corp", plan: "Free plan" },
               ]}
             />
-            <SidebarContent>
-              <SidebarNav groups={NAV} />
+            <SidebarContent className="flex flex-col overflow-hidden">
+              <div className="min-h-0 flex-1 overflow-hidden">
+                <SidebarNav
+                  groups={APP_SHELL_NAV}
+                  searchExtras={APP_SHELL_SEARCH_EXTRAS}
+                  searchPlaceholder="Search…"
+                />
+              </div>
+              <SidebarUpcoming
+                events={upcomingEvents}
+                viewAllHref="#"
+                viewAllLabel="View calendar"
+              />
             </SidebarContent>
             {/* Onboarding checklist: sits just above the account menu */}
-            <SidebarOnboarding steps={ONBOARDING} />
+            <SidebarOnboarding steps={APP_SHELL_ONBOARDING} />
             <AppSidebarFooter
               user={{
                 name: "Levi Putna",

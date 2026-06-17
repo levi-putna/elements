@@ -2,11 +2,13 @@
 
 import * as React from "react"
 import {
+  ArrowLeft,
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
   LifeBuoy,
   LogOut,
+  Search,
   Settings,
   Sparkles,
 } from "lucide-react"
@@ -34,6 +36,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarSeparator,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
@@ -77,6 +80,357 @@ export interface NavPanel {
   groups: NavGroup[]
 }
 
+export interface NavSearchResult {
+  title: string
+  href: string
+  icon?: React.ElementType
+  groupLabel?: string
+  panelTitle?: string
+  /** Secondary line shown under the title (e.g. scheme name, lot context). */
+  subtitle?: string
+  /** Groups results in the search overlay. Defaults to navigation. */
+  kind?: NavSearchResultKind
+}
+
+export type NavSearchResultKind =
+  | "navigation"
+  | "scheme"
+  | "lot"
+  | "owner"
+  | "document"
+
+const SEARCH_RESULT_KIND_ORDER: NavSearchResultKind[] = [
+  "scheme",
+  "lot",
+  "owner",
+  "document",
+  "navigation",
+]
+
+const SEARCH_RESULT_KIND_LABELS: Record<NavSearchResultKind, string> = {
+  scheme: "Schemes",
+  lot: "Lots",
+  owner: "Owners",
+  document: "Documents",
+  navigation: "Navigation",
+}
+
+/**
+ * Flattens nav groups (including drill-in panels) into searchable rows.
+ */
+export function collectNavSearchResults({
+  groups,
+}: {
+  groups: NavGroup[]
+}): NavSearchResult[] {
+  const results: NavSearchResult[] = []
+
+  for (const group of groups) {
+    for (const item of group.items) {
+      if (item.panel) {
+        for (const panelGroup of item.panel.groups) {
+          for (const panelItem of panelGroup.items) {
+            results.push({
+              title: panelItem.title,
+              href: panelItem.href,
+              icon: panelItem.icon,
+              groupLabel: panelGroup.label ?? group.label,
+              panelTitle: item.panel.title,
+              kind: "navigation",
+            })
+          }
+        }
+        continue
+      }
+
+      if (item.items?.length) {
+        for (const subItem of item.items) {
+          results.push({
+            title: subItem.title,
+            href: subItem.href,
+            groupLabel: group.label,
+            panelTitle: item.title,
+            kind: "navigation",
+          })
+        }
+      }
+
+      results.push({
+        title: item.title,
+        href: item.href,
+        icon: item.icon,
+        groupLabel: group.label,
+        kind: "navigation",
+      })
+    }
+  }
+
+  return results
+}
+
+/**
+ * Filters flattened nav rows by title, group, panel, or href segment.
+ */
+export function filterNavSearchResults({
+  results,
+  query,
+}: {
+  results: NavSearchResult[]
+  query: string
+}): NavSearchResult[] {
+  const trimmed = query.trim().toLowerCase()
+  if (!trimmed) {
+    return []
+  }
+
+  return results.filter((result) => {
+    const haystack = [
+      result.title,
+      result.subtitle,
+      result.groupLabel,
+      result.panelTitle,
+      result.href,
+      result.kind,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase()
+
+    return haystack.includes(trimmed)
+  })
+}
+
+/**
+ * Groups filtered search rows by entity kind for the overlay layout.
+ */
+export function groupNavSearchResults({
+  results,
+}: {
+  results: NavSearchResult[]
+}): Array<{ kind: NavSearchResultKind; label: string; items: NavSearchResult[] }> {
+  return SEARCH_RESULT_KIND_ORDER.map((kind) => ({
+    kind,
+    label: SEARCH_RESULT_KIND_LABELS[kind],
+    items: results.filter((result) => (result.kind ?? "navigation") === kind),
+  })).filter((group) => group.items.length > 0)
+}
+
+/**
+ * Resolves the subtitle line for a search result row.
+ */
+function getNavSearchResultSubtitle({ result }: { result: NavSearchResult }): string | undefined {
+  if (result.subtitle) {
+    return result.subtitle
+  }
+
+  const parts = [result.panelTitle, result.groupLabel].filter(Boolean)
+  return parts.length > 0 ? parts.join(" · ") : undefined
+}
+
+type SidebarSearchResultItemProps = {
+  result: NavSearchResult
+  onSelect: () => void
+}
+
+/**
+ * Search result row: slightly taller than a standard nav item, with a
+ * primary title and optional subtitle for entity context.
+ */
+function SidebarSearchResultItem({ result, onSelect }: SidebarSearchResultItemProps) {
+  const Icon = result.icon ?? Search
+  const subtitle = getNavSearchResultSubtitle({ result })
+
+  return (
+    <SidebarMenuItem>
+      <a
+        href={result.href}
+        onClick={onSelect}
+        className="flex min-h-10 w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-sidebar-foreground transition-colors duration-150 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+      >
+        <Icon className="size-4 shrink-0 text-sidebar-foreground/70" aria-hidden />
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="truncate text-sm font-medium leading-snug">{result.title}</span>
+          {subtitle ? (
+            <span className="truncate text-xs leading-snug text-sidebar-foreground/55">
+              {subtitle}
+            </span>
+          ) : null}
+        </div>
+      </a>
+    </SidebarMenuItem>
+  )
+}
+
+type SidebarSearchTriggerProps = {
+  onOpen: () => void
+  placeholder?: string
+}
+
+/**
+ * Read-only search affordance at the top of the root nav list.
+ */
+function SidebarSearchTrigger({
+  onOpen,
+  placeholder = "Search",
+}: SidebarSearchTriggerProps) {
+  return (
+    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            type="button"
+            tooltip="Search"
+            onClick={onOpen}
+            className="cursor-text"
+          >
+            <Search />
+            <span className="flex-1 truncate text-left text-sidebar-foreground/40">
+              {placeholder}
+            </span>
+            <kbd className="pointer-events-none hidden h-4 select-none items-center rounded border border-sidebar-border bg-sidebar px-1 font-mono text-[10px] text-sidebar-foreground/50 sm:inline-flex">
+              ⌘K
+            </kbd>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </SidebarGroup>
+  )
+}
+
+type SidebarSearchOverlayProps = {
+  searchInputRef: React.RefObject<HTMLInputElement | null>
+  searchQuery: string
+  onSearchQueryChange: ({ value }: { value: string }) => void
+  results: NavSearchResult[]
+  placeholder?: string
+  onClose: () => void
+  onClear: () => void
+  onResultSelect: () => void
+}
+
+/**
+ * Full-height search overlay layered over SidebarNav drill-down panels.
+ */
+function SidebarSearchOverlay({
+  searchInputRef,
+  searchQuery,
+  onSearchQueryChange,
+  results,
+  placeholder = "Search navigation…",
+  onClose,
+  onClear,
+  onResultSelect,
+}: SidebarSearchOverlayProps) {
+  const hasQuery = searchQuery.trim().length > 0
+  const groupedResults = groupNavSearchResults({ results })
+
+  return (
+    <div className="absolute inset-0 z-10 flex animate-in fade-in flex-col overflow-y-auto bg-sidebar duration-100">
+      {/* Back nav row */}
+      <SidebarGroup>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              type="button"
+              tooltip="Back"
+              onClick={onClose}
+              className="relative justify-center font-medium"
+            >
+              <ArrowLeft className="absolute left-2" aria-hidden />
+              <span className="text-sidebar-foreground">Search</span>
+              {hasQuery ? (
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    onClear()
+                  }}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.stopPropagation()
+                      onClear()
+                    }
+                  }}
+                  className="absolute right-2 cursor-pointer text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground"
+                >
+                  Clear
+                </span>
+              ) : null}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      {/* Search input */}
+      <SidebarGroup className="pt-0">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <div className="flex h-8 w-full items-center gap-2 rounded-md bg-sidebar-accent/50 px-2 ring-sidebar-ring focus-within:ring-1">
+              <Search
+                className="size-4 shrink-0 text-sidebar-foreground/40"
+                aria-hidden
+              />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder={placeholder}
+                value={searchQuery}
+                onChange={(event) =>
+                  onSearchQueryChange({ value: event.target.value })
+                }
+                onKeyDown={(event) => {
+                  if (event.key === "Escape") {
+                    onClose()
+                  }
+                }}
+                className="min-w-0 flex-1 border-0 bg-transparent text-sm text-sidebar-foreground outline-none placeholder:text-sidebar-foreground/40"
+              />
+            </div>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      <SidebarSeparator />
+
+      {/* Results */}
+      <SidebarGroup className="min-h-0 flex-1 overflow-y-auto pt-0">
+        {!hasQuery ? (
+          <p className="py-6 text-center text-xs text-sidebar-foreground/50">
+            Type to find pages and settings
+          </p>
+        ) : results.length > 0 ? (
+          <div className="flex flex-col gap-3">
+            {groupedResults.map((group) => (
+              <div key={group.kind}>
+                <SidebarGroupLabel className="h-7 px-2 text-[10px] uppercase tracking-widest text-sidebar-foreground/45">
+                  {group.label}
+                </SidebarGroupLabel>
+                <SidebarMenu className="gap-0.5">
+                  {group.items.map((result) => (
+                    <SidebarSearchResultItem
+                      key={`${group.kind}-${result.href}-${result.title}`}
+                      result={result}
+                      onSelect={onResultSelect}
+                    />
+                  ))}
+                </SidebarMenu>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-2 px-2 py-8 text-center">
+            <Search className="size-6 text-sidebar-foreground/30" aria-hidden />
+            <p className="text-xs text-sidebar-foreground/50">
+              No results for &ldquo;{searchQuery.trim()}&rdquo;
+            </p>
+          </div>
+        )}
+      </SidebarGroup>
+    </div>
+  )
+}
+
 // ─────────────────────────────────────────────────────────
 // SidebarNav: the sidebar navigation
 //
@@ -91,20 +445,142 @@ export interface NavPanel {
 export interface SidebarNavProps {
   groups: NavGroup[]
   className?: string
+  /** Show the sidebar search overlay on the root nav. Default true. */
+  search?: boolean
+  /** Placeholder copy for the search input. */
+  searchPlaceholder?: string
+  /** Extra searchable rows (schemes, lots, owners, documents) not shown in the nav. */
+  searchExtras?: NavSearchResult[]
 }
 
-export function SidebarNav({ groups, className }: SidebarNavProps) {
+export function SidebarNav({
+  groups,
+  className,
+  search = true,
+  searchPlaceholder,
+  searchExtras = [],
+}: SidebarNavProps) {
+  const { state, setOpen } = useSidebar()
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false)
+  const [searchQuery, setSearchQuery] = React.useState("")
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
+
+  const searchResults = React.useMemo(() => {
+    const allResults = [
+      ...collectNavSearchResults({ groups }),
+      ...searchExtras,
+    ]
+    return filterNavSearchResults({ results: allResults, query: searchQuery })
+  }, [groups, searchExtras, searchQuery])
+
+  const openSearch = React.useCallback(() => {
+    if (state === "collapsed") {
+      setOpen(true)
+    }
+    setIsSearchOpen(true)
+  }, [setOpen, state])
+
+  const closeSearch = React.useCallback(() => {
+    setIsSearchOpen(false)
+    setSearchQuery("")
+  }, [])
+
+  const clearSearch = React.useCallback(() => {
+    setSearchQuery("")
+    searchInputRef.current?.focus()
+  }, [])
+
+  React.useEffect(() => {
+    if (!search) {
+      return
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault()
+        setIsSearchOpen((open) => {
+          if (open) {
+            setSearchQuery("")
+            return false
+          }
+          if (state === "collapsed") {
+            setOpen(true)
+          }
+          return true
+        })
+      }
+
+      if (event.key === "Escape" && isSearchOpen) {
+        closeSearch()
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [closeSearch, isSearchOpen, search, setOpen, state])
+
+  React.useEffect(() => {
+    if (!isSearchOpen) {
+      return
+    }
+
+    const frame = requestAnimationFrame(() => {
+      searchInputRef.current?.focus()
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [isSearchOpen])
+
+  const searchTrigger = search ? (
+    <SidebarSearchTrigger
+      onOpen={openSearch}
+      placeholder={searchPlaceholder}
+    />
+  ) : null
+
   // Only pay for the stack machinery when an item actually drills in.
   const hasPanels = React.useMemo(
     () => groups.some((g) => g.items.some((i) => i.panel)),
     [groups]
   )
 
-  if (!hasPanels) {
-    return <SidebarGroups groups={groups} className={className} />
+  const nav = hasPanels ? (
+    <StackedSidebarNav
+      groups={groups}
+      className={className}
+      searchTrigger={searchTrigger}
+    />
+  ) : (
+    <SidebarGroups
+      groups={groups}
+      className={className}
+      searchTrigger={searchTrigger}
+    />
+  )
+
+  if (!search) {
+    return nav
   }
 
-  return <StackedSidebarNav groups={groups} className={className} />
+  return (
+    <div className="relative flex h-full min-h-0 flex-col overflow-hidden">
+      <div className={cn("min-h-0 flex-1 overflow-hidden", isSearchOpen && "invisible")}>
+        {nav}
+      </div>
+      {isSearchOpen ? (
+        <SidebarSearchOverlay
+          searchInputRef={searchInputRef}
+          searchQuery={searchQuery}
+          onSearchQueryChange={({ value }) => setSearchQuery(value)}
+          results={searchResults}
+          placeholder={searchPlaceholder}
+          onClose={closeSearch}
+          onClear={clearSearch}
+          onResultSelect={closeSearch}
+        />
+      ) : null}
+    </div>
+  )
 }
 
 /** Flat rendering of nav groups — the single-tier case and each stack level. */
@@ -112,13 +588,16 @@ function SidebarGroups({
   groups,
   className,
   onDrill,
+  searchTrigger,
 }: {
   groups: NavGroup[]
   className?: string
   onDrill?: (item: NavItem) => void
+  searchTrigger?: React.ReactNode
 }) {
   return (
     <>
+      {searchTrigger}
       {groups.map((group, i) => (
         <SidebarGroup key={group.label ?? i} className={className}>
           {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
@@ -220,7 +699,11 @@ function SidebarNavItem({
 // (300ms), and fully disabled under prefers-reduced-motion.
 // ─────────────────────────────────────────────────────────
 
-function StackedSidebarNav({ groups, className }: SidebarNavProps) {
+function StackedSidebarNav({
+  groups,
+  className,
+  searchTrigger,
+}: SidebarNavProps & { searchTrigger?: React.ReactNode }) {
   // Open straight into a panel if its drill item is the active route.
   const initial = React.useMemo(() => {
     for (const group of groups) {
@@ -282,7 +765,12 @@ function StackedSidebarNav({ groups, className }: SidebarNavProps) {
         aria-hidden={view !== "root"}
         className={cn(layer, "data-[active=false]:-translate-x-full")}
       >
-        <SidebarGroups groups={groups} className={className} onDrill={push} />
+        <SidebarGroups
+          groups={groups}
+          className={className}
+          onDrill={push}
+          searchTrigger={searchTrigger}
+        />
       </div>
 
       {/* Pushed panel — always mounted so it sits pre-painted off the right

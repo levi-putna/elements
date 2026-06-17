@@ -1,24 +1,8 @@
 "use client"
 
-import type * as React from "react"
+import * as React from "react"
 import Link from "next/link"
-import {
-  LayoutDashboard,
-  MessageSquare,
-  AlertCircle,
-  Calendar,
-  ClipboardList,
-  Building2,
-  Users,
-  Settings,
-  Home,
-  SlidersHorizontal,
-  CreditCard,
-  Bell,
-  ShieldCheck,
-  Plug,
-  UserCog,
-} from "lucide-react"
+import { Home } from "lucide-react"
 
 import {
   Sidebar,
@@ -33,64 +17,18 @@ import {
   AppSidebarFooter,
   AppSidebarHeader,
   SidebarNav,
-  type NavGroup,
-  type NavPanel,
 } from "@/components/ui/app-shell"
-import {
-  SidebarOnboarding,
-  type OnboardingStep,
-} from "@/components/ui/onboarding"
+import { SidebarOnboarding } from "@/components/ui/onboarding"
+import { SidebarUpcoming } from "@/components/ui/sidebar-upcoming"
 import { assetPath } from "@/lib/utils"
+import {
+  APP_SHELL_NAV,
+  APP_SHELL_ONBOARDING,
+  APP_SHELL_SEARCH_EXTRAS,
+  APP_SHELL_SIDEBAR_THEME,
+  getAppShellUpcomingEvents,
+} from "@/lib/app-shell-nav"
 import { Dashboard } from "@/components/preview/dashboard"
-
-// Second-tier navigation that "Settings" drills into. Only Settings uses
-// the stacked pattern for now — every other item is a flat link.
-const SETTINGS_PANEL: NavPanel = {
-  title: "Settings",
-  groups: [
-    {
-      label: "Workspace",
-      items: [
-        { title: "General", href: "#", icon: SlidersHorizontal, isActive: true },
-        { title: "Members", href: "#", icon: Users },
-        { title: "Billing", href: "#", icon: CreditCard },
-        { title: "Integrations", href: "#", icon: Plug },
-      ],
-    },
-    {
-      label: "Account",
-      items: [
-        { title: "Profile", href: "#", icon: UserCog },
-        { title: "Notifications", href: "#", icon: Bell },
-        { title: "Security", href: "#", icon: ShieldCheck },
-      ],
-    },
-  ],
-}
-
-const NAV: NavGroup[] = [
-  {
-    items: [
-      { title: "Dashboard", href: "#", icon: LayoutDashboard, isActive: true },
-      { title: "Inbox", href: "#", icon: MessageSquare },
-      { title: "Issues", href: "#", icon: AlertCircle },
-      { title: "Meetings", href: "#", icon: Calendar },
-      { title: "Tasks", href: "#", icon: ClipboardList },
-      { title: "Schemes", href: "#", icon: Building2 },
-      { title: "Contacts", href: "#", icon: Users },
-      { title: "Settings", href: "#", icon: Settings, panel: SETTINGS_PANEL },
-    ],
-  },
-]
-
-// Setup checklist surfaced in the sidebar footer until onboarding is done.
-const ONBOARDING: OnboardingStep[] = [
-  { title: "Create your workspace", href: "#", status: "complete" },
-  { title: "Add your first scheme", href: "#", status: "complete" },
-  { title: "Invite a committee member", href: "#", status: "current" },
-  { title: "Connect your bank feed", href: "#", status: "todo" },
-  { title: "Import owner contacts", href: "#", status: "todo" },
-]
 
 /**
  * The full application shell rendered at viewport height — the same pieces
@@ -98,23 +36,13 @@ const ONBOARDING: OnboardingStep[] = [
  * them rather than inside the resizable docs demo.
  */
 export function AppPreview() {
+  const upcomingEvents = React.useMemo(() => getAppShellUpcomingEvents(), [])
+
   return (
     <TooltipProvider>
       <SidebarProvider
         className="h-svh"
-        style={
-          {
-            // Forest sidebar to match the docs navigation theme.
-            "--sidebar": "#043F2E",
-            "--sidebar-foreground": "#EEF2E3",
-            "--sidebar-primary": "#C8F169",
-            "--sidebar-primary-foreground": "#043F2E",
-            "--sidebar-accent": "#0A5C3D",
-            "--sidebar-accent-foreground": "#FFFFFF",
-            "--sidebar-border": "#032B1F",
-            "--sidebar-ring": "#C8F169",
-          } as React.CSSProperties
-        }
+        style={APP_SHELL_SIDEBAR_THEME}
       >
         {/* text-current + no-underline neutralise the docs site's global
             anchor styling so sidebar links read correctly on forest. */}
@@ -126,11 +54,22 @@ export function AppPreview() {
               { name: "Harbour Body Corp", plan: "Free plan" },
             ]}
           />
-          <SidebarContent>
-            <SidebarNav groups={NAV} />
+          <SidebarContent className="flex flex-col overflow-hidden">
+            <div className="min-h-0 flex-1 overflow-hidden">
+              <SidebarNav
+                groups={APP_SHELL_NAV}
+                searchExtras={APP_SHELL_SEARCH_EXTRAS}
+                searchPlaceholder="Search…"
+              />
+            </div>
+            <SidebarUpcoming
+              events={upcomingEvents}
+              viewAllHref="#"
+              viewAllLabel="View calendar"
+            />
           </SidebarContent>
           {/* Onboarding checklist: sits just above the account menu */}
-          <SidebarOnboarding steps={ONBOARDING} />
+          <SidebarOnboarding steps={APP_SHELL_ONBOARDING} />
           <AppSidebarFooter
             user={{
               name: "Levi Putna",

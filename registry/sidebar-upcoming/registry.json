@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sidebar-upcoming",
+  "type": "registry:ui",
+  "description": "A low-key upcoming events strip for the application sidebar. Shows today and the next few days of meetings, deadlines, and other items an agent should know about. Collapsed by default with an upcoming count; expand for up to five rows and a view-all link. Sits below SidebarNav inside SidebarContent and hides when the sidebar collapses to icons.",
+  "dependencies": ["date-fns", "lucide-react"],
+  "registryDependencies": ["utils", "sidebar"],
+  "files": [
+    {
+      "path": "registry/sidebar-upcoming/sidebar-upcoming.tsx",
+      "target": "components/ui/sidebar-upcoming.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

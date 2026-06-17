@@ -9,12 +9,9 @@ const NAV_CODE = `import { SidebarNav, type NavGroup } from "@/components/ui/app
 import {
   LayoutDashboard,
   MessageSquare,
-  AlertCircle,
-  Calendar,
-  ClipboardList,
-  Building2,
-  Users,
   Settings,
+  SlidersHorizontal,
+  Users,
 } from "lucide-react"
 
 const groups: NavGroup[] = [
@@ -22,18 +19,29 @@ const groups: NavGroup[] = [
     items: [
       { title: "Dashboard", href: "/", icon: LayoutDashboard, isActive: true },
       { title: "Inbox", href: "/inbox", icon: MessageSquare },
-      { title: "Issues", href: "/issues", icon: AlertCircle },
-      { title: "Meetings", href: "/meetings", icon: Calendar },
-      { title: "Tasks", href: "/tasks", icon: ClipboardList },
-      { title: "Schemes", href: "/schemes", icon: Building2 },
-      { title: "Contacts", href: "/contacts", icon: Users },
-      { title: "Settings", href: "/settings", icon: Settings },
+      {
+        title: "Settings",
+        href: "/settings",
+        icon: Settings,
+        panel: {
+          title: "Settings",
+          groups: [
+            {
+              label: "Workspace",
+              items: [
+                { title: "General", href: "/settings", icon: SlidersHorizontal },
+                { title: "Members", href: "/settings/members", icon: Users },
+              ],
+            },
+          ],
+        },
+      },
     ],
   },
 ]
 
-<SidebarContent>
-  <SidebarNav groups={groups} />
+<SidebarContent className="overflow-hidden">
+  <SidebarNav groups={groups} searchPlaceholder="Search…" />
 </SidebarContent>`;
 
 const HEADER_CODE = `import { AppSidebarHeader } from "@/components/ui/app-shell"
@@ -60,7 +68,10 @@ const FOOTER_CODE = `import { AppSidebarFooter } from "@/components/ui/app-shell
 />`;
 
 const NAV_PROPS = [
-  { name: "groups", type: "NavGroup[]", description: "Labelled groups of nav items. NavItem = { title, href, icon?, isActive?, items? }. An items array makes the entry collapsible sub-navigation." },
+  { name: "groups", type: "NavGroup[]", description: "Labelled groups of nav items. NavItem = { title, href, icon?, isActive?, items?, panel? }. An items array makes the entry collapsible; a panel drills into a stacked second tier." },
+  { name: "search", type: "boolean", default: "true", description: "Show the sidebar search overlay. Opens via the search field or ⌘K." },
+  { name: "searchPlaceholder", type: "string", description: "Placeholder copy for the search input." },
+  { name: "searchExtras", type: "NavSearchResult[]", description: "Extra searchable entity rows (schemes, lots, owners, documents) not shown in the main nav." },
   { name: "className", type: "string", description: "Additional classes applied to each SidebarGroup." },
 ];
 
@@ -87,9 +98,10 @@ export default function SidebarPage() {
         <h1 className="text-3xl font-bold tracking-tight text-foreground mb-3">Sidebar</h1>
         <p className="text-base text-ink-muted leading-relaxed">
           The Instant Strata application sidebar, built on the shadcn sidebar primitives
-          and composed from three branded pieces: a workspace switcher header, the navigation,
-          and a user-menu footer. Collapses to an icon rail and becomes a slide-in sheet on
-          mobile. See <a href="/components/app-layout">App Layout</a> for the full shell.
+          and composed from three branded pieces: a workspace switcher header, searchable
+          navigation with optional drill-in panels, and a user-menu footer. Collapses to an
+          icon rail and becomes a slide-in sheet on mobile. See{" "}
+          <a href="/components/app-layout">App Layout</a> for the full shell.
         </p>
       </div>
 
@@ -111,7 +123,11 @@ export default function SidebarPage() {
         <p className="text-sm text-ink-muted mb-4 leading-relaxed">
           Renders labelled groups of menu items. Each item takes an icon and href; supply an{" "}
           <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">items</code> array
-          to turn it into collapsible sub-navigation.
+          to turn it into collapsible sub-navigation, or a{" "}
+          <code className="font-mono text-xs bg-secondary px-1 py-0.5 rounded-sm">panel</code> to
+          drill into a second-tier stacked view (e.g. Settings). Search is on by default: click
+          the field at the top of the nav or press{" "}
+          <kbd className="rounded border border-border bg-secondary px-1 py-0.5 font-mono text-[10px]">⌘K</kbd>.
         </p>
         <CodeBlock code={NAV_CODE} language="tsx" />
         <div className="mt-5">
