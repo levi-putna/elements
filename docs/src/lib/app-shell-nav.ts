@@ -20,7 +20,7 @@ import {
   User,
 } from "lucide-react"
 
-import type { NavGroup, NavPanel, NavSearchResult } from "@/components/ui/app-shell"
+import type { NavGroup, NavPanel, NavSearchResult, AgentSession } from "@/components/ui/app-shell"
 import type { OnboardingStep } from "@/components/ui/onboarding"
 import type { UpcomingEvent } from "@/components/ui/sidebar-upcoming"
 
@@ -131,6 +131,75 @@ export const APP_SHELL_SEARCH_EXTRAS: NavSearchResult[] = [
     kind: "document",
   },
 ]
+
+/**
+ * Demo agent sessions for the assistant sidebar in agentic mode.
+ */
+export const APP_AGENT_SESSIONS: AgentSession[] = [
+  {
+    id: "agent_agm",
+    title: "AGM notice pack review",
+    preview: "Draft motions for Northbridge Estate",
+    when: "Today",
+  },
+  {
+    id: "agent_lift",
+    title: "Lift contractor follow-up",
+    preview: "Chase quotes before committee meeting",
+    when: "Today",
+  },
+  {
+    id: "agent_levy",
+    title: "Levy payment plan",
+    preview: "Lot 7 hardship request terms",
+    when: "Yesterday",
+  },
+  {
+    id: "agent_hub",
+    title: "Strata Hub lodgement",
+    preview: "Overdue return checklist",
+    when: "Monday",
+  },
+]
+
+/**
+ * Today's schedule for the sidebar, aligned with the dashboard preview data.
+ */
+export function getAppShellScheduleEvents({
+  reference = new Date("2026-06-17"),
+}: { reference?: Date } = {}): UpcomingEvent[] {
+  const day = format(reference, "yyyy-MM-dd")
+
+  return [
+    {
+      id: "sched_review",
+      title: "Clear review queue",
+      date: day,
+      time: "Now",
+      kind: "meeting",
+      tone: "accent",
+      href: "#ai-review",
+    },
+    {
+      id: "sched_committee",
+      title: "Committee meeting",
+      subtitle: "Harbour View · lift quotes",
+      date: day,
+      time: "10:00",
+      kind: "meeting",
+      href: "#",
+    },
+    {
+      id: "sched_hub",
+      title: "Strata Hub lodgement",
+      subtitle: "Northbridge Estate",
+      date: day,
+      time: "14:00",
+      kind: "deadline",
+      href: "#",
+    },
+  ]
+}
 
 /**
  * Demo upcoming events for the app layout preview (today + next 5 days).

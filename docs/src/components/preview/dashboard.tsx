@@ -410,8 +410,6 @@ export function Dashboard() {
           estimatedReviewMinutes: DAY_PLAN.ai.estimatedReviewMinutes,
           reviewHref: "#ai-review",
         }}
-        events={SCHEDULE_EVENTS}
-        reference={PREVIEW_DATE}
       />
 
       {/* Tier 1a: AI review queue, the inbox-zero fast lane */}

@@ -6,8 +6,11 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
+  LayoutGrid,
   LifeBuoy,
   LogOut,
+  MessageSquare,
+  Plus,
   Search,
   Settings,
   Sparkles,
@@ -1004,6 +1007,187 @@ export function AppSidebarFooter({
         </SidebarMenuItem>
       </SidebarMenu>
     </SidebarFooter>
+  )
+}
+
+// ─────────────────────────────────────────────────────────
+// SidebarExperienceToggle: switch between traditional nav and agentic UI
+//
+// Sits at the top of SidebarContent, below the workspace header. Lets the
+// user choose the navigate stack (search, links, schedule) or an agentic
+// experience where the sidebar becomes conversation history.
+// ─────────────────────────────────────────────────────────
+
+export type SidebarExperience = "navigate" | "agentic"
+
+export interface SidebarExperienceToggleProps {
+  value: SidebarExperience
+  onValueChange: (value: SidebarExperience) => void
+  className?: string
+}
+
+/**
+ * Segmented control for switching between traditional navigation and agentic mode.
+ */
+export function SidebarExperienceToggle({
+  value,
+  onValueChange,
+  className,
+}: SidebarExperienceToggleProps) {
+  const { state } = useSidebar()
+
+  if (state === "collapsed") {
+    return null
+  }
+
+  return (
+    <div
+      className={cn(
+        "shrink-0 border-b border-sidebar-border/50 px-2 py-2 group-data-[collapsible=icon]:hidden",
+        className
+      )}
+      role="tablist"
+      aria-label="Sidebar experience"
+    >
+      <div className="grid grid-cols-2 gap-1 rounded-md bg-sidebar-accent/25 p-1">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={value === "navigate"}
+          onClick={() => onValueChange("navigate")}
+          className={cn(
+            "inline-flex items-center justify-center gap-1.5 rounded-sm px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
+            value === "navigate"
+              ? "bg-sidebar text-sidebar-foreground shadow-sm"
+              : "text-sidebar-foreground/55 hover:text-sidebar-foreground/80"
+          )}
+        >
+          <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
+          Navigate
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={value === "agentic"}
+          onClick={() => onValueChange("agentic")}
+          className={cn(
+            "inline-flex items-center justify-center gap-1.5 rounded-sm px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
+            value === "agentic"
+              ? "bg-sidebar text-sidebar-foreground shadow-sm"
+              : "text-sidebar-foreground/55 hover:text-sidebar-foreground/80"
+          )}
+        >
+          <Sparkles className="size-3.5 shrink-0" aria-hidden />
+          Assistant
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────
+// SidebarAgentHistory: conversation list for agentic mode
+//
+// Replaces SidebarNav when the user switches to the assistant experience.
+// Shows prior chats with a new-chat action at the top.
+// ─────────────────────────────────────────────────────────
+
+export interface AgentSession {
+  id: string
+  title: string
+  preview: string
+  /** Relative or absolute time label, e.g. "Today" or "Yesterday". */
+  when: string
+}
+
+export interface SidebarAgentHistoryProps {
+  sessions: AgentSession[]
+  activeId?: string
+  onSelect?: (session: AgentSession) => void
+  onNewChat?: () => void
+  className?: string
+}
+
+/**
+ * Agent conversation history for the sidebar in agentic mode.
+ */
+export function SidebarAgentHistory({
+  sessions,
+  activeId,
+  onSelect,
+  onNewChat,
+  className,
+}: SidebarAgentHistoryProps) {
+  const { state } = useSidebar()
+
+  if (state === "collapsed") {
+    return null
+  }
+
+  return (
+    <div
+      className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", className)}
+      aria-label="Assistant history"
+    >
+      {/* New chat action */}
+      <div className="shrink-0 px-2 py-2">
+        <button
+          type="button"
+          onClick={onNewChat}
+          className="flex w-full items-center gap-2 rounded-md border border-sidebar-border/60 bg-sidebar-accent/15 px-2.5 py-2 text-left text-xs font-medium text-sidebar-foreground/90 transition-colors duration-150 hover:bg-sidebar-accent/30"
+        >
+          <Plus className="size-3.5 shrink-0 text-sidebar-primary" aria-hidden />
+          New chat
+        </button>
+      </div>
+
+      {/* Session list */}
+      <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
+        {sessions.length === 0 ? (
+          <p className="px-2 py-4 text-center text-[11px] text-sidebar-foreground/45">
+            No conversations yet. Start a new chat.
+          </p>
+        ) : (
+          <ul className="flex flex-col gap-0.5">
+            {sessions.map((session) => {
+              const isActive = session.id === activeId
+
+              return (
+                <li key={session.id}>
+                  <button
+                    type="button"
+                    onClick={() => onSelect?.(session)}
+                    aria-current={isActive ? "true" : undefined}
+                    className={cn(
+                      "flex w-full items-start gap-2 rounded-md px-2 py-2 text-left transition-colors duration-150",
+                      isActive
+                        ? "bg-sidebar-accent/50 text-sidebar-accent-foreground"
+                        : "text-sidebar-foreground/75 hover:bg-sidebar-accent/30 hover:text-sidebar-accent-foreground"
+                    )}
+                  >
+                    <MessageSquare
+                      className="mt-0.5 size-3.5 shrink-0 text-sidebar-foreground/40"
+                      aria-hidden
+                    />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-xs font-medium leading-snug">
+                        {session.title}
+                      </span>
+                      <span className="mt-0.5 block truncate text-[10px] leading-snug text-sidebar-foreground/45">
+                        {session.preview}
+                      </span>
+                      <span className="mt-1 block text-[10px] text-sidebar-foreground/40">
+                        {session.when}
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
+    </div>
   )
 }
 

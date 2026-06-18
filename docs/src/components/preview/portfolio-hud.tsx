@@ -118,9 +118,6 @@ export interface DashboardCommandHeaderProps
   portfolio: PortfolioHealthStats
   ai: AiQueueStats
   briefing: Omit<AiBriefingProps, "embedded" | "className">
-  events: ScheduleEvent[]
-  reference?: Date
-  calendarHref?: string
 }
 
 const COMMAND_SHELL_CLASS =
@@ -503,52 +500,26 @@ export function PortfolioHud({
 }
 
 /**
- * Unified dashboard header: HUD, AI brief, and today schedule in one panel.
+ * Unified dashboard header: HUD and AI brief in one panel.
  */
 export function DashboardCommandHeader({
   attention,
   portfolio,
   ai,
   briefing,
-  events,
-  reference = new Date(),
-  calendarHref = "#",
   className,
   ...props
 }: DashboardCommandHeaderProps) {
   return (
     <div
-      className={cn(
-        COMMAND_SHELL_CLASS,
-        "flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_18rem] lg:grid-rows-[auto_minmax(0,1fr)]",
-        className
-      )}
+      className={cn(COMMAND_SHELL_CLASS, "flex flex-col", className)}
       {...props}
     >
       {/* HUD strip */}
-      <PortfolioHud
-        embedded
-        attention={attention}
-        portfolio={portfolio}
-        ai={ai}
-        className="lg:col-start-1 lg:row-start-1"
-      />
+      <PortfolioHud embedded attention={attention} portfolio={portfolio} ai={ai} />
 
       {/* AI morning brief */}
-      <AiBriefing
-        embedded
-        {...briefing}
-        className="lg:col-start-1 lg:row-start-2"
-      />
-
-      {/* Today schedule: spans both rows on the right */}
-      <ScheduleHud
-        embedded
-        events={events}
-        reference={reference}
-        calendarHref={calendarHref}
-        className="border-t border-border lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:border-t-0"
-      />
+      <AiBriefing embedded {...briefing} />
     </div>
   )
 }

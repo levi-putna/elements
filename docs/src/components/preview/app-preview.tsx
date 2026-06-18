@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Home } from "lucide-react"
+import { Home, Sparkles } from "lucide-react"
 
 import {
   Sidebar,
@@ -16,17 +16,22 @@ import {
   AppHeader,
   AppSidebarFooter,
   AppSidebarHeader,
+  SidebarAgentHistory,
+  SidebarExperienceToggle,
   SidebarNav,
+  type SidebarExperience,
 } from "@/components/ui/app-shell"
 import { SidebarOnboarding } from "@/components/ui/onboarding"
-import { SidebarUpcoming } from "@/components/ui/sidebar-upcoming"
+import { SidebarSchedule } from "@/components/ui/sidebar-upcoming"
+import { AssistantPreview } from "@/components/docs/assistant-preview"
 import { assetPath } from "@/lib/utils"
 import {
+  APP_AGENT_SESSIONS,
   APP_SHELL_NAV,
   APP_SHELL_ONBOARDING,
   APP_SHELL_SEARCH_EXTRAS,
   APP_SHELL_SIDEBAR_THEME,
-  getAppShellUpcomingEvents,
+  getAppShellScheduleEvents,
 } from "@/lib/app-shell-nav"
 import { Dashboard } from "@/components/preview/dashboard"
 
@@ -36,7 +41,23 @@ import { Dashboard } from "@/components/preview/dashboard"
  * them rather than inside the resizable docs demo.
  */
 export function AppPreview() {
-  const upcomingEvents = React.useMemo(() => getAppShellUpcomingEvents(), [])
+  const scheduleEvents = React.useMemo(() => getAppShellScheduleEvents(), [])
+  const [experience, setExperience] = React.useState<SidebarExperience>("navigate")
+  const [activeSessionId, setActiveSessionId] = React.useState<string | undefined>(
+    APP_AGENT_SESSIONS[0]?.id
+  )
+  const [assistantKey, setAssistantKey] = React.useState(0)
+
+  const handleExperienceChange = React.useCallback((value: SidebarExperience) => {
+    setExperience(value)
+  }, [])
+
+  const handleNewChat = React.useCallback(() => {
+    setActiveSessionId(undefined)
+    setAssistantKey((key) => key + 1)
+  }, [])
+
+  const isAgentic = experience === "agentic"
 
   return (
     <TooltipProvider>
@@ -55,21 +76,38 @@ export function AppPreview() {
             ]}
           />
           <SidebarContent className="flex flex-col overflow-hidden">
-            <div className="min-h-0 flex-1 overflow-hidden">
-              <SidebarNav
-                groups={APP_SHELL_NAV}
-                searchExtras={APP_SHELL_SEARCH_EXTRAS}
-                searchPlaceholder="Search…"
-              />
-            </div>
-            <SidebarUpcoming
-              events={upcomingEvents}
-              viewAllHref="#"
-              viewAllLabel="View calendar"
+            {/* Experience toggle: traditional nav or agentic assistant */}
+            <SidebarExperienceToggle
+              value={experience}
+              onValueChange={handleExperienceChange}
             />
+
+            {isAgentic ? (
+              <SidebarAgentHistory
+                sessions={APP_AGENT_SESSIONS}
+                activeId={activeSessionId}
+                onSelect={({ id }) => setActiveSessionId(id)}
+                onNewChat={handleNewChat}
+              />
+            ) : (
+              <>
+                <div className="min-h-0 flex-1 overflow-hidden">
+                  <SidebarNav
+                    groups={APP_SHELL_NAV}
+                    searchExtras={APP_SHELL_SEARCH_EXTRAS}
+                    searchPlaceholder="Search…"
+                  />
+                </div>
+                <SidebarSchedule
+                  events={scheduleEvents}
+                  viewAllHref="#"
+                  viewAllLabel="View calendar"
+                />
+              </>
+            )}
           </SidebarContent>
           {/* Onboarding checklist: sits just above the account menu */}
-          <SidebarOnboarding steps={APP_SHELL_ONBOARDING} />
+          {!isAgentic ? <SidebarOnboarding steps={APP_SHELL_ONBOARDING} /> : null}
           <AppSidebarFooter
             user={{
               name: "Levi Putna",
@@ -100,12 +138,31 @@ export function AppPreview() {
                 <span className="sr-only">Home</span>
               </a>
               <span className="text-ink-muted/40">/</span>
-              <span className="font-medium text-foreground">Dashboard</span>
+              {isAgentic ? (
+                <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
+                  <Sparkles className="size-3.5 text-forest/70" aria-hidden />
+                  Assistant
+                </span>
+              ) : (
+                <span className="font-medium text-foreground">Dashboard</span>
+              )}
             </nav>
           </AppHeader>
-          <div className="flex-1 overflow-auto bg-white p-4 md:p-6">
-            <Dashboard />
-          </div>
+
+          {/* Main content: dashboard or full assistant view */}
+          {isAgentic ? (
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
+              <AssistantPreview
+                key={assistantKey}
+                className="min-h-0 flex-1"
+                showDocsLink={false}
+              />
+            </div>
+          ) : (
+            <div className="flex-1 overflow-auto bg-white p-4 md:p-6">
+              <Dashboard />
+            </div>
+          )}
         </SidebarInset>
       </SidebarProvider>
     </TooltipProvider>

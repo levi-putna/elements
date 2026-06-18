@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Home } from "lucide-react"
+import { Home, Sparkles } from "lucide-react"
 
 import {
   Sidebar,
@@ -20,20 +20,32 @@ import {
   AppHeader,
   AppSidebarFooter,
   AppSidebarHeader,
+  SidebarAgentHistory,
+  SidebarExperienceToggle,
   SidebarNav,
+  type SidebarExperience,
 } from "@/components/ui/app-shell"
+import { AssistantPreview } from "@/components/docs/assistant-preview"
 import { SidebarOnboarding } from "@/components/ui/onboarding"
-import { SidebarUpcoming } from "@/components/ui/sidebar-upcoming"
+import { SidebarSchedule } from "@/components/ui/sidebar-upcoming"
 import {
+  APP_AGENT_SESSIONS,
   APP_SHELL_NAV,
   APP_SHELL_ONBOARDING,
   APP_SHELL_SEARCH_EXTRAS,
   APP_SHELL_SIDEBAR_THEME,
-  getAppShellUpcomingEvents,
+  getAppShellScheduleEvents,
 } from "@/lib/app-shell-nav"
 
 function Shell({ withContent = true }: { withContent?: boolean }) {
-  const upcomingEvents = React.useMemo(() => getAppShellUpcomingEvents(), [])
+  const scheduleEvents = React.useMemo(() => getAppShellScheduleEvents(), [])
+  const [experience, setExperience] = React.useState<SidebarExperience>("navigate")
+  const [activeSessionId, setActiveSessionId] = React.useState<string | undefined>(
+    APP_AGENT_SESSIONS[0]?.id
+  )
+  const [assistantKey, setAssistantKey] = React.useState(0)
+  const isAgentic = experience === "agentic"
+
   return (
     // A transformed ancestor makes the sidebar's `fixed` container resolve
     // against this box instead of the viewport, so the demo stays contained.
@@ -55,21 +67,39 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
               ]}
             />
             <SidebarContent className="flex flex-col overflow-hidden">
-              <div className="min-h-0 flex-1 overflow-hidden">
-                <SidebarNav
-                  groups={APP_SHELL_NAV}
-                  searchExtras={APP_SHELL_SEARCH_EXTRAS}
-                  searchPlaceholder="Search…"
-                />
-              </div>
-              <SidebarUpcoming
-                events={upcomingEvents}
-                viewAllHref="#"
-                viewAllLabel="View calendar"
+              <SidebarExperienceToggle
+                value={experience}
+                onValueChange={setExperience}
               />
+              {isAgentic ? (
+                <SidebarAgentHistory
+                  sessions={APP_AGENT_SESSIONS}
+                  activeId={activeSessionId}
+                  onSelect={({ id }) => setActiveSessionId(id)}
+                  onNewChat={() => {
+                    setActiveSessionId(undefined)
+                    setAssistantKey((key) => key + 1)
+                  }}
+                />
+              ) : (
+                <>
+                  <div className="min-h-0 flex-1 overflow-hidden">
+                    <SidebarNav
+                      groups={APP_SHELL_NAV}
+                      searchExtras={APP_SHELL_SEARCH_EXTRAS}
+                      searchPlaceholder="Search…"
+                    />
+                  </div>
+                  <SidebarSchedule
+                    events={scheduleEvents}
+                    viewAllHref="#"
+                    viewAllLabel="View calendar"
+                  />
+                </>
+              )}
             </SidebarContent>
             {/* Onboarding checklist: sits just above the account menu */}
-            <SidebarOnboarding steps={APP_SHELL_ONBOARDING} />
+            {!isAgentic ? <SidebarOnboarding steps={APP_SHELL_ONBOARDING} /> : null}
             <AppSidebarFooter
               user={{
                 name: "Levi Putna",
@@ -89,27 +119,44 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
                     <span className="sr-only">Home</span>
                   </a>
                   <span className="text-ink-muted/40">/</span>
-                  <span className="font-medium text-foreground">Dashboard</span>
+                  {isAgentic ? (
+                    <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
+                      <Sparkles className="size-3.5 text-forest/70" aria-hidden />
+                      Assistant
+                    </span>
+                  ) : (
+                    <span className="font-medium text-foreground">Dashboard</span>
+                  )}
                 </nav>
               </AppHeader>
-              <div className="flex-1 overflow-auto p-4">
-                <div className="grid auto-rows-min gap-3 md:grid-cols-3">
-                  {[
-                    { t: "Active schemes", v: 48 },
-                    { t: "Open levies", v: 23 },
-                    { t: "Maintenance jobs", v: 16 },
-                  ].map(({ t, v }) => (
-                    <div
-                      key={t}
-                      className="rounded-lg border border-border bg-secondary/40 p-4"
-                    >
-                      <p className="text-xs text-ink-muted">{t}</p>
-                      <p className="mt-1 font-display text-2xl text-foreground">{v}</p>
-                    </div>
-                  ))}
+              {isAgentic ? (
+                <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+                  <AssistantPreview
+                    key={assistantKey}
+                    className="min-h-0 flex-1"
+                    showDocsLink={false}
+                  />
                 </div>
-                <div className="mt-3 rounded-lg border border-border bg-secondary/40 min-h-48" />
-              </div>
+              ) : (
+                <div className="flex-1 overflow-auto p-4">
+                  <div className="grid auto-rows-min gap-3 md:grid-cols-3">
+                    {[
+                      { t: "Active schemes", v: 48 },
+                      { t: "Open levies", v: 23 },
+                      { t: "Maintenance jobs", v: 16 },
+                    ].map(({ t, v }) => (
+                      <div
+                        key={t}
+                        className="rounded-lg border border-border bg-secondary/40 p-4"
+                      >
+                        <p className="text-xs text-ink-muted">{t}</p>
+                        <p className="mt-1 font-display text-2xl text-foreground">{v}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-3 rounded-lg border border-border bg-secondary/40 min-h-48" />
+                </div>
+              )}
             </SidebarInset>
           )}
         </SidebarProvider>

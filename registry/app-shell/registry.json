@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "app-shell",
   "type": "registry:ui",
-  "description": "Branded application shell pieces built on the shadcn sidebar: SidebarNav (searchable navigation with inline collapsible sub-items and optional two-tier stacked panels that drill in/out like the Vercel dashboard Settings), AppSidebarHeader (workspace switcher), AppSidebarFooter (user menu) and AppHeader (top bar with sidebar trigger). Compose with SidebarProvider, Sidebar and SidebarInset for a sidebar-07 style layout.",
+  "description": "Branded application shell pieces built on the shadcn sidebar: SidebarNav (searchable navigation with inline collapsible sub-items and optional two-tier stacked panels), SidebarExperienceToggle (switch between traditional navigation and agentic assistant mode), SidebarAgentHistory (conversation list for agentic mode), AppSidebarHeader (workspace switcher), AppSidebarFooter (user menu) and AppHeader (top bar with sidebar trigger). Compose with SidebarProvider, Sidebar and SidebarInset for a sidebar-07 style layout.",
   "dependencies": ["lucide-react"],
   "registryDependencies": ["utils", "logo", "avatar", "sidebar", "dropdown-menu"],
   "files": [

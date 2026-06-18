@@ -31,6 +31,8 @@ export type UpcomingEventKind =
   | "levy"
   | "agm"
 
+export type UpcomingEventTone = "accent" | "warning" | "danger" | "info"
+
 export interface UpcomingEvent {
   id: string
   title: string
@@ -39,7 +41,9 @@ export interface UpcomingEvent {
   date: string
   time?: string
   scheme?: string
+  subtitle?: string
   kind?: UpcomingEventKind
+  tone?: UpcomingEventTone
 }
 
 export interface SidebarUpcomingProps {
@@ -166,6 +170,164 @@ export function groupUpcomingEventsByDay({
   }
 
   return groups
+}
+
+const SIDEBAR_SCHEDULE_TONE_BORDER: Record<UpcomingEventTone, string> = {
+  accent: "border-l-sidebar-primary",
+  warning: "border-l-amber-400",
+  danger: "border-l-red-400",
+  info: "border-l-sky-400",
+}
+
+const EVENT_KIND_TONES: Record<UpcomingEventKind, UpcomingEventTone> = {
+  meeting: "warning",
+  deadline: "danger",
+  inspection: "info",
+  levy: "accent",
+  agm: "warning",
+}
+
+/**
+ * Resolves the accent border for a sidebar schedule slot.
+ */
+function getSidebarScheduleTone({
+  event,
+}: {
+  event: UpcomingEvent
+}): UpcomingEventTone {
+  return event.tone ?? EVENT_KIND_TONES[event.kind ?? "meeting"]
+}
+
+/**
+ * Events on a given calendar day, sorted by time with "Now" first.
+ */
+function eventsForDay({
+  events,
+  date,
+}: {
+  events: UpcomingEvent[]
+  date: string
+}): UpcomingEvent[] {
+  return events
+    .filter((event) => event.date === date)
+    .sort((left, right) => {
+      if (left.time === "Now") return -1
+      if (right.time === "Now") return 1
+      return (left.time ?? "").localeCompare(right.time ?? "")
+    })
+}
+
+export interface SidebarScheduleProps {
+  events: UpcomingEvent[]
+  /** Reference date for "today" labelling. Defaults to now. */
+  reference?: Date
+  title?: string
+  viewAllHref?: string
+  viewAllLabel?: string
+  className?: string
+}
+
+/**
+ * Today's schedule running vertically in the sidebar beneath navigation.
+ */
+export function SidebarSchedule({
+  events,
+  reference = new Date(),
+  title = "Your schedule",
+  viewAllHref,
+  viewAllLabel = "Calendar",
+  className,
+}: SidebarScheduleProps) {
+  const { state } = useSidebar()
+  const todayIso = format(startOfDay(reference), "yyyy-MM-dd")
+  const todayEvents = React.useMemo(
+    () => eventsForDay({ events, date: todayIso }),
+    [events, todayIso]
+  )
+  const dateLabel = format(reference, "EEEE d MMM")
+
+  if (state === "collapsed") {
+    return null
+  }
+
+  return (
+    <section
+      className={cn(
+        "flex min-h-0 shrink-0 flex-col border-t border-sidebar-border/50 group-data-[collapsible=icon]:hidden",
+        className
+      )}
+      aria-label={title}
+    >
+      {/* Header: label and date */}
+      <div className="shrink-0 px-3 pb-2 pt-3">
+        <div className="flex items-center gap-2">
+          <Calendar
+            className="size-3.5 shrink-0 text-sidebar-foreground/40"
+            aria-hidden
+          />
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-sidebar-foreground/40">
+            {title}
+          </p>
+        </div>
+        <p className="mt-1 px-0.5 text-xs font-semibold tracking-tight text-sidebar-foreground/85">
+          {dateLabel}
+        </p>
+      </div>
+
+      {/* Today's slots */}
+      <div className="min-h-0 flex-1 overflow-y-auto px-3 py-1">
+        {todayEvents.length === 0 ? (
+          <p className="text-[11px] text-sidebar-foreground/45">
+            Nothing scheduled today.
+          </p>
+        ) : (
+          <ul className="flex flex-col gap-2">
+            {todayEvents.map((event) => {
+              const tone = getSidebarScheduleTone({ event })
+              const subtitle = event.subtitle ?? event.scheme
+
+              return (
+                <li key={event.id} className="flex items-stretch gap-2">
+                  <span className="w-8 shrink-0 pt-1.5 text-[10px] font-medium tabular-nums text-sidebar-foreground/45">
+                    {event.time ?? "—"}
+                  </span>
+                  <a
+                    href={event.href}
+                    className={cn(
+                      "min-w-0 flex-1 rounded-xs border-l-[3px] bg-sidebar-accent/20 px-2 py-1.5 transition-colors duration-150 hover:bg-sidebar-accent/35",
+                      SIDEBAR_SCHEDULE_TONE_BORDER[tone]
+                    )}
+                  >
+                    <span className="block text-xs font-medium leading-snug text-sidebar-foreground/90">
+                      {event.title}
+                    </span>
+                    {subtitle ? (
+                      <span className="mt-0.5 block text-[10px] leading-snug text-sidebar-foreground/45">
+                        {subtitle}
+                      </span>
+                    ) : null}
+                  </a>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
+
+      {/* Calendar link */}
+      {viewAllHref ? (
+        <div className="shrink-0 border-t border-sidebar-border/40 px-3 py-2.5">
+          <a
+            href={viewAllHref}
+            className="inline-flex items-center gap-1 text-[11px] text-sidebar-foreground/45 transition-colors duration-150 hover:text-sidebar-foreground/75"
+          >
+            {viewAllLabel}
+            <ArrowRight className="size-3" aria-hidden />
+          </a>
+        </div>
+      ) : null}
+    </section>
+  )
 }
 
 /**
