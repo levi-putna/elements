@@ -88,12 +88,19 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
                 }}
               >
                 {isAgentic ? (
-                  <SidebarAgentHistory
-                    sessions={APP_AGENT_SESSIONS}
-                    activeId={activeSessionId}
-                    onSelect={({ id }) => setActiveSessionId(id)}
-                    onNewChat={() => setActiveSessionId(undefined)}
-                  />
+                  <>
+                    <SidebarAgentHistory
+                      sessions={APP_AGENT_SESSIONS}
+                      activeId={activeSessionId}
+                      onSelect={({ id }) => setActiveSessionId(id)}
+                      onNewChat={() => setActiveSessionId(undefined)}
+                    />
+                    <SidebarSchedule
+                      events={scheduleEvents}
+                      viewAllHref="#"
+                      viewAllLabel="View calendar"
+                    />
+                  </>
                 ) : (
                   <>
                     <div className="min-h-0 flex-1 overflow-hidden">
@@ -109,7 +116,7 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
               </SidebarSearch>
             </SidebarContent>
             {/* Onboarding checklist: sits just above the account menu */}
-            {!isAgentic ? <SidebarOnboarding steps={APP_SHELL_ONBOARDING} /> : null}
+            <SidebarOnboarding steps={APP_SHELL_ONBOARDING} />
             <AppSidebarFooter
               user={{
                 name: "Levi Putna",
