@@ -60,12 +60,22 @@
   --color-ink:               #043F2E;
   --color-ink-muted:         #4A7A62;
 
-  /* Radius scale: small values for rectangular feel */
-  --radius-xs:  2px;
-  --radius-sm:  4px;
-  --radius-md:  8px;
-  --radius-lg:  12px;
-  --radius-xl:  16px;
+  /* Radius scale: rectangular product UI; larger values for marketing */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-expressive: 28px;
+
+  /* Semantic padding tokens (4px grid) */
+  --padding-xs:  8px;   /* compact rows, tag insets */
+  --padding-sm:  16px;  /* compact data, dense lists */
+  --padding-md:  24px;  /* cards, panels, app content area */
+  --padding-lg:  32px;  /* featured marketing cards */
+  --padding-xl:  48px;  /* section gutter (tablet+) */
+  --padding-2xl: 96px;  /* section vertical padding (desktop) */
 
   /* Sidebar */
   --color-sidebar-ring:               var(--sidebar-ring);

@@ -154,8 +154,8 @@ export function SidebarOnboarding({
   onDismiss,
   className,
 }: SidebarOnboardingProps) {
-  const { state, toggleSidebar } = useSidebar()
-  const collapsed = state === "collapsed"
+  const { state, isMobile, toggleSidebar } = useSidebar()
+  const collapsed = state === "collapsed" && !isMobile
   const [open, setOpen] = React.useState(defaultOpen)
 
   // Derive progress from the supplied steps.

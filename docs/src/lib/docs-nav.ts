@@ -8,13 +8,26 @@ export type DocsNavGroup = {
   items: DocsNavItem[]
 }
 
+/** Overview-level pages shown under Overview in the sidebar. */
+export const docsOverviewItems: DocsNavItem[] = [
+  { href: "/tone-of-voice", label: "Tone of voice" },
+]
+
 /** Docs sidebar navigation groups and page links. */
 export const docsNavGroups: DocsNavGroup[] = [
+  {
+    label: "Overview",
+    items: [{ href: "/", label: "Overview" }, ...docsOverviewItems],
+  },
   {
     label: "Foundation",
     items: [
       { href: "/components/colours", label: "Colours & Accent" },
       { href: "/components/typography", label: "Typography" },
+      { href: "/components/radius", label: "Radius" },
+      { href: "/components/padding", label: "Padding" },
+      { href: "/components/spacing", label: "Spacing" },
+      { href: "/components/responsive-design", label: "Responsive design" },
       { href: "/components/logo", label: "Logo" },
       { href: "/components/favicon", label: "Favicon" },
       { href: "/components/icons", label: "Icons" },

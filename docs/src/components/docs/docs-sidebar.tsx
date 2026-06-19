@@ -6,6 +6,7 @@ import * as React from "react"
 
 import {
   docsNavGroups,
+  docsOverviewItems,
   filterDocsNavGroups,
   type DocsNavGroup,
 } from "@/lib/docs-nav"
@@ -144,48 +145,60 @@ function DocsSidebarSearchOverlay({
 type DocsNavListProps = {
   groups: DocsNavGroup[]
   onOpenSearch: () => void
+  showSearchTrigger?: boolean
 }
 
 /**
  * Default docs sidebar navigation with a search trigger at the top.
  */
-function DocsNavList({ groups, onOpenSearch }: DocsNavListProps) {
+function DocsNavList({
+  groups,
+  onOpenSearch,
+  showSearchTrigger = true,
+}: DocsNavListProps) {
   return (
     <div className="space-y-6">
       {/* Search trigger */}
-      <div className="relative">
-        <Search
-          className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-white/40"
-          aria-hidden
-        />
-        <input
-          readOnly
-          type="text"
-          placeholder="Search"
-          value=""
-          onClick={onOpenSearch}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              onOpenSearch()
-            }
-          }}
-          className="h-7 w-full cursor-pointer rounded-sm border-0 bg-white/10 pl-7 pr-12 text-sm text-white outline-none placeholder:text-white/40 hover:bg-white/15 focus-visible:ring-1 focus-visible:ring-white/30"
-          aria-label="Search documentation"
-        />
-        <kbd className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 select-none items-center rounded bg-white/10 px-1 font-mono text-[10px] text-white/50 sm:inline-flex">
-          ⌘K
-        </kbd>
-      </div>
+      {showSearchTrigger ? (
+        <div className="relative">
+          <Search
+            className="pointer-events-none absolute left-2 top-1/2 size-3.5 -translate-y-1/2 text-white/40"
+            aria-hidden
+          />
+          <input
+            readOnly
+            type="text"
+            placeholder="Search"
+            value=""
+            onClick={onOpenSearch}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                onOpenSearch()
+              }
+            }}
+            className="h-7 w-full cursor-pointer rounded-sm border-0 bg-white/10 pl-7 pr-12 text-sm text-white outline-none placeholder:text-white/40 hover:bg-white/15 focus-visible:ring-1 focus-visible:ring-white/30"
+            aria-label="Search documentation"
+          />
+          <kbd className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 select-none items-center rounded bg-white/10 px-1 font-mono text-[10px] text-white/50 sm:inline-flex">
+            ⌘K
+          </kbd>
+        </div>
+      ) : null}
 
       {/* Overview */}
-      <nav>
+      <nav className="flex flex-col gap-0.5">
         <Link href="/" className={overviewLinkClassName}>
           Overview
         </Link>
+        {docsOverviewItems.map((item) => (
+          <Link key={item.href} href={item.href} className={linkClassName}>
+            {item.label}
+          </Link>
+        ))}
       </nav>
 
-      {/* Component groups */}
-      {groups.map((group) => (
+      {/* Component groups (skip Overview; rendered above) */}
+      {groups.filter((group) => group.label !== "Overview").map((group) => (
         <div key={group.label}>
           <p className="mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-widest text-white/40">
             {group.label}
@@ -277,6 +290,7 @@ export function DocsSidebar() {
           <DocsNavList
             groups={docsNavGroups}
             onOpenSearch={() => setIsSearchOpen(true)}
+            showSearchTrigger={!isSearchOpen}
           />
         </div>
 

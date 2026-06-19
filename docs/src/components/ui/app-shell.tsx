@@ -10,6 +10,7 @@ import {
   LifeBuoy,
   LogOut,
   MessageSquare,
+  Plus,
   Search,
   Settings,
   Sparkles,
@@ -293,6 +294,146 @@ function SidebarSearchResultItem({ result, onSelect }: SidebarSearchResultItemPr
   )
 }
 
+// ─────────────────────────────────────────────────────────
+// SidebarFlyout: panel anchored to the icon rail
+//
+// Slides out to the right of the collapsed sidebar without expanding
+// the rail. Used for search and Cowork history in icon mode.
+// ─────────────────────────────────────────────────────────
+
+type SidebarCollapsedFlyoutId = "search" | "history"
+
+type SidebarCollapsedFlyoutContextValue = {
+  openFlyout: SidebarCollapsedFlyoutId | null
+  setOpenFlyout: (id: SidebarCollapsedFlyoutId | null) => void
+}
+
+const SidebarCollapsedFlyoutContext =
+  React.createContext<SidebarCollapsedFlyoutContextValue | null>(null)
+
+/**
+ * Coordinates which collapsed flyout is open (search vs history).
+ */
+function useSidebarCollapsedFlyout(): SidebarCollapsedFlyoutContextValue {
+  const context = React.useContext(SidebarCollapsedFlyoutContext)
+  const [localOpen, setLocalOpen] = React.useState<SidebarCollapsedFlyoutId | null>(
+    null
+  )
+
+  if (context) {
+    return context
+  }
+
+  return {
+    openFlyout: localOpen,
+    setOpenFlyout: setLocalOpen,
+  }
+}
+
+type SidebarFlyoutProps = {
+  open: boolean
+  onOpenChange: ({ open }: { open: boolean }) => void
+  ariaLabel: string
+  children: React.ReactNode
+  className?: string
+}
+
+/**
+ * Fixed panel that extends the collapsed icon rail for peek interactions.
+ */
+function SidebarFlyout({
+  open,
+  onOpenChange,
+  ariaLabel,
+  children,
+  className,
+}: SidebarFlyoutProps) {
+  const { state, isMobile } = useSidebar()
+
+  React.useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onOpenChange({ open: false })
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [onOpenChange, open])
+
+  if (isMobile || state !== "collapsed" || !open) {
+    return null
+  }
+
+  return (
+    <>
+      {/* Dismiss backdrop over the main canvas */}
+      <button
+        type="button"
+        aria-label="Close panel"
+        tabIndex={-1}
+        className="fixed inset-0 z-[15] bg-black/20 max-md:hidden"
+        style={{ left: "var(--sidebar-width-icon)" }}
+        onClick={() => onOpenChange({ open: false })}
+      />
+      <div
+        role="dialog"
+        aria-label={ariaLabel}
+        aria-modal="true"
+        className={cn(
+          "fixed inset-y-0 z-[20] flex w-(--sidebar-width) flex-col bg-sidebar shadow-lg",
+          "border-r border-sidebar-border max-md:hidden left-(--sidebar-width-icon)",
+          "animate-in slide-in-from-left-2 duration-200 motion-reduce:animate-none",
+          "group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]]:!size-auto",
+          "group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]]:!h-8",
+          "group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]]:!w-full",
+          className
+        )}
+      >
+        {children}
+      </div>
+    </>
+  )
+}
+
+type SidebarFlyoutBackHeaderProps = {
+  title: string
+  onBack: () => void
+  trailing?: React.ReactNode
+}
+
+/**
+ * Flyout panel header with back control, centred title, and optional trailing action.
+ */
+function SidebarFlyoutBackHeader({
+  title,
+  onBack,
+  trailing,
+}: SidebarFlyoutBackHeaderProps) {
+  return (
+    <div className="grid shrink-0 grid-cols-[2rem_1fr_2rem] items-center gap-1 px-2 py-1">
+      <button
+        type="button"
+        onClick={onBack}
+        className="flex size-8 items-center justify-center rounded-md text-sidebar-foreground outline-hidden transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring"
+        aria-label="Back"
+      >
+        <ArrowLeft className="size-4 shrink-0" aria-hidden />
+      </button>
+      <span className="truncate text-center text-sm font-medium text-sidebar-foreground">
+        {title}
+      </span>
+      <div className="flex size-8 items-center justify-center">
+        {trailing}
+      </div>
+    </div>
+  )
+}
+
 type SidebarSearchTriggerProps = {
   onOpen: () => void
   placeholder?: string
@@ -329,6 +470,35 @@ function SidebarSearchTrigger({
   )
 }
 
+/**
+ * Icon-only search affordance in the collapsed sidebar rail.
+ */
+function SidebarSearchTriggerCollapsed({
+  onToggle,
+  isOpen = false,
+}: {
+  onToggle: () => void
+  isOpen?: boolean
+}) {
+  return (
+    <SidebarGroup className="hidden shrink-0 group-data-[collapsible=icon]:block">
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            type="button"
+            tooltip={isOpen ? "Close search" : "Search (⌘K)"}
+            isActive={isOpen}
+            onClick={onToggle}
+          >
+            <Search />
+            <span className="sr-only">{isOpen ? "Close search" : "Search"}</span>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    </SidebarGroup>
+  )
+}
+
 type SidebarSearchOverlayProps = {
   searchInputRef: React.RefObject<HTMLInputElement | null>
   searchQuery: string
@@ -339,6 +509,8 @@ type SidebarSearchOverlayProps = {
   onClear: () => void
   onResultSelect: ({ result }: { result: NavSearchResult }) => void
   emptyHint?: string
+  /** overlay: full sidebar takeover; panel: flyout body */
+  variant?: "overlay" | "panel"
 }
 
 /**
@@ -354,46 +526,37 @@ function SidebarSearchOverlay({
   onClear,
   onResultSelect,
   emptyHint = "Type to find pages, property, and conversations",
+  variant = "overlay",
 }: SidebarSearchOverlayProps) {
   const hasQuery = searchQuery.trim().length > 0
   const groupedResults = groupNavSearchResults({ results })
 
   return (
-    <div className="absolute inset-0 z-10 flex animate-in fade-in flex-col overflow-y-auto bg-sidebar duration-100">
+    <div
+      className={cn(
+        "flex flex-col overflow-y-auto bg-sidebar",
+        variant === "overlay"
+          ? "absolute inset-0 z-10 animate-in fade-in duration-100"
+          : "min-h-0 flex-1"
+      )}
+    >
       {/* Back nav row */}
-      <SidebarGroup>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              type="button"
-              tooltip="Back"
-              onClick={onClose}
-              className="relative justify-center font-medium"
-            >
-              <ArrowLeft className="absolute left-2" aria-hidden />
-              <span className="text-sidebar-foreground">Search</span>
-              {hasQuery ? (
-                <span
-                  role="button"
-                  tabIndex={0}
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    onClear()
-                  }}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.stopPropagation()
-                      onClear()
-                    }
-                  }}
-                  className="absolute right-2 cursor-pointer text-xs text-sidebar-foreground/50 hover:text-sidebar-foreground"
-                >
-                  Clear
-                </span>
-              ) : null}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+      <SidebarGroup className="py-0">
+        <SidebarFlyoutBackHeader
+          title="Search"
+          onBack={onClose}
+          trailing={
+            hasQuery ? (
+              <button
+                type="button"
+                onClick={onClear}
+                className="text-xs text-sidebar-foreground/50 transition-colors hover:text-sidebar-foreground"
+              >
+                Clear
+              </button>
+            ) : null
+          }
+        />
       </SidebarGroup>
 
       {/* Search input */}
@@ -494,7 +657,8 @@ export function SidebarNav({
   searchPlaceholder,
   searchExtras = [],
 }: SidebarNavProps) {
-  const { state, setOpen } = useSidebar()
+  const { state, isMobile } = useSidebar()
+  const isCollapsed = state === "collapsed" && !isMobile
   const [isSearchOpen, setIsSearchOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState("")
   const searchInputRef = React.useRef<HTMLInputElement>(null)
@@ -507,17 +671,18 @@ export function SidebarNav({
     return filterNavSearchResults({ results: allResults, query: searchQuery })
   }, [groups, searchExtras, searchQuery])
 
-  const openSearch = React.useCallback(() => {
-    if (state === "collapsed") {
-      setOpen(true)
-    }
-    setIsSearchOpen(true)
-  }, [setOpen, state])
-
   const closeSearch = React.useCallback(() => {
     setIsSearchOpen(false)
     setSearchQuery("")
   }, [])
+
+  const toggleSearch = React.useCallback(() => {
+    if (isCollapsed && isSearchOpen) {
+      closeSearch()
+      return
+    }
+    setIsSearchOpen(true)
+  }, [closeSearch, isCollapsed, isSearchOpen])
 
   const clearSearch = React.useCallback(() => {
     setSearchQuery("")
@@ -537,9 +702,6 @@ export function SidebarNav({
             setSearchQuery("")
             return false
           }
-          if (state === "collapsed") {
-            setOpen(true)
-          }
           return true
         })
       }
@@ -551,7 +713,7 @@ export function SidebarNav({
 
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [closeSearch, isSearchOpen, search, setOpen, state])
+  }, [closeSearch, isSearchOpen, search])
 
   React.useEffect(() => {
     if (!isSearchOpen) {
@@ -566,10 +728,18 @@ export function SidebarNav({
   }, [isSearchOpen])
 
   const searchTrigger = search ? (
-    <SidebarSearchTrigger
-      onOpen={openSearch}
-      placeholder={searchPlaceholder}
-    />
+    !isSearchOpen ? (
+      <>
+        <SidebarSearchTrigger
+          onOpen={toggleSearch}
+          placeholder={searchPlaceholder}
+        />
+        <SidebarSearchTriggerCollapsed
+          onToggle={toggleSearch}
+          isOpen={false}
+        />
+      </>
+    ) : null
   ) : null
 
   // Only pay for the stack machinery when an item actually drills in.
@@ -598,10 +768,15 @@ export function SidebarNav({
 
   return (
     <div className="relative flex h-full min-h-0 flex-col overflow-hidden">
-      <div className={cn("min-h-0 flex-1 overflow-hidden", isSearchOpen && "invisible")}>
+      <div
+        className={cn(
+          "min-h-0 flex-1 overflow-hidden",
+          isSearchOpen && !isCollapsed && "invisible"
+        )}
+      >
         {nav}
       </div>
-      {isSearchOpen ? (
+      {isSearchOpen && !isCollapsed ? (
         <SidebarSearchOverlay
           searchInputRef={searchInputRef}
           searchQuery={searchQuery}
@@ -613,6 +788,29 @@ export function SidebarNav({
           onResultSelect={() => closeSearch()}
         />
       ) : null}
+      <SidebarFlyout
+        open={isCollapsed && isSearchOpen}
+        onOpenChange={({ open }) => {
+          if (!open) {
+            closeSearch()
+          } else {
+            toggleSearch()
+          }
+        }}
+        ariaLabel="Search"
+      >
+        <SidebarSearchOverlay
+          searchInputRef={searchInputRef}
+          searchQuery={searchQuery}
+          onSearchQueryChange={({ value }) => setSearchQuery(value)}
+          results={searchResults}
+          placeholder={searchPlaceholder}
+          onClose={closeSearch}
+          onClear={clearSearch}
+          onResultSelect={() => closeSearch()}
+          variant="panel"
+        />
+      </SidebarFlyout>
     </div>
   )
 }
@@ -876,8 +1074,8 @@ export function AppSidebarHeader({
   workspaces = [],
   onSelect,
 }: AppSidebarHeaderProps) {
-  const { state } = useSidebar()
-  const collapsed = state === "collapsed"
+  const { state, isMobile } = useSidebar()
+  const collapsed = state === "collapsed" && !isMobile
 
   return (
     <SidebarHeader
@@ -1075,10 +1273,32 @@ export function SidebarSearch({
   children,
   className,
 }: SidebarSearchProps) {
-  const { state, setOpen } = useSidebar()
+  const { state, isMobile } = useSidebar()
+  const isCollapsed = state === "collapsed" && !isMobile
+  const [openFlyout, setOpenFlyoutState] =
+    React.useState<SidebarCollapsedFlyoutId | null>(null)
   const [isSearchOpen, setIsSearchOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState("")
   const searchInputRef = React.useRef<HTMLInputElement>(null)
+
+  const setOpenFlyout = React.useCallback(
+    (id: SidebarCollapsedFlyoutId | null) => {
+      setOpenFlyoutState(id)
+      if (id === "history") {
+        setIsSearchOpen(false)
+        setSearchQuery("")
+      }
+    },
+    []
+  )
+
+  const flyoutContext = React.useMemo(
+    () => ({
+      openFlyout,
+      setOpenFlyout,
+    }),
+    [openFlyout, setOpenFlyout]
+  )
 
   const searchResults = React.useMemo(() => {
     const allResults = [
@@ -1089,22 +1309,43 @@ export function SidebarSearch({
     return filterNavSearchResults({ results: allResults, query: searchQuery })
   }, [conversations, groups, searchExtras, searchQuery])
 
-  const openSearch = React.useCallback(() => {
-    if (state === "collapsed") {
-      setOpen(true)
-    }
-    setIsSearchOpen(true)
-  }, [setOpen, state])
-
   const closeSearch = React.useCallback(() => {
     setIsSearchOpen(false)
     setSearchQuery("")
-  }, [])
+    if (isCollapsed) {
+      setOpenFlyoutState(null)
+    }
+  }, [isCollapsed])
+
+  const toggleSearch = React.useCallback(() => {
+    if (isCollapsed && isSearchOpen) {
+      closeSearch()
+      return
+    }
+    if (isCollapsed) {
+      setOpenFlyoutState("search")
+    }
+    setIsSearchOpen(true)
+  }, [closeSearch, isCollapsed, isSearchOpen])
 
   const clearSearch = React.useCallback(() => {
     setSearchQuery("")
     searchInputRef.current?.focus()
   }, [])
+
+  // Collapsed flyouts are invalid when expanded; inline search and history take over.
+  React.useEffect(() => {
+    if (!isCollapsed) {
+      setOpenFlyoutState(null)
+    }
+  }, [isCollapsed])
+
+  // Restore the search flyout when collapsing with an active inline search session.
+  React.useEffect(() => {
+    if (isCollapsed && isSearchOpen) {
+      setOpenFlyoutState("search")
+    }
+  }, [isCollapsed, isSearchOpen])
 
   const handleResultSelect = React.useCallback(
     ({ result }: { result: NavSearchResult }) => {
@@ -1127,10 +1368,11 @@ export function SidebarSearch({
         setIsSearchOpen((open) => {
           if (open) {
             setSearchQuery("")
+            setOpenFlyoutState(null)
             return false
           }
-          if (state === "collapsed") {
-            setOpen(true)
+          if (isCollapsed) {
+            setOpenFlyoutState("search")
           }
           return true
         })
@@ -1143,7 +1385,7 @@ export function SidebarSearch({
 
     window.addEventListener("keydown", onKeyDown)
     return () => window.removeEventListener("keydown", onKeyDown)
-  }, [closeSearch, isSearchOpen, setOpen, state])
+  }, [closeSearch, isCollapsed, isSearchOpen])
 
   React.useEffect(() => {
     if (!isSearchOpen) {
@@ -1157,44 +1399,73 @@ export function SidebarSearch({
     return () => cancelAnimationFrame(frame)
   }, [isSearchOpen])
 
-  return (
-    <div
-      className={cn(
-        "relative flex min-h-0 flex-1 flex-col overflow-hidden",
-        className
-      )}
-    >
-      {/* Search trigger: always visible below tabs and above content */}
-      <div className="shrink-0 border-b border-sidebar-border/50">
-        <SidebarSearchTrigger
-          onOpen={openSearch}
-          placeholder={searchPlaceholder}
-        />
-      </div>
+  const searchOverlayProps = {
+    searchInputRef,
+    searchQuery,
+    onSearchQueryChange: ({ value }: { value: string }) => setSearchQuery(value),
+    results: searchResults,
+    placeholder: searchPlaceholder,
+    onClose: closeSearch,
+    onClear: clearSearch,
+    onResultSelect: handleResultSelect,
+  }
 
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
-        <div
-          className={cn(
-            "flex min-h-0 flex-1 flex-col overflow-hidden",
-            isSearchOpen && "invisible"
-          )}
-        >
-          {children}
-        </div>
-        {isSearchOpen ? (
-          <SidebarSearchOverlay
-            searchInputRef={searchInputRef}
-            searchQuery={searchQuery}
-            onSearchQueryChange={({ value }) => setSearchQuery(value)}
-            results={searchResults}
-            placeholder={searchPlaceholder}
-            onClose={closeSearch}
-            onClear={clearSearch}
-            onResultSelect={handleResultSelect}
-          />
+  return (
+    <SidebarCollapsedFlyoutContext.Provider value={flyoutContext}>
+      <div
+        className={cn(
+          "relative flex min-h-0 flex-1 flex-col overflow-hidden",
+          className
+        )}
+      >
+        {/* Search triggers: expanded field and collapsed icon */}
+        {!isSearchOpen ? (
+          <div
+            className={cn(
+              "shrink-0 border-b border-sidebar-border/50",
+              "group-data-[collapsible=icon]:border-b-0"
+            )}
+          >
+            <SidebarSearchTrigger
+              onOpen={toggleSearch}
+              placeholder={searchPlaceholder}
+            />
+            <SidebarSearchTriggerCollapsed
+              onToggle={toggleSearch}
+              isOpen={false}
+            />
+          </div>
         ) : null}
+
+        <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+          <div
+            className={cn(
+              "flex min-h-0 flex-1 flex-col overflow-hidden",
+              isSearchOpen && !isCollapsed && "invisible"
+            )}
+          >
+            {children}
+          </div>
+          {isSearchOpen && !isCollapsed ? (
+            <SidebarSearchOverlay {...searchOverlayProps} />
+          ) : null}
+        </div>
+
+        <SidebarFlyout
+          open={isCollapsed && isSearchOpen && openFlyout === "search"}
+          onOpenChange={({ open }) => {
+            if (!open) {
+              closeSearch()
+            } else {
+              toggleSearch()
+            }
+          }}
+          ariaLabel="Search"
+        >
+          <SidebarSearchOverlay {...searchOverlayProps} variant="panel" />
+        </SidebarFlyout>
       </div>
-    </div>
+    </SidebarCollapsedFlyoutContext.Provider>
   )
 }
 
@@ -1221,54 +1492,88 @@ export function SidebarExperienceToggle({
   onValueChange,
   className,
 }: SidebarExperienceToggleProps) {
-  const { state } = useSidebar()
-
-  if (state === "collapsed") {
-    return null
-  }
-
   return (
-    <div
-      className={cn(
-        "shrink-0 border-b border-sidebar-border/50 px-2 py-2 group-data-[collapsible=icon]:hidden",
-        className
-      )}
-      role="tablist"
-      aria-label="Sidebar experience"
-    >
-      <div className="grid grid-cols-2 gap-1 rounded-md bg-sidebar-accent/25 p-1">
-        <button
-          type="button"
-          role="tab"
-          aria-selected={value === "navigate"}
-          onClick={() => onValueChange("navigate")}
-          className={cn(
-            "inline-flex items-center justify-center gap-1.5 rounded-sm px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
-            value === "navigate"
-              ? "bg-off-white text-forest shadow-sm"
-              : "text-sidebar-foreground/55 hover:text-sidebar-foreground/80"
-          )}
-        >
-          <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
-          Navigate
-        </button>
-        <button
-          type="button"
-          role="tab"
-          aria-selected={value === "agentic"}
-          onClick={() => onValueChange("agentic")}
-          className={cn(
-            "inline-flex items-center justify-center gap-1.5 rounded-sm px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
-            value === "agentic"
-              ? "bg-off-white text-forest shadow-sm"
-              : "text-sidebar-foreground/55 hover:text-sidebar-foreground/80"
-          )}
-        >
-          <Sparkles className="size-3.5 shrink-0" aria-hidden />
-          Cowork
-        </button>
+    <>
+      {/* Expanded: segmented control */}
+      <div
+        className={cn(
+          "shrink-0 border-b border-sidebar-border/50 px-2 py-2",
+          "group-data-[collapsible=icon]:hidden",
+          className
+        )}
+        role="tablist"
+        aria-label="Sidebar experience"
+      >
+        <div className="grid grid-cols-2 gap-1 rounded-md bg-sidebar-accent/25 p-1">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={value === "navigate"}
+            onClick={() => onValueChange("navigate")}
+            className={cn(
+              "inline-flex items-center justify-center gap-1.5 rounded-sm px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
+              value === "navigate"
+                ? "bg-off-white text-forest shadow-sm"
+                : "text-sidebar-foreground/55 hover:text-sidebar-foreground/80"
+            )}
+          >
+            <LayoutGrid className="size-3.5 shrink-0" aria-hidden />
+            Navigate
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={value === "agentic"}
+            onClick={() => onValueChange("agentic")}
+            className={cn(
+              "inline-flex items-center justify-center gap-1.5 rounded-sm px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
+              value === "agentic"
+                ? "bg-off-white text-forest shadow-sm"
+                : "text-sidebar-foreground/55 hover:text-sidebar-foreground/80"
+            )}
+          >
+            <Sparkles className="size-3.5 shrink-0" aria-hidden />
+            Cowork
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* Collapsed: single icon toggles between modes */}
+      <div
+        className={cn(
+          "hidden shrink-0 border-b border-sidebar-border/50 px-2 py-2",
+          "group-data-[collapsible=icon]:block",
+          className
+        )}
+      >
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              type="button"
+              isActive={value === "agentic"}
+              tooltip={
+                value === "agentic"
+                  ? "Cowork · switch to Navigate"
+                  : "Navigate · switch to Cowork"
+              }
+              aria-label={
+                value === "agentic"
+                  ? "Cowork mode. Switch to Navigate"
+                  : "Navigate mode. Switch to Cowork"
+              }
+              onClick={() =>
+                onValueChange(value === "agentic" ? "navigate" : "agentic")
+              }
+            >
+              {value === "agentic" ? <Sparkles /> : <LayoutGrid />}
+              <span className="sr-only">
+                {value === "agentic" ? "Cowork" : "Navigate"}
+              </span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </div>
+    </>
   )
 }
 
@@ -1283,7 +1588,72 @@ export interface SidebarAgentHistoryProps {
   sessions: AgentSession[]
   activeId?: string
   onSelect?: (session: AgentSession) => void
+  /** Called when the user starts a new chat from the collapsed flyout. */
+  onNewChat?: () => void
   className?: string
+}
+
+type SidebarAgentHistoryListProps = {
+  sessions: AgentSession[]
+  activeId?: string
+  onSelect?: (session: AgentSession) => void
+}
+
+/**
+ * Scrollable Cowork session list shared by expanded and flyout layouts.
+ */
+function SidebarAgentHistoryList({
+  sessions,
+  activeId,
+  onSelect,
+}: SidebarAgentHistoryListProps) {
+  if (sessions.length === 0) {
+    return (
+      <p className="px-2 py-4 text-center text-[11px] text-sidebar-foreground/45">
+        No conversations yet.
+      </p>
+    )
+  }
+
+  return (
+    <ul className="flex flex-col gap-0.5">
+      {sessions.map((session) => {
+        const isActive = session.id === activeId
+
+        return (
+          <li key={session.id}>
+            <button
+              type="button"
+              onClick={() => onSelect?.(session)}
+              aria-current={isActive ? "true" : undefined}
+              className={cn(
+                "flex w-full items-start gap-2 rounded-md px-2 py-2 text-left transition-colors duration-150",
+                isActive
+                  ? "bg-sidebar-accent/50 text-sidebar-accent-foreground"
+                  : "text-sidebar-foreground/75 hover:bg-sidebar-accent/30 hover:text-sidebar-accent-foreground"
+              )}
+            >
+              <MessageSquare
+                className="mt-0.5 size-3.5 shrink-0 text-sidebar-foreground/40"
+                aria-hidden
+              />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-xs font-medium leading-snug">
+                  {session.title}
+                </span>
+                <span className="mt-0.5 block truncate text-[10px] leading-snug text-sidebar-foreground/45">
+                  {session.preview}
+                </span>
+                <span className="mt-1 block text-[10px] text-sidebar-foreground/40">
+                  {session.when}
+                </span>
+              </span>
+            </button>
+          </li>
+        )
+      })}
+    </ul>
+  )
 }
 
 /**
@@ -1293,66 +1663,122 @@ export function SidebarAgentHistory({
   sessions,
   activeId,
   onSelect,
+  onNewChat,
   className,
 }: SidebarAgentHistoryProps) {
-  const { state } = useSidebar()
+  const { state, isMobile } = useSidebar()
+  const isCollapsed = state === "collapsed" && !isMobile
+  const { openFlyout, setOpenFlyout } = useSidebarCollapsedFlyout()
+  const isHistoryOpen = openFlyout === "history"
 
-  if (state === "collapsed") {
-    return null
-  }
+  const closeHistory = React.useCallback(() => {
+    setOpenFlyout(null)
+  }, [setOpenFlyout])
+
+  const openHistory = React.useCallback(() => {
+    setOpenFlyout("history")
+  }, [setOpenFlyout])
+
+  // History flyout is collapsed-only; inline list takes over when expanded.
+  React.useEffect(() => {
+    if (!isCollapsed && isHistoryOpen) {
+      closeHistory()
+    }
+  }, [closeHistory, isCollapsed, isHistoryOpen])
+
+  const handleSelect = React.useCallback(
+    (session: AgentSession) => {
+      onSelect?.(session)
+      closeHistory()
+    },
+    [closeHistory, onSelect]
+  )
+
+  const handleNewChat = React.useCallback(() => {
+    onNewChat?.()
+    closeHistory()
+  }, [closeHistory, onNewChat])
 
   return (
-    <div
-      className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", className)}
-      aria-label="Cowork history"
-    >
-      {/* Session list */}
-      <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
-        {sessions.length === 0 ? (
-          <p className="px-2 py-4 text-center text-[11px] text-sidebar-foreground/45">
-            No conversations yet.
-          </p>
-        ) : (
-          <ul className="flex flex-col gap-0.5">
-            {sessions.map((session) => {
-              const isActive = session.id === activeId
-
-              return (
-                <li key={session.id}>
-                  <button
-                    type="button"
-                    onClick={() => onSelect?.(session)}
-                    aria-current={isActive ? "true" : undefined}
-                    className={cn(
-                      "flex w-full items-start gap-2 rounded-md px-2 py-2 text-left transition-colors duration-150",
-                      isActive
-                        ? "bg-sidebar-accent/50 text-sidebar-accent-foreground"
-                        : "text-sidebar-foreground/75 hover:bg-sidebar-accent/30 hover:text-sidebar-accent-foreground"
-                    )}
-                  >
-                    <MessageSquare
-                      className="mt-0.5 size-3.5 shrink-0 text-sidebar-foreground/40"
-                      aria-hidden
-                    />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-xs font-medium leading-snug">
-                        {session.title}
-                      </span>
-                      <span className="mt-0.5 block truncate text-[10px] leading-snug text-sidebar-foreground/45">
-                        {session.preview}
-                      </span>
-                      <span className="mt-1 block text-[10px] text-sidebar-foreground/40">
-                        {session.when}
-                      </span>
-                    </span>
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
+    <>
+      {/* Expanded sidebar list */}
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col overflow-hidden",
+          "group-data-[collapsible=icon]:hidden",
+          className
         )}
+        aria-label="Cowork history"
+      >
+        <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
+          <SidebarAgentHistoryList
+            sessions={sessions}
+            activeId={activeId}
+            onSelect={onSelect}
+          />
+        </div>
       </div>
-    </div>
+
+      {/* Collapsed rail: history flyout trigger */}
+      <SidebarGroup className="hidden shrink-0 group-data-[collapsible=icon]:block">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              type="button"
+              tooltip="Recent conversations"
+              isActive={isHistoryOpen}
+              onClick={() => (isHistoryOpen ? closeHistory() : openHistory())}
+            >
+              <MessageSquare />
+              <span className="sr-only">Recent conversations</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      <SidebarFlyout
+        open={isHistoryOpen}
+        onOpenChange={({ open }) => {
+          if (!open) {
+            closeHistory()
+          } else {
+            openHistory()
+          }
+        }}
+        ariaLabel="Cowork history"
+      >
+        <SidebarGroup className="py-0">
+          <SidebarFlyoutBackHeader
+            title="Conversations"
+            onBack={closeHistory}
+          />
+        </SidebarGroup>
+
+        {onNewChat ? (
+          <SidebarGroup className="pt-0">
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton type="button" onClick={handleNewChat}>
+                  <Plus />
+                  <span>New chat</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+        ) : null}
+
+        <SidebarSeparator />
+
+        {/* Session list */}
+        <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
+          <SidebarAgentHistoryList
+            sessions={sessions}
+            activeId={activeId}
+            onSelect={handleSelect}
+          />
+        </div>
+      </SidebarFlyout>
+    </>
   )
 }
 

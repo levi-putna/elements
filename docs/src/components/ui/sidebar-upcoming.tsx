@@ -238,7 +238,7 @@ export function SidebarSchedule({
   viewAllLabel = "Calendar",
   className,
 }: SidebarScheduleProps) {
-  const { state } = useSidebar()
+  const { state, isMobile } = useSidebar()
   const todayIso = format(startOfDay(reference), "yyyy-MM-dd")
   const todayEvents = React.useMemo(
     () => eventsForDay({ events, date: todayIso }),
@@ -246,7 +246,7 @@ export function SidebarSchedule({
   )
   const dateLabel = format(reference, "EEEE d MMM")
 
-  if (state === "collapsed") {
+  if (state === "collapsed" && !isMobile) {
     return null
   }
 
@@ -343,7 +343,7 @@ export function SidebarUpcoming({
   defaultOpen = false,
   className,
 }: SidebarUpcomingProps) {
-  const { state } = useSidebar()
+  const { state, isMobile } = useSidebar()
   const [open, setOpen] = React.useState(defaultOpen)
   const reference = React.useMemo(() => new Date(), [])
 
@@ -373,7 +373,7 @@ export function SidebarUpcoming({
 
   const totalCount = eventsInHorizon.length
 
-  if (state === "collapsed" || totalCount === 0) {
+  if ((state === "collapsed" && !isMobile) || totalCount === 0) {
     return null
   }
 

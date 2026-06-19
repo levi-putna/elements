@@ -13,6 +13,16 @@ const foundationLinks = [
     description: "Young Serif, Inter, and the type scale for marketing and UI.",
   },
   {
+    href: "/components/spacing",
+    label: "Spacing",
+    description: "Foundational scale and semantic gap tokens for app and website.",
+  },
+  {
+    href: "/components/responsive-design",
+    label: "Responsive design",
+    description: "Desktop-first, mobile-aware breakpoints, layout variants, and content priority.",
+  },
+  {
     href: "/components/logo",
     label: "Logo",
     description: "The IS mark, lockups, and surface colour rules.",
@@ -273,7 +283,14 @@ export default function HomePage() {
             Instant Strata sits in a regulated, relationship-driven industry. Owners entrust
             managers with their homes; committees need clarity on levies, maintenance, and
             compliance. The brand must feel capable and calm: confident without being cold,
-            modern without chasing trends.
+            modern without chasing trends. How we write supports that: see{" "}
+            <Link
+              href="/tone-of-voice"
+              className="text-foreground underline underline-offset-4 hover:text-forest-mid transition-colors"
+            >
+              Tone of voice
+            </Link>
+            .
           </p>
           <p>
             This design system encodes those qualities in reusable tokens and components.

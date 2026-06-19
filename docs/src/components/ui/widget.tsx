@@ -40,7 +40,7 @@ export interface WidgetProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Dashboard panel shell. Bordered 8px card; compose with WidgetHeader,
+ * Dashboard panel shell. Bordered card with 4px radius; compose with WidgetHeader,
  * WidgetContent, WidgetFooter.
  */
 export function Widget({

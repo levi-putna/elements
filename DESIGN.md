@@ -11,6 +11,8 @@
 **Personality:** Professional, trustworthy, efficient. Not corporate. Not cold. Confident without being aggressive.  
 **Voice:** Plain language. No legal jargon in the UI. Direct and clear.
 
+See the [Tone of voice](/tone-of-voice) docs for principles, contextual tone, vocabulary, and a statement library.
+
 ### Logo
 
 The mark is the letters **IS** set in Young Serif inside a square container with `4px` border radius. The container is rotated **15°** for energy; the letterforms stay upright. Tight and compact.
@@ -190,16 +192,72 @@ Whitespace is the primary design tool. Sections should feel uncrowded. When in d
 
 ```
 4px   · --space-1   · micro gaps, icon padding
-8px   · --space-2   · tight inline spacing
-12px  · --space-3   · small element gaps
-16px  · --space-4   · default element spacing
-24px  · --space-6   · card padding, group spacing
-32px  · --space-8   · section sub-divisions
-48px  · --space-12  · component-level spacing
+8px   · --space-2   · tight inline spacing, padding-xs
+12px  · --space-3   · small element gaps, list row vertical
+16px  · --space-4   · default element spacing, padding-sm
+24px  · --space-6   · card padding, padding-md, group spacing
+32px  · --space-8   · section sub-divisions, padding-lg
+48px  · --space-12  · component-level spacing, tablet gutter
 64px  · --space-16  · between major content blocks
-96px  · --space-24  · section vertical padding (desktop)
+96px  · --space-24  · section vertical padding (desktop), padding-2xl
 128px · --space-32  · hero vertical padding
 ```
+
+### Padding
+
+Padding is internal spacing that separates content from a component's outer boundary.
+
+| Token | Utility | Value | Use |
+|---|---|---|---|
+| `--padding-xs` | `p-2` | 8px | Micro insets, tag padding, bento cell gaps |
+| `--padding-sm` | `p-4` | 16px | Compact data: list rows, dialog body, dense tables |
+| `--padding-md` | `p-6` | 24px | Cards, widgets, notifications, app content area |
+| `--padding-lg` | `p-8` | 32px | Featured marketing cards, testimonial blocks |
+| `--padding-xl` | `px-12` | 48px | Section horizontal gutter (tablet+) |
+| `--padding-2xl` | `py-24` | 96px | Section vertical padding (desktop) |
+
+**By context:**
+
+| Context | Token | Examples |
+|---|---|---|
+| **Compact data** | 16px (`p-4`) | Widget list rows, dialog padding, sidebar items |
+| **Variable height content** | 24px (`p-6`) | Cards, notifications, widget body, app shell content |
+| **Marketing cards** | 24–32px, responsive | Base card `p-6`; wide cards scale to `p-8`/`p-10` at lg |
+| **Section layout** | gutter + vertical | Container `px-6 md:px-12`; Section `spacing` prop |
+
+### Spacing (gaps between elements)
+
+Spacing tokens separate elements horizontally and vertically. They use the same foundational scale as padding but apply to `gap`, `margin`, and stack rhythm between siblings. See the [Spacing](/components/spacing) docs page for semantic tokens split by application vs website.
+
+**Foundational scale** (4px grid): `size-4` (4px) through `size-128` (128px), mapped to Tailwind utilities `1` through `32`.
+
+**Application semantic tokens:**
+
+| Direction | Token | Value | Utility |
+|---|---|---|---|
+| Horizontal | between-inline | 8px | `gap-2` |
+| Horizontal | between-controls | 12px | `gap-3` |
+| Horizontal | component-default | 16px | `gap-4` |
+| Horizontal | screen-inset | 24px | `px-6` |
+| Vertical | between-text | 8px | `gap-2` |
+| Vertical | form-fields | 20px | `gap-5` |
+| Vertical | text-to-component | 16px | `gap-4` |
+| Vertical | content-to-action | 24px | `gap-6` |
+
+**Website semantic tokens:**
+
+| Direction | Token | Value | Utility |
+|---|---|---|---|
+| Horizontal | between-chips | 12px | `gap-3` |
+| Horizontal | between-cards | 16px | `gap-4` |
+| Horizontal | between-columns | 32px+ | `gap-8 md:gap-12` |
+| Horizontal | screen-mobile | 24px | `px-6` |
+| Horizontal | screen-desktop | 48px | `md:px-12` |
+| Vertical | eyebrow-to-heading | 12px | `mb-3` |
+| Vertical | heading-to-body | 16px | `mb-4` |
+| Vertical | text-to-component | 24px | `mt-6` |
+| Vertical | content-to-button | 32px | `mt-8` |
+| Vertical | between-sections | 96px+ | `py-24 md:py-32` |
 
 ### Page Layout
 
@@ -207,6 +265,69 @@ Whitespace is the primary design tool. Sections should feel uncrowded. When in d
 - Horizontal padding: `24px` mobile · `48px` tablet · `96px` desktop
 - Section vertical padding: `96px` desktop · `64px` tablet · `48px` mobile
 - Text content columns: max `740px` for body-heavy sections
+
+### Responsive design
+
+Instant Strata is **desktop-first, mobile-aware**. Dashboards and portfolio views are optimised for managers at a desk. The same flows must remain usable on a phone: checking an inbox item, looking up a scheme, or reading a notification between site visits.
+
+This is not mobile-first design. We do not strip the desktop experience down to fit mobile. We make deliberate choices about what appears at each breakpoint.
+
+**Philosophy:**
+
+| Principle | Meaning |
+|---|---|
+| **Desktop-first** | Wide tables, multi-column dashboards, and full metadata are the default target. |
+| **Mobile-aware** | Primary manager paths work on a phone without horizontal scroll. |
+| **Progressive detail** | Add columns, badges, and side panels as viewport width increases. |
+
+**Breakpoints** (Tailwind defaults):
+
+| Token | Min width | Role |
+|---|---|---|
+| `sm` | 640px | Secondary metadata, plan badges, file size columns |
+| `md` | 768px | Mobile/desktop boundary: sidebar sheet, site header nav |
+| `lg` | 1024px | Multi-column dashboard grids, wide table layouts |
+| `xl` | 1280px | Full three-column widget grids, portfolio side panels |
+
+The `useIsMobile()` hook (`@/hooks/use-mobile`) uses `768px` as the mobile threshold for behaviour CSS cannot handle (sheet vs rail).
+
+**Application patterns:**
+
+| Surface | Mobile / tablet | Desktop |
+|---|---|---|
+| Sidebar | Slide-in sheet | Fixed 240px rail with labels |
+| Dashboard grids | Single column stack | `WidgetGrid` with `lg:col-span-*` |
+| Identity rows | `layout="list"` or `layout="compact"` | `layout="wide"` with column headings |
+| Table columns | Hide with `hidden sm:block`, `hidden md:inline-flex` | Full metadata visible |
+| Forms | Single column | Two columns from `md` for short field pairs |
+
+**Content priority (what to hide first on narrow viewports):**
+
+1. Secondary metadata (dates, assignee, location lines)
+2. Decorative or redundant badges
+3. Column headings (when switching to list layout instead)
+4. Never hide: primary identifier, workflow status, or the action that unblocks the user
+
+**Layout variants by domain element:**
+
+| Element | Mobile | Desktop |
+|---|---|---|
+| `SchemeCard` | list, compact | wide, card |
+| `LotCard` / `OwnerRollRow` | list, compact | wide |
+| `WorkItem` | list, compact | list with full trailing column |
+| `Document` | list, thing | wide with headings |
+| `WidgetGrid` | 1 column | 2–3 columns at lg |
+
+**Website:** marketing sections stack at `md`. Hero, feature grids, and footer columns collapse to single column with compressed gutter (`px-6` mobile, `md:px-12` desktop). See [Responsive design](/components/responsive-design) docs for the full checklist.
+
+**Review checklist:**
+
+- Primary task completable at 375px width without horizontal scroll
+- Inbox and list rows at least 44px tap height
+- Desktop shows strictly more detail than mobile, not different data
+- Wide layouts only where column headings fit
+
+**Testing in documentation:** use `ResizableViewport` (`@/components/docs/resizable-viewport`) to drag-resize an iframe-backed preview. CSS breakpoints follow the panel width; JavaScript viewport hooks (`useIsMobile`) follow the browser window. See [Responsive design](/components/responsive-design) docs.
 
 ### Whitespace Principles
 
@@ -220,20 +341,33 @@ Whitespace is the primary design tool. Sections should feel uncrowded. When in d
 
 ## Border Radius
 
-Rectangular with a small radius. Precise and professional.
+Rectangular with a small radius in product UI. Marketing surfaces use larger values for expressive layout blocks.
 
-```
-2px  · --radius-xs  · badges, tags, status pills
-4px  · --radius-sm  · buttons, inputs, logo mark
-8px  · --radius-md  · cards, modals, panels, dropdowns
-12px · --radius-lg  · section containers, bento outer wrapper
-```
+### Product scale
+
+| Token | Utility | Value | Use |
+|---|---|---|---|
+| `--radius-xs` | `rounded-xs` | 2px | Badges, tags, status pills, mention chips |
+| `--radius-sm` | `rounded-sm` | 4px | Buttons, inputs, notifications, widgets, dialogs, logo mark. **Default for app UI.** |
+| `--radius-md` | `rounded-md` | 8px | Dropdown items, sidebar nav, system avatars, inner marketing visuals |
+
+### Marketing scale
+
+| Token | Utility | Value | Use |
+|---|---|---|---|
+| `--radius-lg` | `rounded-lg` | 12px | Marketing cards, infographic shells, bento inner cells |
+| `--radius-xl` | `rounded-xl` | 16px | Story grid tiles, wide blog cards, visual frames |
+| `--radius-2xl` | `rounded-2xl` | 24px | Hero headline bands, page header visuals |
+| `--radius-expressive` | `rounded-[28px]` | 28px | Bento outer wrapper, feature-split seam, hero corner curves |
 
 **Hard rules:**
+- Product UI defaults to `rounded-sm` (4px). Use `rounded-xs` (2px) only for tags and badges.
+- Do not carry marketing radii (`rounded-lg` and above) into the app shell or dense dashboards.
 - All interactive elements (buttons, inputs) use `4px`.
-- All cards use `8px`.
-- `border-radius: 9999px` (pill) is reserved for owner avatars (`OwnerAvatar`). System user avatars use `4px` (`rounded-md`).
+- Marketing cards use `12px` (`rounded-lg`) minimum; wide editorial cards step up to `16px` (`rounded-xl`).
+- `border-radius: 9999px` (pill) is reserved for owner avatars (`OwnerAvatar`) and decorative play buttons. System user avatars use `4px` (`rounded-md`).
 - The logo mark always uses `4px`.
+- Pair larger radii with more internal padding. See [Padding](#padding) below.
 
 ---
 
@@ -310,20 +444,22 @@ Three card styles. Each has a clearly defined home context.
 
 **Bordered card**: on white or off-white backgrounds:
 ```
-bg: white   border: 1px solid var(--border)   radius: 8px   padding: 24px
+bg: white   border: 1px solid var(--border)   radius: 12px (rounded-lg)   padding: 24px
 ```
 
 **Accent card**: on white or off-white backgrounds, for featured/highlighted content:
 ```
-bg: --color-lime-soft   border: none   radius: 8px   padding: 24px
+bg: --color-lime-soft   border: none   radius: 12px (rounded-lg)   padding: 24px
 text: --color-ink
 ```
 
 **Dark card**: inside a dark section:
 ```
-bg: --color-forest-mid   border: none   radius: 8px   padding: 24px
+bg: --color-forest-mid   border: none   radius: 12px (rounded-lg)   padding: 24px
 text: white
 ```
+
+Product dashboard panels (Widget) use `rounded-sm` (4px) and `padding-md` (24px) for the body.
 
 Card shadows: use sparingly. `box-shadow: 0 1px 3px rgba(0,0,0,0.08)` only on bordered cards to lift them off a white background. Never use drop shadows on dark or accent cards.
 
@@ -445,10 +581,10 @@ A **work item** is an operational task in a strata workflow. Items carry workflo
 Signature layout for feature showcase sections. Asymmetric card sizes create hierarchy without needing headings on every card.
 
 ```
-┌──────────────────────────────────────────┐  ← outer: rounded-lg (12px)
+┌──────────────────────────────────────────┐  ← outer: 28px (radius-expressive)
 │  ┌──────────┐  ┌──────────────────────┐  │
 │  │  Small   │  │                      │  │
-│  │  card    │  │   Wide card          │  │  ← inner cards: rounded-md (8px)
+│  │  card    │  │   Wide card          │  │  ← inner cells: rounded-lg (12px)
 │  └──────────┘  │                      │  │
 │  ┌──────────┐  └──────────────────────┘  │
 │  │          │  ┌──────────┐  ┌────────┐  │
@@ -611,10 +747,11 @@ When `background: --color-forest`:
 ### App / Dashboard Pages
 
 - Light mode, white background always
-- Left sidebar: `240px` wide, `--color-off-white` background, `1px` right border
+- Left sidebar: `240px` wide, `--color-off-white` background, `1px` right border. Slide-in sheet below `md` (768px)
 - Content area: white, `24px` padding
 - Max content width for text-heavy pages: `740px`
 - Headings: Inter only (Young Serif is for marketing, not dense UI)
+- Mobile: use list/compact layout variants; progressive column visibility on wide rows. See [Responsive design](#responsive-design)
 
 ### Docs Pages
 
@@ -673,6 +810,8 @@ export default {
         sm:  "4px",
         md:  "8px",
         lg:  "12px",
+        xl:  "16px",
+        "2xl": "24px",
       },
       maxWidth: {
         content: "1200px",
@@ -695,7 +834,7 @@ Include this block when prompting AI tools to build Instant Strata UI:
 >
 > **Typography:** Young Serif (Google Fonts, weight 400 only) for all display and section headings. Inter for UI, body, and labels. Logo mark uses Young Serif inside the lime square.
 >
-> **Style:** Rectangular forms: `4px` radius on buttons and inputs, `8px` on cards. No pill shapes. Generous whitespace. Professional but not corporate.
+> **Style:** Rectangular forms in product UI: `4px` radius (`rounded-sm`) on buttons, inputs, and panels; `2px` on badges. Marketing cards use `12px` (`rounded-lg`) and above. No pill shapes in product UI. Generous whitespace. Professional but not corporate.
 >
 > **Sections:** Most content sections are white or off-white. Dark sections (forest) used sparingly: hero, one testimonial, footer. Lime-soft accent sections used for CTA bands. Max 3 dark sections per page.
 >
@@ -714,4 +853,7 @@ Include this block when prompting AI tools to build Instant Strata UI:
 | 2026-06-15 | Added Scheme identity component guidance (SchemeCard, SchemeContextBar, primitives) |
 | 2026-06-15 | Added Lot identity component guidance (LotCard, LotBadge, roll lists) |
 | 2026-06-15 | Added Owner identity component guidance (OwnerRollRow, OwnerCard, directory) |
-| 2026-06-15 | Added Task queue and WorkItem guidance (workflow states, R-A-S, sectioned inbox) |
+| 2026-06-19 | Added responsive design foundation: desktop-first, mobile-aware application and website patterns |
+| 2026-06-19 | Added tone of voice foundation docs under Overview |
+| 2026-06-19 | Added spacing foundation docs with app vs website semantic tokens |
+| 2026-06-19 | Added product vs marketing radius scale, semantic padding tokens, radius and padding foundation docs |

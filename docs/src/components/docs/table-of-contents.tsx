@@ -104,44 +104,46 @@ export function TableOfContents() {
   if (headings.length < 2) return null
 
   return (
-    <div
-      className="fixed right-5 top-20 z-30 hidden xl:flex items-start gap-3"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-      {/* Text popover: slides in from right on hover */}
+    <div className="fixed right-5 top-20 z-30 hidden xl:block">
+      {/* Hover zone: only the compressed lines column; popover is absolute so it does not widen the hit area */}
       <div
-        className={cn(
-          "transition-all duration-200 ease-out",
-          hovered
-            ? "opacity-100 translate-x-0 pointer-events-auto"
-            : "opacity-0 translate-x-2 pointer-events-none"
-        )}
+        className="relative inline-flex"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
-        <div className="rounded-sm border border-border bg-card shadow-md py-2 w-48">
-          <p className="text-[9px] font-semibold uppercase tracking-widest text-ink-muted/60 px-3 pb-1.5">
-            On this page
-          </p>
-          {headings.map(({ id, text, level }) => (
-            <button
-              key={id}
-              onClick={() => scrollTo(id)}
-              className={cn(
-                "w-full text-left px-3 py-1 text-xs transition-colors duration-100 no-underline",
-                level === 3 && "pl-5",
-                activeId === id
-                  ? "text-foreground font-medium"
-                  : "text-ink-muted hover:text-foreground"
-              )}
-            >
-              {text}
-            </button>
-          ))}
+        {/* Text popover: slides in from the lines column on hover */}
+        <div
+          className={cn(
+            "absolute top-0 right-full pr-3 transition-all duration-200 ease-out",
+            hovered
+              ? "opacity-100 translate-x-0 pointer-events-auto"
+              : "opacity-0 translate-x-2 pointer-events-none"
+          )}
+        >
+          <div className="rounded-sm border border-border bg-card shadow-md py-2 w-48">
+            <p className="text-[9px] font-semibold uppercase tracking-widest text-ink-muted/60 px-3 pb-1.5">
+              On this page
+            </p>
+            {headings.map(({ id, text, level }) => (
+              <button
+                key={id}
+                onClick={() => scrollTo(id)}
+                className={cn(
+                  "w-full text-left px-3 py-1 text-xs transition-colors duration-100 no-underline",
+                  level === 3 && "pl-5",
+                  activeId === id
+                    ? "text-foreground font-medium"
+                    : "text-ink-muted hover:text-foreground"
+                )}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Lines column */}
-      <div className="flex flex-col gap-[5px] cursor-pointer">
+        {/* Lines column */}
+        <div className="flex flex-col gap-[5px] cursor-pointer">
         {headings.map(({ id, level }) => (
           <button
             key={id}
@@ -158,6 +160,7 @@ export function TableOfContents() {
             )}
           />
         ))}
+        </div>
       </div>
     </div>
   )

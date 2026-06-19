@@ -60,6 +60,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { SidebarTrigger } from "@/components/ui/sidebar"
 import { useChat } from "@ai-sdk/react"
 import {
   DefaultChatTransport,
@@ -122,6 +123,8 @@ export interface AssistantPreviewProps {
   sessionTitle?: string
   /** Called when the user starts a new chat from the header. */
   onNewChat?: () => void
+  /** When true, renders the sidebar toggle (for use inside AppShell). */
+  showSidebarTrigger?: boolean
   className?: string
 }
 
@@ -135,6 +138,7 @@ export function AssistantPreview({
   headerActions,
   sessionTitle,
   onNewChat,
+  showSidebarTrigger = false,
   className,
 }: AssistantPreviewProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null)
@@ -280,6 +284,9 @@ export function AssistantPreview({
         )}
       >
         <div className="flex min-w-0 flex-1 items-center gap-2">
+          {showSidebarTrigger ? (
+            <SidebarTrigger className="-ml-1 shrink-0" />
+          ) : null}
           <div
             className={cn(
               "flex shrink-0 items-center justify-center rounded-sm bg-foreground text-background",

@@ -92,6 +92,7 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
                     sessions={APP_AGENT_SESSIONS}
                     activeId={activeSessionId}
                     onSelect={({ id }) => setActiveSessionId(id)}
+                    onNewChat={() => setActiveSessionId(undefined)}
                   />
                 ) : (
                   <>
@@ -139,6 +140,7 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
                     key={activeSessionId ?? "new"}
                     className="min-h-0 flex-1"
                     showDocsLink={false}
+                    showSidebarTrigger
                     sessionTitle={activeSession?.title}
                     onNewChat={() => setActiveSessionId(undefined)}
                   />

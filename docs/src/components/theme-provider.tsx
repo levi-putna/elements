@@ -10,5 +10,20 @@ export function ThemeProvider({
   children,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>
+  // next-themes injects a blocking script to prevent theme flash on first paint.
+  // React 19 rejects executable script tags inside client components on re-render.
+  // SSR keeps the default script type; client re-renders use a non-executable type.
+  const scriptProps = React.useMemo(
+    () =>
+      typeof window === "undefined"
+        ? undefined
+        : ({ type: "application/json" } as const),
+    []
+  )
+
+  return (
+    <NextThemesProvider {...props} scriptProps={scriptProps}>
+      {children}
+    </NextThemesProvider>
+  )
 }
