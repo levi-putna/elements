@@ -1,5 +1,5 @@
 /** Placeholder label for chats that do not yet have a generated title. */
-export const NEW_CONVERSATION_TITLE = "New conversation"
+export const NEW_CONVERSATION_TITLE = "New conversation..."
 
 /**
  * Derives a short fallback title from the first user message when generation fails.

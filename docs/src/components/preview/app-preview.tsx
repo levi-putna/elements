@@ -44,12 +44,13 @@ import { Dashboard } from "@/components/preview/dashboard"
 export function AppPreview() {
   const scheduleEvents = React.useMemo(() => getAppShellScheduleEvents(), [])
   const [experience, setExperience] = React.useState<SidebarExperience>("navigate")
-  const [activeSessionId, setActiveSessionId] = React.useState<string | undefined>(
-    APP_AGENT_SESSIONS[0]?.id
-  )
+  const [activeSessionId, setActiveSessionId] = React.useState<string | undefined>()
 
   const handleExperienceChange = React.useCallback((value: SidebarExperience) => {
     setExperience(value)
+    if (value === "agentic") {
+      setActiveSessionId(undefined)
+    }
   }, [])
 
   const handleConversationSelect = React.useCallback(

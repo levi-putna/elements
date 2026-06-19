@@ -205,6 +205,7 @@ export const Message = ({ className, from, ...props }: MessageProps) => (
     className={cn(
       "group flex w-full max-w-[95%] flex-col gap-2",
       from === "user" ? "is-user ml-auto justify-end" : "is-assistant",
+      "has-tool-ui:max-w-full",
       className
     )}
     {...props}
@@ -223,6 +224,7 @@ export const MessageContent = ({
       "is-user:dark flex w-fit min-w-0 max-w-full flex-col gap-2 overflow-hidden text-sm",
       "group-[.is-user]:ml-auto group-[.is-user]:rounded-sm group-[.is-user]:bg-lime group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-forest",
       "group-[.is-assistant]:text-foreground",
+      "group-[.has-tool-ui]:w-full",
       className
     )}
     {...props}

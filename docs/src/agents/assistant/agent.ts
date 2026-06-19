@@ -4,6 +4,8 @@ import {
   type AssistantModelId,
 } from "@/agents/_lib/models"
 import { createDraftEmailTool } from "@/tools/email-draft/tool"
+import { checkCalendarTool } from "@/tools/check-calendar/tool"
+import { createMeetingTool } from "@/tools/create-meeting/tool"
 import { randomNumberTool } from "@/tools/random-number/tool"
 import { createSetupSchemeTool } from "@/tools/scheme-setup/tool"
 import { ToolLoopAgent } from "ai"
@@ -23,6 +25,8 @@ export function createAssistantAgent({ model }: { model: AssistantModelId }) {
       draftEmail: createDraftEmailTool({ model }),
       setupScheme: createSetupSchemeTool({ model }),
       randomNumber: randomNumberTool,
+      checkCalendar: checkCalendarTool,
+      createMeeting: createMeetingTool,
     },
   })
 }

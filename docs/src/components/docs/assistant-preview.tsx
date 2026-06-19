@@ -40,6 +40,16 @@ import {
 } from "@/lib/conversation-title"
 import { DraftEmailCard, DraftEmailCardLoading } from "@/tools/email-draft/draft-email-card"
 import type { EmailDraft } from "@/tools/email-draft/types"
+import {
+  CheckCalendarCard,
+  CheckCalendarCardLoading,
+} from "@/tools/check-calendar/check-calendar-card"
+import type { CheckCalendarResult } from "@/tools/check-calendar/types"
+import {
+  MeetingSchedulerCard,
+  MeetingSchedulerCardLoading,
+} from "@/tools/create-meeting/meeting-scheduler-card"
+import type { CreateMeetingResult } from "@/tools/create-meeting/types"
 import { SchemeSetupCard } from "@/tools/scheme-setup/scheme-setup-card"
 import type { SchemeSetupPreview } from "@/tools/scheme-setup/types"
 import { RandomNumberCard } from "@/tools/random-number/random-number-card"
@@ -61,15 +71,15 @@ import Link from "next/link"
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
 
 const SUGGESTIONS = [
-  "Generate a random number between 1 and 100",
+  "What's on my calendar this week?",
+  "Schedule a committee meeting for Harbour View Towers next Tuesday",
+  "Show me calendar events for Northbridge Estate",
   "Draft an email welcoming the committee of Marina Heights (SP 4821)",
-  "Set up a new scheme from SP4821_Registration.pdf",
-  "What can you help me with as a strata manager?",
 ]
 
 const THIN_SUGGESTIONS = [
-  "Random number 1–100",
-  "What can you do?",
+  "Check my calendar",
+  "Schedule a meeting",
 ]
 
 /**
@@ -90,6 +100,13 @@ function getMessageText({ message }: { message: AssistantUIMessage }): string {
     .filter((part) => part.type === "text")
     .map((part) => part.text)
     .join("\n")
+}
+
+/**
+ * Returns true when a message includes generative tool UI parts.
+ */
+function messageHasToolUi({ message }: { message: AssistantUIMessage }): boolean {
+  return message.parts.some((part) => part.type.startsWith("tool-"))
 }
 
 export interface AssistantPreviewProps {
@@ -262,7 +279,7 @@ export function AssistantPreview({
           thin ? "px-3" : "px-4"
         )}
       >
-        <div className="flex min-w-0 items-center gap-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2">
           <div
             className={cn(
               "flex shrink-0 items-center justify-center rounded-sm bg-foreground text-background",
@@ -271,7 +288,23 @@ export function AssistantPreview({
           >
             <SparklesIcon className={thin ? "size-3.5" : "size-4"} aria-hidden="true" />
           </div>
-          <p className="truncate text-sm font-semibold text-foreground">Cowork</p>
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="shrink-0 text-sm font-semibold text-foreground">Cowork</span>
+            <span
+              className="h-4 w-px shrink-0 bg-border"
+              aria-hidden="true"
+            />
+            <h1
+              className={cn(
+                "truncate text-sm",
+                isPlaceholderTitle
+                  ? "font-normal text-muted-foreground"
+                  : "font-medium text-foreground"
+              )}
+            >
+              {displayTitle}
+            </h1>
+          </div>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           {headerActions}
@@ -313,23 +346,6 @@ export function AssistantPreview({
           )}
         </div>
       </header>
-
-      {/* Conversation title */}
-      <div
-        className={cn(
-          "shrink-0 border-b border-border bg-white",
-          thin ? "px-3 py-2" : "px-4 py-2.5"
-        )}
-      >
-        <h1
-          className={cn(
-            "truncate text-sm font-medium",
-            isPlaceholderTitle ? "text-muted-foreground" : "text-foreground"
-          )}
-        >
-          {displayTitle}
-        </h1>
-      </div>
 
       {/* Conversation */}
       <Conversation className="flex-1">
@@ -385,11 +401,18 @@ export function AssistantPreview({
               </div>
             </ConversationEmptyState>
           ) : (
-            messages.map((message) => (
+            messages.map((message) => {
+              const hasToolUi =
+                message.role === "assistant" && messageHasToolUi({ message })
+
+              return (
               <Message
                 key={message.id}
                 from={message.role === "user" ? "user" : "assistant"}
-                className={thin ? "max-w-full gap-1.5" : undefined}
+                className={cn(
+                  hasToolUi && "has-tool-ui w-full max-w-full",
+                  thin && "gap-1.5"
+                )}
               >
                 <MessageContent className={cn("space-y-3", thin && "text-xs")}>
                   {message.parts.map((part, index) => {
@@ -422,6 +445,7 @@ export function AssistantPreview({
                       return (
                         <RandomNumberCard
                           key={`${message.id}-random-${part.toolCallId}`}
+                          className="w-full"
                           min={input?.min ?? 0}
                           max={input?.max ?? 0}
                           state={part.state}
@@ -460,6 +484,7 @@ export function AssistantPreview({
                         return (
                           <DraftEmailCard
                             key={`${message.id}-draft-${part.toolCallId}`}
+                            className="w-full"
                             draft={part.output as EmailDraft & { status?: "ready" | "sent" }}
                           />
                         )
@@ -469,6 +494,7 @@ export function AssistantPreview({
                         return (
                           <DraftEmailCardLoading
                             key={`${message.id}-draft-error-${part.toolCallId}`}
+                            className="w-full"
                             error
                             message={part.errorText ?? "Could not draft email."}
                           />
@@ -478,6 +504,7 @@ export function AssistantPreview({
                       return (
                         <DraftEmailCardLoading
                           key={`${message.id}-draft-loading-${part.toolCallId}`}
+                          className="w-full"
                         />
                       )
                     }
@@ -490,11 +517,68 @@ export function AssistantPreview({
                       return (
                         <SchemeSetupCard
                           key={`${message.id}-scheme-${part.toolCallId}`}
+                          className="w-full"
                           preview={
                             part.output as SchemeSetupPreview & {
                               reviewStatus?: "pending" | "approved" | "rejected"
                             }
                           }
+                        />
+                      )
+                    }
+
+                    if (part.type === "tool-checkCalendar") {
+                      if (part.state === "output-available" && part.output) {
+                        return (
+                          <CheckCalendarCard
+                            key={`${message.id}-calendar-${part.toolCallId}`}
+                            className="w-full"
+                            result={part.output as CheckCalendarResult}
+                          />
+                        )
+                      }
+
+                      if (part.state === "output-error") {
+                        return (
+                          <CheckCalendarCardLoading
+                            key={`${message.id}-calendar-error-${part.toolCallId}`}
+                            className="w-full"
+                          />
+                        )
+                      }
+
+                      return (
+                        <CheckCalendarCardLoading
+                          key={`${message.id}-calendar-loading-${part.toolCallId}`}
+                          className="w-full"
+                        />
+                      )
+                    }
+
+                    if (part.type === "tool-createMeeting") {
+                      if (part.state === "output-available" && part.output) {
+                        return (
+                          <MeetingSchedulerCard
+                            key={`${message.id}-meeting-${part.toolCallId}`}
+                            className="w-full"
+                            data={part.output as CreateMeetingResult}
+                          />
+                        )
+                      }
+
+                      if (part.state === "output-error") {
+                        return (
+                          <MeetingSchedulerCardLoading
+                            key={`${message.id}-meeting-error-${part.toolCallId}`}
+                            className="w-full"
+                          />
+                        )
+                      }
+
+                      return (
+                        <MeetingSchedulerCardLoading
+                          key={`${message.id}-meeting-loading-${part.toolCallId}`}
+                          className="w-full"
                         />
                       )
                     }
@@ -536,7 +620,8 @@ export function AssistantPreview({
                   </MessageActions>
                 )}
               </Message>
-            ))
+              )
+            })
           )}
         </ConversationContent>
         <ConversationScrollButton />

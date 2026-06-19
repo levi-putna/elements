@@ -41,11 +41,16 @@ import {
 function Shell({ withContent = true }: { withContent?: boolean }) {
   const scheduleEvents = React.useMemo(() => getAppShellScheduleEvents(), [])
   const [experience, setExperience] = React.useState<SidebarExperience>("navigate")
-  const [activeSessionId, setActiveSessionId] = React.useState<string | undefined>(
-    APP_AGENT_SESSIONS[0]?.id
-  )
+  const [activeSessionId, setActiveSessionId] = React.useState<string | undefined>()
   const isAgentic = experience === "agentic"
   const activeSession = APP_AGENT_SESSIONS.find(({ id }) => id === activeSessionId)
+
+  const handleExperienceChange = React.useCallback((value: SidebarExperience) => {
+    setExperience(value)
+    if (value === "agentic") {
+      setActiveSessionId(undefined)
+    }
+  }, [])
 
   return (
     // A transformed ancestor makes the sidebar's `fixed` container resolve
@@ -70,7 +75,7 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
             <SidebarContent className="flex flex-col overflow-hidden">
               <SidebarExperienceToggle
                 value={experience}
-                onValueChange={setExperience}
+                onValueChange={handleExperienceChange}
               />
               <SidebarSearch
                 groups={APP_SHELL_NAV}
