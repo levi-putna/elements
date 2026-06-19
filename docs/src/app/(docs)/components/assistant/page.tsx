@@ -56,7 +56,7 @@ export function AssistantPage({
     <div className="flex h-dvh flex-col bg-background">
       {/* Header: title and session actions */}
       <header className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
-        <p className="text-sm font-semibold text-foreground">Assistant</p>
+        <p className="text-sm font-semibold text-foreground">Cowork</p>
       </header>
 
       {/* Conversation: scrollable message list */}
@@ -92,7 +92,7 @@ export function AssistantPage({
       <div className="shrink-0 px-4 pb-4">
         <div className="mx-auto w-full max-w-3xl">
           <PromptInput onSubmit={onSubmit}>
-            <PromptInputTextarea placeholder="Message the assistant…" />
+            <PromptInputTextarea placeholder="Message Cowork…" />
             <PromptInputFooter>
               <PromptInputTools>
                 <PromptInputSelect defaultValue="opus">
@@ -144,7 +144,7 @@ export function AssistantSidebar({
     <aside className="flex h-full w-80 shrink-0 flex-col border-l border-border bg-background">
       {/* Compact header: icon-only new chat */}
       <header className="flex shrink-0 items-center justify-between border-b border-border px-3 py-2">
-        <p className="text-sm font-semibold text-foreground">Assistant</p>
+        <p className="text-sm font-semibold text-foreground">Cowork</p>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger
@@ -280,7 +280,7 @@ export default function AssistantPage() {
           Components / AI
         </p>
         <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Assistant</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Cowork</h1>
           <Link
             href="/preview/assistant"
             className="inline-flex items-center gap-1.5 rounded-sm border border-border px-3 py-1.5 text-xs font-medium text-foreground hover:bg-secondary transition-colors duration-150 no-underline shrink-0"
@@ -290,7 +290,7 @@ export default function AssistantPage() {
           </Link>
         </div>
         <p className="text-base text-ink-muted leading-relaxed">
-          A full-height assistant layout composed from{" "}
+          A full-height Cowork layout composed from{" "}
           <Link
             href="/components/conversation"
             className="text-foreground underline underline-offset-4 hover:text-forest-mid transition-colors"
@@ -312,7 +312,7 @@ export default function AssistantPage() {
             Prompt Input
           </Link>
           . Use it as the reference pattern when building AI chat in Instant Strata, or when
-          prompting AI tools to generate on-brand assistant UI.
+          prompting AI tools to generate on-brand Cowork UI.
         </p>
       </div>
 
@@ -324,7 +324,7 @@ export default function AssistantPage() {
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
           Send a message, try a suggestion chip, or ask for a &quot;markdown example&quot; to see
           streamed formatting. Replies are mocked; the layout and interactions match a production
-          assistant built from the primitives below.
+          Cowork built from the primitives below.
         </p>
         <div className="rounded-sm border border-border overflow-hidden">
           <AssistantPreview />
@@ -351,7 +351,7 @@ export default function AssistantPage() {
               </p>
               <h3 className="text-lg font-semibold text-foreground mb-2">Scheme dashboard</h3>
               <p className="text-sm text-ink-muted leading-relaxed max-w-md">
-                The assistant docks on the right while managers work in the primary view. Use{" "}
+                Cowork docks on the right while managers work in the primary view. Use{" "}
                 <code className="font-mono text-xs bg-background px-1 py-0.5 rounded-sm">
                   thin
                 </code>{" "}
@@ -378,7 +378,7 @@ export default function AssistantPage() {
           Routes in this docs site
         </h2>
         <p className="text-sm text-ink-muted mb-4 leading-relaxed">
-          AI coding agents and contributors can use these paths to find the assistant pattern
+          AI coding agents and contributors can use these paths to find the Cowork pattern
           and live demo. Paths include the site base path when deployed to GitHub Pages.
         </p>
         <div className="rounded-sm border border-border overflow-hidden">
@@ -435,7 +435,7 @@ export default function AssistantPage() {
           Installation
         </h2>
         <p className="text-sm text-ink-muted mb-3 leading-relaxed">
-          The assistant is a composition, not a separate registry entry. Install the three
+          Cowork is a composition, not a separate registry entry. Install the three
           primitives below, then copy the layout from the preview or the example on this page.
         </p>
         <CodeBlock code={INSTALL} language="bash" />

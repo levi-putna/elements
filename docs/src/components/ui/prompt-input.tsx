@@ -78,6 +78,7 @@ import {
   useState,
   useSyncExternalStore,
 } from "react";
+import { PromptMentionEditor } from "@/components/ui/prompt-mention-editor";
 
 // ============================================================================
 // Helpers
@@ -325,6 +326,15 @@ export const PromptInputProvider = ({
 // ============================================================================
 
 const LocalAttachmentsContext = createContext<AttachmentsContext | null>(null);
+
+interface PromptInputComposerContextValue {
+  registerClear: (clear: () => void) => () => void;
+}
+
+const PromptInputComposerContext =
+  createContext<PromptInputComposerContextValue | null>(null);
+
+const usePromptInputComposer = () => useContext(PromptInputComposerContext);
 
 export const usePromptInputAttachments = () => {
   const provider = useOptionalProviderAttachments();
@@ -576,6 +586,21 @@ export const PromptInput = ({
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const composerClearRef = useRef<(() => void) | null>(null);
+
+  const registerComposerClear = useCallback((clear: () => void) => {
+    composerClearRef.current = clear;
+    return () => {
+      if (composerClearRef.current === clear) {
+        composerClearRef.current = null;
+      }
+    };
+  }, []);
+
+  const composerContext = useMemo<PromptInputComposerContextValue>(
+    () => ({ registerClear: registerComposerClear }),
+    [registerComposerClear]
+  );
 
   const [items, setItems] = useState<(FileUIPart & { id: string })[]>([]);
   const files = usingProvider ? controller.attachments.files : items;
@@ -803,7 +828,10 @@ export const PromptInput = ({
             return (formData.get("message") as string) || "";
           })();
 
-      if (!usingProvider) form.reset();
+      if (!usingProvider) {
+        composerClearRef.current?.();
+        form.reset();
+      }
 
       try {
         const convertedFiles: FileUIPart[] = await Promise.all(
@@ -822,12 +850,14 @@ export const PromptInput = ({
             await result;
             clear();
             if (usingProvider) controller.textInput.clear();
+            else composerClearRef.current?.();
           } catch {
             // Don't clear on error
           }
         } else {
           clear();
           if (usingProvider) controller.textInput.clear();
+          else composerClearRef.current?.();
         }
       } catch {
         // Don't clear on error
@@ -863,7 +893,9 @@ export const PromptInput = ({
   return (
     <LocalAttachmentsContext.Provider value={attachmentsCtx}>
       <LocalReferencedSourcesContext.Provider value={refsCtx}>
-        {inner}
+        <PromptInputComposerContext.Provider value={composerContext}>
+          {inner}
+        </PromptInputComposerContext.Provider>
       </LocalReferencedSourcesContext.Provider>
     </LocalAttachmentsContext.Provider>
   );
@@ -958,6 +990,83 @@ export const PromptInputTextarea = ({
       {...props}
       {...controlledProps}
     />
+  );
+};
+
+export type PromptInputMentionEditorProps = {
+  onChange?: (value: string) => void;
+  className?: string;
+  placeholder?: string;
+};
+
+/**
+ * TipTap prompt field with # scheme and @ entity mentions.
+ */
+export const PromptInputMentionEditor = ({
+  onChange,
+  className,
+  placeholder = "Message Cowork…",
+}: PromptInputMentionEditorProps) => {
+  const controller = useOptionalPromptInputController();
+  const composer = usePromptInputComposer();
+  const attachments = usePromptInputAttachments();
+  const [localValue, setLocalValue] = useState("");
+
+  const value = controller ? controller.textInput.value : localValue;
+
+  const clearComposer = useCallback(() => {
+    if (controller) {
+      controller.textInput.clear();
+      return;
+    }
+    setLocalValue("");
+  }, [controller]);
+
+  useEffect(() => {
+    if (!composer) return;
+    return composer.registerClear(clearComposer);
+  }, [clearComposer, composer]);
+
+  const setValue = useCallback(
+    (next: string) => {
+      if (controller) {
+        controller.textInput.setInput(next);
+      } else {
+        setLocalValue(next);
+      }
+      onChange?.(next);
+    },
+    [controller, onChange]
+  );
+
+  const handleEnterSubmit = useCallback(() => {
+    const active = document.activeElement;
+    const form = active?.closest("form");
+    const submitButton = form?.querySelector(
+      'button[type="submit"]'
+    ) as HTMLButtonElement | null;
+    if (submitButton?.disabled) return;
+    form?.requestSubmit();
+  }, []);
+
+  const handleBackspaceEmpty = useCallback(() => {
+    if (attachments.files.length === 0) return;
+    const lastAttachment = attachments.files.at(-1);
+    if (lastAttachment) attachments.remove(lastAttachment.id);
+  }, [attachments]);
+
+  return (
+    <>
+      <PromptMentionEditor
+        className={className}
+        onBackspaceEmpty={handleBackspaceEmpty}
+        onEnterSubmit={handleEnterSubmit}
+        onValueChange={setValue}
+        placeholder={placeholder}
+        value={value}
+      />
+      {!controller ? <input name="message" type="hidden" value={value} /> : null}
+    </>
   );
 };
 

@@ -1,8 +1,8 @@
 import { AssistantPreview } from "@/components/docs/assistant-preview"
 
 /**
- * Full-screen assistant demo with mocked streaming replies.
+ * Full-screen Cowork demo with live AI Gateway streaming.
  */
-export default function AssistantPreviewPage() {
+export default function CoworkPreviewPage() {
   return <AssistantPreview fullScreen />
 }

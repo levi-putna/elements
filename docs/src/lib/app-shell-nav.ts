@@ -57,7 +57,7 @@ export const APP_SHELL_NAV: NavGroup[] = [
       { title: "Issues", href: "#", icon: AlertCircle },
       { title: "Meetings", href: "#", icon: Calendar },
       { title: "Tasks", href: "#", icon: ClipboardList },
-      { title: "Schemes", href: "#", icon: Building2 },
+      { title: "Property", href: "#", icon: Building2 },
       { title: "Contacts", href: "#", icon: Users },
       {
         title: "Settings",

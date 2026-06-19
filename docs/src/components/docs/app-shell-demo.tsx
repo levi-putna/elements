@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Home, Sparkles } from "lucide-react"
+import { Home } from "lucide-react"
 
 import {
   Sidebar,
@@ -23,6 +23,7 @@ import {
   SidebarAgentHistory,
   SidebarExperienceToggle,
   SidebarNav,
+  SidebarSearch,
   type SidebarExperience,
 } from "@/components/ui/app-shell"
 import { AssistantPreview } from "@/components/docs/assistant-preview"
@@ -43,8 +44,8 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
   const [activeSessionId, setActiveSessionId] = React.useState<string | undefined>(
     APP_AGENT_SESSIONS[0]?.id
   )
-  const [assistantKey, setAssistantKey] = React.useState(0)
   const isAgentic = experience === "agentic"
+  const activeSession = APP_AGENT_SESSIONS.find(({ id }) => id === activeSessionId)
 
   return (
     // A transformed ancestor makes the sidebar's `fixed` container resolve
@@ -71,32 +72,35 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
                 value={experience}
                 onValueChange={setExperience}
               />
-              {isAgentic ? (
-                <SidebarAgentHistory
-                  sessions={APP_AGENT_SESSIONS}
-                  activeId={activeSessionId}
-                  onSelect={({ id }) => setActiveSessionId(id)}
-                  onNewChat={() => {
-                    setActiveSessionId(undefined)
-                    setAssistantKey((key) => key + 1)
-                  }}
-                />
-              ) : (
-                <>
-                  <div className="min-h-0 flex-1 overflow-hidden">
-                    <SidebarNav
-                      groups={APP_SHELL_NAV}
-                      searchExtras={APP_SHELL_SEARCH_EXTRAS}
-                      searchPlaceholder="Search…"
-                    />
-                  </div>
-                  <SidebarSchedule
-                    events={scheduleEvents}
-                    viewAllHref="#"
-                    viewAllLabel="View calendar"
+              <SidebarSearch
+                groups={APP_SHELL_NAV}
+                searchExtras={APP_SHELL_SEARCH_EXTRAS}
+                conversations={APP_AGENT_SESSIONS}
+                searchPlaceholder="Search…"
+                onConversationSelect={({ session }) => {
+                  setExperience("agentic")
+                  setActiveSessionId(session.id)
+                }}
+              >
+                {isAgentic ? (
+                  <SidebarAgentHistory
+                    sessions={APP_AGENT_SESSIONS}
+                    activeId={activeSessionId}
+                    onSelect={({ id }) => setActiveSessionId(id)}
                   />
-                </>
-              )}
+                ) : (
+                  <>
+                    <div className="min-h-0 flex-1 overflow-hidden">
+                      <SidebarNav groups={APP_SHELL_NAV} search={false} />
+                    </div>
+                    <SidebarSchedule
+                      events={scheduleEvents}
+                      viewAllHref="#"
+                      viewAllLabel="View calendar"
+                    />
+                  </>
+                )}
+              </SidebarSearch>
             </SidebarContent>
             {/* Onboarding checklist: sits just above the account menu */}
             {!isAgentic ? <SidebarOnboarding steps={APP_SHELL_ONBOARDING} /> : null}
@@ -112,29 +116,26 @@ function Shell({ withContent = true }: { withContent?: boolean }) {
 
           {withContent && (
             <SidebarInset className="!min-h-0 h-full overflow-hidden">
-              <AppHeader>
-                <nav className="flex items-center gap-1.5 text-sm">
-                  <a href="#" className="text-ink-muted hover:text-foreground no-underline">
-                    <Home className="size-4" />
-                    <span className="sr-only">Home</span>
-                  </a>
-                  <span className="text-ink-muted/40">/</span>
-                  {isAgentic ? (
-                    <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
-                      <Sparkles className="size-3.5 text-forest/70" aria-hidden />
-                      Assistant
-                    </span>
-                  ) : (
+              {!isAgentic ? (
+                <AppHeader>
+                  <nav className="flex items-center gap-1.5 text-sm">
+                    <a href="#" className="text-ink-muted hover:text-foreground no-underline">
+                      <Home className="size-4" />
+                      <span className="sr-only">Home</span>
+                    </a>
+                    <span className="text-ink-muted/40">/</span>
                     <span className="font-medium text-foreground">Dashboard</span>
-                  )}
-                </nav>
-              </AppHeader>
+                  </nav>
+                </AppHeader>
+              ) : null}
               {isAgentic ? (
                 <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
                   <AssistantPreview
-                    key={assistantKey}
+                    key={activeSessionId ?? "new"}
                     className="min-h-0 flex-1"
                     showDocsLink={false}
+                    sessionTitle={activeSession?.title}
+                    onNewChat={() => setActiveSessionId(undefined)}
                   />
                 </div>
               ) : (

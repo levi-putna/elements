@@ -24,8 +24,10 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
+  inputGroupButtonVariants,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -74,7 +76,9 @@ import {
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react";
+import { PromptMentionEditor } from "@/components/ui/prompt-mention-editor";
 
 // ============================================================================
 // Helpers
@@ -323,6 +327,15 @@ export const PromptInputProvider = ({
 
 const LocalAttachmentsContext = createContext<AttachmentsContext | null>(null);
 
+interface PromptInputComposerContextValue {
+  registerClear: (clear: () => void) => () => void;
+}
+
+const PromptInputComposerContext =
+  createContext<PromptInputComposerContextValue | null>(null);
+
+const usePromptInputComposer = () => useContext(PromptInputComposerContext);
+
 export const usePromptInputAttachments = () => {
   const provider = useOptionalProviderAttachments();
   const local = useContext(LocalAttachmentsContext);
@@ -426,7 +439,10 @@ export const PromptInputActionAddScreenshot = ({
 // Speech Recognition Button
 // ============================================================================
 
-export type PromptInputSpeechProps = ComponentProps<typeof InputGroupButton> & {
+export type PromptInputSpeechProps = Omit<
+  ComponentProps<typeof InputGroupButton>,
+  "ref"
+> & {
   onTranscript?: (text: string) => void;
   tooltip?: PromptInputButtonTooltip;
 };
@@ -441,9 +457,12 @@ export const PromptInputSpeech = ({
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const controller = useOptionalPromptInputController();
 
-  const supported =
-    typeof window !== "undefined" &&
-    ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
+  const supported = useSyncExternalStore(
+    () => () => {},
+    () =>
+      "SpeechRecognition" in window || "webkitSpeechRecognition" in window,
+    () => false
+  );
 
   const toggle = useCallback(() => {
     if (!supported) return;
@@ -483,12 +502,17 @@ export const PromptInputSpeech = ({
   if (!supported) return null;
 
   const button = (
-    <InputGroupButton
-      aria-label={isListening ? "Stop recording" : "Start voice input"}
-      className={cn(isListening && "text-destructive", className)}
-      onClick={toggle}
+    <Button
       type="button"
+      data-size="xs"
       variant="ghost"
+      className={cn(
+        inputGroupButtonVariants({ size: "xs" }),
+        isListening && "text-destructive",
+        className
+      )}
+      aria-label={isListening ? "Stop recording" : "Start voice input"}
+      onClick={toggle}
       {...props}
     >
       {isListening ? (
@@ -496,7 +520,7 @@ export const PromptInputSpeech = ({
       ) : (
         <Mic className="size-4" />
       )}
-    </InputGroupButton>
+    </Button>
   );
 
   const resolvedTooltip =
@@ -509,7 +533,7 @@ export const PromptInputSpeech = ({
 
   return (
     <Tooltip>
-      <TooltipTrigger>{button}</TooltipTrigger>
+      <TooltipTrigger render={button} />
       <TooltipContent side={side}>{tooltipContent}</TooltipContent>
     </Tooltip>
   );
@@ -562,6 +586,21 @@ export const PromptInput = ({
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const composerClearRef = useRef<(() => void) | null>(null);
+
+  const registerComposerClear = useCallback((clear: () => void) => {
+    composerClearRef.current = clear;
+    return () => {
+      if (composerClearRef.current === clear) {
+        composerClearRef.current = null;
+      }
+    };
+  }, []);
+
+  const composerContext = useMemo<PromptInputComposerContextValue>(
+    () => ({ registerClear: registerComposerClear }),
+    [registerComposerClear]
+  );
 
   const [items, setItems] = useState<(FileUIPart & { id: string })[]>([]);
   const files = usingProvider ? controller.attachments.files : items;
@@ -789,7 +828,10 @@ export const PromptInput = ({
             return (formData.get("message") as string) || "";
           })();
 
-      if (!usingProvider) form.reset();
+      if (!usingProvider) {
+        composerClearRef.current?.();
+        form.reset();
+      }
 
       try {
         const convertedFiles: FileUIPart[] = await Promise.all(
@@ -808,12 +850,14 @@ export const PromptInput = ({
             await result;
             clear();
             if (usingProvider) controller.textInput.clear();
+            else composerClearRef.current?.();
           } catch {
             // Don't clear on error
           }
         } else {
           clear();
           if (usingProvider) controller.textInput.clear();
+          else composerClearRef.current?.();
         }
       } catch {
         // Don't clear on error
@@ -849,7 +893,9 @@ export const PromptInput = ({
   return (
     <LocalAttachmentsContext.Provider value={attachmentsCtx}>
       <LocalReferencedSourcesContext.Provider value={refsCtx}>
-        {inner}
+        <PromptInputComposerContext.Provider value={composerContext}>
+          {inner}
+        </PromptInputComposerContext.Provider>
       </LocalReferencedSourcesContext.Provider>
     </LocalAttachmentsContext.Provider>
   );
@@ -947,6 +993,83 @@ export const PromptInputTextarea = ({
   );
 };
 
+export type PromptInputMentionEditorProps = {
+  onChange?: (value: string) => void;
+  className?: string;
+  placeholder?: string;
+};
+
+/**
+ * TipTap prompt field with # scheme and @ entity mentions.
+ */
+export const PromptInputMentionEditor = ({
+  onChange,
+  className,
+  placeholder = "Message the agent…",
+}: PromptInputMentionEditorProps) => {
+  const controller = useOptionalPromptInputController();
+  const composer = usePromptInputComposer();
+  const attachments = usePromptInputAttachments();
+  const [localValue, setLocalValue] = useState("");
+
+  const value = controller ? controller.textInput.value : localValue;
+
+  const clearComposer = useCallback(() => {
+    if (controller) {
+      controller.textInput.clear();
+      return;
+    }
+    setLocalValue("");
+  }, [controller]);
+
+  useEffect(() => {
+    if (!composer) return;
+    return composer.registerClear(clearComposer);
+  }, [clearComposer, composer]);
+
+  const setValue = useCallback(
+    (next: string) => {
+      if (controller) {
+        controller.textInput.setInput(next);
+      } else {
+        setLocalValue(next);
+      }
+      onChange?.(next);
+    },
+    [controller, onChange]
+  );
+
+  const handleEnterSubmit = useCallback(() => {
+    const active = document.activeElement;
+    const form = active?.closest("form");
+    const submitButton = form?.querySelector(
+      'button[type="submit"]'
+    ) as HTMLButtonElement | null;
+    if (submitButton?.disabled) return;
+    form?.requestSubmit();
+  }, []);
+
+  const handleBackspaceEmpty = useCallback(() => {
+    if (attachments.files.length === 0) return;
+    const lastAttachment = attachments.files.at(-1);
+    if (lastAttachment) attachments.remove(lastAttachment.id);
+  }, [attachments]);
+
+  return (
+    <>
+      <PromptMentionEditor
+        className={className}
+        onBackspaceEmpty={handleBackspaceEmpty}
+        onEnterSubmit={handleEnterSubmit}
+        onValueChange={setValue}
+        placeholder={placeholder}
+        value={value}
+      />
+      {!controller ? <input name="message" type="hidden" value={value} /> : null}
+    </>
+  );
+};
+
 export type PromptInputHeaderProps = Omit<ComponentProps<typeof InputGroupAddon>, "align">;
 export const PromptInputHeader = ({ className, ...props }: PromptInputHeaderProps) => (
   <InputGroupAddon align="block-end" className={cn("order-first flex-wrap gap-1", className)} {...props} />
@@ -970,7 +1093,10 @@ export type PromptInputButtonTooltip =
       side?: ComponentProps<typeof TooltipContent>["side"];
     };
 
-export type PromptInputButtonProps = ComponentProps<typeof InputGroupButton> & {
+export type PromptInputButtonProps = Omit<
+  ComponentProps<typeof InputGroupButton>,
+  "ref"
+> & {
   tooltip?: PromptInputButtonTooltip;
 };
 
@@ -984,11 +1110,11 @@ export const PromptInputButton = ({
   const newSize = size ?? (Children.count(props.children) > 1 ? "sm" : "icon-sm");
 
   const button = (
-    <InputGroupButton
-      className={cn(className)}
-      size={newSize}
+    <Button
       type="button"
+      data-size={newSize}
       variant={variant}
+      className={cn(inputGroupButtonVariants({ size: newSize }), className)}
       {...props}
     />
   );
@@ -1001,7 +1127,7 @@ export const PromptInputButton = ({
 
   return (
     <Tooltip>
-      <TooltipTrigger>{button}</TooltipTrigger>
+      <TooltipTrigger render={button} />
       <TooltipContent side={side}>
         {tooltipContent}
         {shortcut && <span className="ml-2 text-muted-foreground">{shortcut}</span>}

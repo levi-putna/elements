@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "mention",
+  "type": "registry:ui",
+  "description": "Mention tags and wire-format helpers for the assistant prompt. Includes entity catalog, @[label]{type:id} serialisation, and inline MentionTag chips (lime-soft background, forest text, type icon).",
+  "dependencies": ["lucide-react"],
+  "registryDependencies": ["utils"],
+  "files": [
+    {
+      "path": "registry/mention/mention-entities.ts",
+      "target": "lib/mention-entities.ts",
+      "type": "registry:lib"
+    },
+    {
+      "path": "registry/mention/mention-format.ts",
+      "target": "lib/mention-format.ts",
+      "type": "registry:lib"
+    },
+    {
+      "path": "registry/mention/mention-tag.tsx",
+      "target": "components/ui/mention-tag.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

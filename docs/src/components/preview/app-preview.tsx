@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import Link from "next/link"
-import { Home, Sparkles } from "lucide-react"
+import { Home } from "lucide-react"
 
 import {
   Sidebar,
@@ -19,6 +19,7 @@ import {
   SidebarAgentHistory,
   SidebarExperienceToggle,
   SidebarNav,
+  SidebarSearch,
   type SidebarExperience,
 } from "@/components/ui/app-shell"
 import { SidebarOnboarding } from "@/components/ui/onboarding"
@@ -46,18 +47,21 @@ export function AppPreview() {
   const [activeSessionId, setActiveSessionId] = React.useState<string | undefined>(
     APP_AGENT_SESSIONS[0]?.id
   )
-  const [assistantKey, setAssistantKey] = React.useState(0)
 
   const handleExperienceChange = React.useCallback((value: SidebarExperience) => {
     setExperience(value)
   }, [])
 
-  const handleNewChat = React.useCallback(() => {
-    setActiveSessionId(undefined)
-    setAssistantKey((key) => key + 1)
-  }, [])
+  const handleConversationSelect = React.useCallback(
+    ({ session }: { session: { id: string } }) => {
+      setExperience("agentic")
+      setActiveSessionId(session.id)
+    },
+    []
+  )
 
   const isAgentic = experience === "agentic"
+  const activeSession = APP_AGENT_SESSIONS.find(({ id }) => id === activeSessionId)
 
   return (
     <TooltipProvider>
@@ -76,35 +80,36 @@ export function AppPreview() {
             ]}
           />
           <SidebarContent className="flex flex-col overflow-hidden">
-            {/* Experience toggle: traditional nav or agentic assistant */}
             <SidebarExperienceToggle
               value={experience}
               onValueChange={handleExperienceChange}
             />
-
-            {isAgentic ? (
-              <SidebarAgentHistory
-                sessions={APP_AGENT_SESSIONS}
-                activeId={activeSessionId}
-                onSelect={({ id }) => setActiveSessionId(id)}
-                onNewChat={handleNewChat}
-              />
-            ) : (
-              <>
-                <div className="min-h-0 flex-1 overflow-hidden">
-                  <SidebarNav
-                    groups={APP_SHELL_NAV}
-                    searchExtras={APP_SHELL_SEARCH_EXTRAS}
-                    searchPlaceholder="Search…"
-                  />
-                </div>
-                <SidebarSchedule
-                  events={scheduleEvents}
-                  viewAllHref="#"
-                  viewAllLabel="View calendar"
+            <SidebarSearch
+              groups={APP_SHELL_NAV}
+              searchExtras={APP_SHELL_SEARCH_EXTRAS}
+              conversations={APP_AGENT_SESSIONS}
+              searchPlaceholder="Search…"
+              onConversationSelect={handleConversationSelect}
+            >
+              {isAgentic ? (
+                <SidebarAgentHistory
+                  sessions={APP_AGENT_SESSIONS}
+                  activeId={activeSessionId}
+                  onSelect={({ id }) => setActiveSessionId(id)}
                 />
-              </>
-            )}
+              ) : (
+                <>
+                  <div className="min-h-0 flex-1 overflow-hidden">
+                    <SidebarNav groups={APP_SHELL_NAV} search={false} />
+                  </div>
+                  <SidebarSchedule
+                    events={scheduleEvents}
+                    viewAllHref="#"
+                    viewAllLabel="View calendar"
+                  />
+                </>
+              )}
+            </SidebarSearch>
           </SidebarContent>
           {/* Onboarding checklist: sits just above the account menu */}
           {!isAgentic ? <SidebarOnboarding steps={APP_SHELL_ONBOARDING} /> : null}
@@ -119,43 +124,48 @@ export function AppPreview() {
         </Sidebar>
 
         <SidebarInset>
-          <AppHeader
-            actions={
-              <Link
-                href="/components/app-layout"
-                className="text-xs text-ink-muted hover:text-foreground no-underline"
-              >
-                ← Back to docs
-              </Link>
-            }
-          >
-            <nav className="flex items-center gap-1.5 text-sm">
-              <a
-                href="#"
-                className="text-ink-muted hover:text-foreground no-underline"
-              >
-                <Home className="size-4" />
-                <span className="sr-only">Home</span>
-              </a>
-              <span className="text-ink-muted/40">/</span>
-              {isAgentic ? (
-                <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
-                  <Sparkles className="size-3.5 text-forest/70" aria-hidden />
-                  Assistant
-                </span>
-              ) : (
+          {!isAgentic ? (
+            <AppHeader
+              actions={
+                <Link
+                  href="/components/app-layout"
+                  className="text-xs text-ink-muted hover:text-foreground no-underline"
+                >
+                  ← Back to docs
+                </Link>
+              }
+            >
+              <nav className="flex items-center gap-1.5 text-sm">
+                <a
+                  href="#"
+                  className="text-ink-muted hover:text-foreground no-underline"
+                >
+                  <Home className="size-4" />
+                  <span className="sr-only">Home</span>
+                </a>
+                <span className="text-ink-muted/40">/</span>
                 <span className="font-medium text-foreground">Dashboard</span>
-              )}
-            </nav>
-          </AppHeader>
+              </nav>
+            </AppHeader>
+          ) : null}
 
-          {/* Main content: dashboard or full assistant view */}
+          {/* Main content: dashboard or Cowork */}
           {isAgentic ? (
             <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white">
               <AssistantPreview
-                key={assistantKey}
+                key={activeSessionId ?? "new"}
                 className="min-h-0 flex-1"
                 showDocsLink={false}
+                sessionTitle={activeSession?.title}
+                onNewChat={() => setActiveSessionId(undefined)}
+                headerActions={
+                  <Link
+                    href="/components/app-layout"
+                    className="hidden text-xs text-muted-foreground underline-offset-4 hover:text-foreground hover:underline sm:inline"
+                  >
+                    ← Back to docs
+                  </Link>
+                }
               />
             </div>
           ) : (

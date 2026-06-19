@@ -10,7 +10,6 @@ import {
   LifeBuoy,
   LogOut,
   MessageSquare,
-  Plus,
   Search,
   Settings,
   Sparkles,
@@ -95,26 +94,38 @@ export interface NavSearchResult {
   kind?: NavSearchResultKind
 }
 
+/** Cowork conversation session shown in the sidebar history list. */
+export interface AgentSession {
+  id: string
+  title: string
+  preview: string
+  /** Relative or absolute time label, e.g. "Today" or "Yesterday". */
+  when: string
+}
+
 export type NavSearchResultKind =
   | "navigation"
   | "scheme"
   | "lot"
   | "owner"
   | "document"
+  | "conversation"
 
 const SEARCH_RESULT_KIND_ORDER: NavSearchResultKind[] = [
   "scheme",
   "lot",
   "owner",
   "document",
+  "conversation",
   "navigation",
 ]
 
 const SEARCH_RESULT_KIND_LABELS: Record<NavSearchResultKind, string> = {
-  scheme: "Schemes",
+  scheme: "Property",
   lot: "Lots",
   owner: "Owners",
   document: "Documents",
+  conversation: "Cowork",
   navigation: "Navigation",
 }
 
@@ -169,6 +180,24 @@ export function collectNavSearchResults({
   }
 
   return results
+}
+
+/**
+ * Maps Cowork conversation sessions into searchable sidebar rows.
+ */
+export function collectConversationSearchResults({
+  sessions,
+}: {
+  sessions: AgentSession[]
+}): NavSearchResult[] {
+  return sessions.map((session) => ({
+    title: session.title,
+    subtitle: session.preview,
+    href: `#${session.id}`,
+    icon: MessageSquare,
+    kind: "conversation",
+    groupLabel: session.when,
+  }))
 }
 
 /**
@@ -308,7 +337,8 @@ type SidebarSearchOverlayProps = {
   placeholder?: string
   onClose: () => void
   onClear: () => void
-  onResultSelect: () => void
+  onResultSelect: ({ result }: { result: NavSearchResult }) => void
+  emptyHint?: string
 }
 
 /**
@@ -323,6 +353,7 @@ function SidebarSearchOverlay({
   onClose,
   onClear,
   onResultSelect,
+  emptyHint = "Type to find pages, property, and conversations",
 }: SidebarSearchOverlayProps) {
   const hasQuery = searchQuery.trim().length > 0
   const groupedResults = groupNavSearchResults({ results })
@@ -400,7 +431,7 @@ function SidebarSearchOverlay({
       <SidebarGroup className="min-h-0 flex-1 overflow-y-auto pt-0">
         {!hasQuery ? (
           <p className="py-6 text-center text-xs text-sidebar-foreground/50">
-            Type to find pages and settings
+            {emptyHint}
           </p>
         ) : results.length > 0 ? (
           <div className="flex flex-col gap-3">
@@ -414,7 +445,7 @@ function SidebarSearchOverlay({
                     <SidebarSearchResultItem
                       key={`${group.kind}-${result.href}-${result.title}`}
                       result={result}
-                      onSelect={onResultSelect}
+                      onSelect={() => onResultSelect({ result })}
                     />
                   ))}
                 </SidebarMenu>
@@ -579,7 +610,7 @@ export function SidebarNav({
           placeholder={searchPlaceholder}
           onClose={closeSearch}
           onClear={clearSearch}
-          onResultSelect={closeSearch}
+          onResultSelect={() => closeSearch()}
         />
       ) : null}
     </div>
@@ -1011,11 +1042,167 @@ export function AppSidebarFooter({
 }
 
 // ─────────────────────────────────────────────────────────
+// SidebarSearch: persistent search below the experience toggle
+//
+// Render SidebarExperienceToggle above this component. Search sits below
+// the Navigate / Cowork tabs and above tab content. State persists across
+// both modes: nav links, entities, and Cowork conversations.
+// ─────────────────────────────────────────────────────────
+
+export interface SidebarSearchProps {
+  /** Navigation groups included in search results. */
+  groups: NavGroup[]
+  /** Extra searchable entities (property, lots, owners, documents). */
+  searchExtras?: NavSearchResult[]
+  /** Cowork conversations included in search results. */
+  conversations?: AgentSession[]
+  searchPlaceholder?: string
+  /** Called when the user picks a Cowork conversation from search. */
+  onConversationSelect?: ({ session }: { session: AgentSession }) => void
+  children: React.ReactNode
+  className?: string
+}
+
+/**
+ * Persistent sidebar search rendered below the experience toggle and above main content.
+ */
+export function SidebarSearch({
+  groups,
+  searchExtras = [],
+  conversations = [],
+  searchPlaceholder,
+  onConversationSelect,
+  children,
+  className,
+}: SidebarSearchProps) {
+  const { state, setOpen } = useSidebar()
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false)
+  const [searchQuery, setSearchQuery] = React.useState("")
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
+
+  const searchResults = React.useMemo(() => {
+    const allResults = [
+      ...collectNavSearchResults({ groups }),
+      ...searchExtras,
+      ...collectConversationSearchResults({ sessions: conversations }),
+    ]
+    return filterNavSearchResults({ results: allResults, query: searchQuery })
+  }, [conversations, groups, searchExtras, searchQuery])
+
+  const openSearch = React.useCallback(() => {
+    if (state === "collapsed") {
+      setOpen(true)
+    }
+    setIsSearchOpen(true)
+  }, [setOpen, state])
+
+  const closeSearch = React.useCallback(() => {
+    setIsSearchOpen(false)
+    setSearchQuery("")
+  }, [])
+
+  const clearSearch = React.useCallback(() => {
+    setSearchQuery("")
+    searchInputRef.current?.focus()
+  }, [])
+
+  const handleResultSelect = React.useCallback(
+    ({ result }: { result: NavSearchResult }) => {
+      if (result.kind === "conversation") {
+        const sessionId = result.href.replace(/^#/, "")
+        const session = conversations.find(({ id }) => id === sessionId)
+        if (session) {
+          onConversationSelect?.({ session })
+        }
+      }
+      closeSearch()
+    },
+    [closeSearch, conversations, onConversationSelect]
+  )
+
+  React.useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault()
+        setIsSearchOpen((open) => {
+          if (open) {
+            setSearchQuery("")
+            return false
+          }
+          if (state === "collapsed") {
+            setOpen(true)
+          }
+          return true
+        })
+      }
+
+      if (event.key === "Escape" && isSearchOpen) {
+        closeSearch()
+      }
+    }
+
+    window.addEventListener("keydown", onKeyDown)
+    return () => window.removeEventListener("keydown", onKeyDown)
+  }, [closeSearch, isSearchOpen, setOpen, state])
+
+  React.useEffect(() => {
+    if (!isSearchOpen) {
+      return
+    }
+
+    const frame = requestAnimationFrame(() => {
+      searchInputRef.current?.focus()
+    })
+
+    return () => cancelAnimationFrame(frame)
+  }, [isSearchOpen])
+
+  return (
+    <div
+      className={cn(
+        "relative flex min-h-0 flex-1 flex-col overflow-hidden",
+        className
+      )}
+    >
+      {/* Search trigger: always visible below tabs and above content */}
+      <div className="shrink-0 border-b border-sidebar-border/50">
+        <SidebarSearchTrigger
+          onOpen={openSearch}
+          placeholder={searchPlaceholder}
+        />
+      </div>
+
+      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+        <div
+          className={cn(
+            "flex min-h-0 flex-1 flex-col overflow-hidden",
+            isSearchOpen && "invisible"
+          )}
+        >
+          {children}
+        </div>
+        {isSearchOpen ? (
+          <SidebarSearchOverlay
+            searchInputRef={searchInputRef}
+            searchQuery={searchQuery}
+            onSearchQueryChange={({ value }) => setSearchQuery(value)}
+            results={searchResults}
+            placeholder={searchPlaceholder}
+            onClose={closeSearch}
+            onClear={clearSearch}
+            onResultSelect={handleResultSelect}
+          />
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────
 // SidebarExperienceToggle: switch between traditional nav and agentic UI
 //
-// Sits at the top of SidebarContent, below the workspace header. Lets the
-// user choose the navigate stack (search, links, schedule) or an agentic
-// experience where the sidebar becomes conversation history.
+// Sits below the workspace header, above SidebarSearch. Lets the user choose
+// the navigate stack (links, schedule) or Cowork conversation history.
 // ─────────────────────────────────────────────────────────
 
 export type SidebarExperience = "navigate" | "agentic"
@@ -1058,7 +1245,7 @@ export function SidebarExperienceToggle({
           className={cn(
             "inline-flex items-center justify-center gap-1.5 rounded-sm px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
             value === "navigate"
-              ? "bg-sidebar text-sidebar-foreground shadow-sm"
+              ? "bg-off-white text-forest shadow-sm"
               : "text-sidebar-foreground/55 hover:text-sidebar-foreground/80"
           )}
         >
@@ -1073,12 +1260,12 @@ export function SidebarExperienceToggle({
           className={cn(
             "inline-flex items-center justify-center gap-1.5 rounded-sm px-2 py-1.5 text-[11px] font-medium transition-colors duration-150",
             value === "agentic"
-              ? "bg-sidebar text-sidebar-foreground shadow-sm"
+              ? "bg-off-white text-forest shadow-sm"
               : "text-sidebar-foreground/55 hover:text-sidebar-foreground/80"
           )}
         >
           <Sparkles className="size-3.5 shrink-0" aria-hidden />
-          Assistant
+          Cowork
         </button>
       </div>
     </div>
@@ -1088,23 +1275,14 @@ export function SidebarExperienceToggle({
 // ─────────────────────────────────────────────────────────
 // SidebarAgentHistory: conversation list for agentic mode
 //
-// Replaces SidebarNav when the user switches to the assistant experience.
-// Shows prior chats with a new-chat action at the top.
+// Replaces SidebarNav when the user switches to Cowork. Search lives in
+// SidebarSearch below the experience toggle. New chat lives in the Cowork header.
 // ─────────────────────────────────────────────────────────
-
-export interface AgentSession {
-  id: string
-  title: string
-  preview: string
-  /** Relative or absolute time label, e.g. "Today" or "Yesterday". */
-  when: string
-}
 
 export interface SidebarAgentHistoryProps {
   sessions: AgentSession[]
   activeId?: string
   onSelect?: (session: AgentSession) => void
-  onNewChat?: () => void
   className?: string
 }
 
@@ -1115,7 +1293,6 @@ export function SidebarAgentHistory({
   sessions,
   activeId,
   onSelect,
-  onNewChat,
   className,
 }: SidebarAgentHistoryProps) {
   const { state } = useSidebar()
@@ -1127,25 +1304,13 @@ export function SidebarAgentHistory({
   return (
     <div
       className={cn("flex min-h-0 flex-1 flex-col overflow-hidden", className)}
-      aria-label="Assistant history"
+      aria-label="Cowork history"
     >
-      {/* New chat action */}
-      <div className="shrink-0 px-2 py-2">
-        <button
-          type="button"
-          onClick={onNewChat}
-          className="flex w-full items-center gap-2 rounded-md border border-sidebar-border/60 bg-sidebar-accent/15 px-2.5 py-2 text-left text-xs font-medium text-sidebar-foreground/90 transition-colors duration-150 hover:bg-sidebar-accent/30"
-        >
-          <Plus className="size-3.5 shrink-0 text-sidebar-primary" aria-hidden />
-          New chat
-        </button>
-      </div>
-
       {/* Session list */}
-      <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2">
+      <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
         {sessions.length === 0 ? (
           <p className="px-2 py-4 text-center text-[11px] text-sidebar-foreground/45">
-            No conversations yet. Start a new chat.
+            No conversations yet.
           </p>
         ) : (
           <ul className="flex flex-col gap-0.5">

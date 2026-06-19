@@ -2,9 +2,20 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "prompt-input",
   "type": "registry:ui",
-  "description": "AI chat prompt input with model selector, file attachments, drag-and-drop, screenshot capture, and voice input. Extended from ai-elements with rectangular styling and built-in speech recognition.",
+  "description": "AI chat prompt input with TipTap mentions (# schemes, @ entities), model selector, file attachments, drag-and-drop, screenshot capture, and voice input.",
   "dependencies": [
     "@base-ui/react",
+    "@tiptap/core",
+    "@tiptap/extension-document",
+    "@tiptap/extension-hard-break",
+    "@tiptap/extension-mention",
+    "@tiptap/extension-paragraph",
+    "@tiptap/extension-text",
+    "@tiptap/extensions",
+    "@tiptap/pm",
+    "@tiptap/react",
+    "@tiptap/suggestion",
+    "@floating-ui/dom",
     "ai",
     "nanoid",
     "lucide-react",
@@ -12,15 +23,22 @@
   ],
   "registryDependencies": [
     "utils",
+    "mention",
     "command",
     "dropdown-menu",
     "hover-card",
     "input-group",
     "select",
     "spinner",
-    "tooltip"
+    "tooltip",
+    "button"
   ],
   "files": [
+    {
+      "path": "registry/prompt-input/prompt-mention-editor.tsx",
+      "target": "components/ui/prompt-mention-editor.tsx",
+      "type": "registry:ui"
+    },
     {
       "path": "registry/prompt-input/prompt-input.tsx",
       "target": "components/ui/prompt-input.tsx",

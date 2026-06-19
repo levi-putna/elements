@@ -58,7 +58,7 @@ export const docsNavGroups: DocsNavGroup[] = [
   {
     label: "AI",
     items: [
-      { href: "/components/assistant", label: "Assistant" },
+      { href: "/components/assistant", label: "Cowork" },
       { href: "/components/prompt-input", label: "Prompt Input" },
       { href: "/components/conversation", label: "Conversation" },
       { href: "/components/message", label: "Message" },

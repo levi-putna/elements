@@ -47,9 +47,9 @@ const components = [
   },
   {
     href: "/components/assistant",
-    label: "Assistant",
+    label: "Cowork",
     description:
-      "Full-height chat layout composing Conversation, Message, and Prompt Input. Includes a live preview.",
+      "Full-height Cowork chat layout composing Conversation, Message, and Prompt Input. Includes a live preview.",
     badge: "AI",
   },
   {

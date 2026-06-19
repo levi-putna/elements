@@ -30,7 +30,9 @@ import {
   useMemo,
   useState,
 } from "react";
-import { Streamdown } from "streamdown";
+import { Streamdown, type AllowedTags, type Components } from "streamdown";
+import { MentionTag } from "@/components/ui/mention-tag";
+import { mentionsToMarkup, splitMessageWithMentions } from "@/lib/mention-format";
 
 // ============================================================================
 // Custom entity plugins for Streamdown
@@ -40,17 +42,16 @@ import { Streamdown } from "streamdown";
  * Renders <person name="Jane Smith" id="123"> tags in AI responses.
  * Usage in markdown: <person name="Jane Smith" id="123">Jane Smith</person>
  */
-const personPlugin = {
-  name: "person",
-  render: ({
-    name,
-    id,
-    children,
-  }: {
-    name?: string;
-    id?: string;
-    children?: ReactNode;
-  }) => (
+function PersonTag({
+  name,
+  id,
+  children,
+}: {
+  name?: string;
+  id?: string;
+  children?: ReactNode;
+}) {
+  return (
     <span
       className="inline-flex items-center gap-1 rounded-sm bg-blue-50 px-1.5 py-0.5 text-blue-700 text-xs font-medium ring-1 ring-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:ring-blue-800"
       data-entity="person"
@@ -76,73 +77,69 @@ const personPlugin = {
       </svg>
       {children ?? name}
     </span>
-  ),
-};
+  );
+}
 
 /**
  * Renders <location address="123 Main St" suburb="Sydney"> tags in AI responses.
  * Usage in markdown: <location address="123 Main St" suburb="Sydney">123 Main St</location>
  */
-const locationPlugin = {
-  name: "location",
-  render: ({
-    address,
-    suburb,
-    state,
-    children,
-  }: {
-    address?: string;
-    suburb?: string;
-    state?: string;
-    children?: ReactNode;
-  }) => {
-    const fullAddress = [address, suburb, state].filter(Boolean).join(", ");
-    return (
-      <span
-        className="inline-flex items-center gap-1 rounded-sm bg-green-50 px-1.5 py-0.5 text-green-700 text-xs font-medium ring-1 ring-green-200 dark:bg-green-950 dark:text-green-300 dark:ring-green-800"
-        data-entity="location"
-        data-address={address}
-        data-suburb={suburb}
-        data-state={state}
-        title={fullAddress}
+function LocationTag({
+  address,
+  suburb,
+  state,
+  children,
+}: {
+  address?: string;
+  suburb?: string;
+  state?: string;
+  children?: ReactNode;
+}) {
+  const fullAddress = [address, suburb, state].filter(Boolean).join(", ");
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-sm bg-green-50 px-1.5 py-0.5 text-green-700 text-xs font-medium ring-1 ring-green-200 dark:bg-green-950 dark:text-green-300 dark:ring-green-800"
+      data-entity="location"
+      data-address={address}
+      data-suburb={suburb}
+      data-state={state}
+      title={fullAddress}
+    >
+      <svg
+        aria-hidden="true"
+        className="size-3 shrink-0"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <svg
-          aria-hidden="true"
-          className="size-3 shrink-0"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <circle cx="12" cy="10" r="3" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        {children ?? fullAddress}
-      </span>
-    );
-  },
-};
+        <path
+          d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="12" cy="10" r="3" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      {children ?? fullAddress}
+    </span>
+  );
+}
 
 /**
  * Renders <strata-scheme plan="SP12345" name="Sunrise Apartments"> tags in AI responses.
  * Usage in markdown: <strata-scheme plan="SP12345">SP12345</strata-scheme>
  */
-const strataSchemePlugin = {
-  name: "strata-scheme",
-  render: ({
-    plan,
-    name,
-    children,
-  }: {
-    plan?: string;
-    name?: string;
-    children?: ReactNode;
-  }) => (
+function StrataSchemeTag({
+  plan,
+  name,
+  children,
+}: {
+  plan?: string;
+  name?: string;
+  children?: ReactNode;
+}) {
+  return (
     <span
       className="inline-flex items-center gap-1 rounded-sm bg-amber-50 px-1.5 py-0.5 text-amber-700 text-xs font-medium ring-1 ring-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:ring-amber-800"
       data-entity="strata-scheme"
@@ -172,8 +169,28 @@ const strataSchemePlugin = {
       </svg>
       {children ?? plan}
     </span>
-  ),
-};
+  );
+}
+
+/**
+ * Renders <mention type="scheme" id="SP1042" label="Harbour View"> tags in AI responses.
+ */
+function MentionStreamdownTag({
+  type,
+  label,
+  children,
+}: {
+  type?: string;
+  label?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <MentionTag
+      label={label ?? (typeof children === "string" ? children : "") ?? ""}
+      type={type ?? "scheme"}
+    />
+  );
+}
 
 // ============================================================================
 // Message Components
@@ -204,7 +221,7 @@ export const MessageContent = ({
   <div
     className={cn(
       "is-user:dark flex w-fit min-w-0 max-w-full flex-col gap-2 overflow-hidden text-sm",
-      "group-[.is-user]:ml-auto group-[.is-user]:rounded-sm group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
+      "group-[.is-user]:ml-auto group-[.is-user]:rounded-sm group-[.is-user]:bg-lime group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-forest",
       "group-[.is-assistant]:text-foreground",
       className
     )}
@@ -433,20 +450,87 @@ const streamdownPlugins = {
   code,
   math,
   mermaid,
-  // Custom entity plugins: extend this object to add more entity types
-  person: personPlugin,
-  location: locationPlugin,
-  "strata-scheme": strataSchemePlugin,
 };
 
+/** Custom HTML tags allowed through Streamdown sanitisation. */
+const messageAllowedTags: AllowedTags = {
+  mention: ["type", "id", "label"],
+  person: ["name", "id"],
+  location: ["address", "suburb", "state"],
+  "strata-scheme": ["plan", "name"],
+};
+
+/** Tags whose child content should not be parsed as markdown. */
+const messageLiteralTagContent = ["mention", "person", "strata-scheme"];
+
+/** Streamdown component map for inline entity and mention tags. */
+const messageStreamdownComponents: Components = {
+  mention: MentionStreamdownTag as Components[string],
+  person: PersonTag as Components[string],
+  location: LocationTag as Components[string],
+  "strata-scheme": StrataSchemeTag as Components[string],
+};
+
+export type MessageMentionTextProps = HTMLAttributes<HTMLParagraphElement> & {
+  children: string;
+};
+
+/**
+ * Inline message body for user prompts with mention chips.
+ */
+export function MessageMentionText({
+  children,
+  className,
+  ...props
+}: MessageMentionTextProps) {
+  const segments = useMemo(
+    () => splitMessageWithMentions(children),
+    [children]
+  )
+
+  return (
+    <p className={cn("whitespace-pre-wrap break-words leading-relaxed", className)} {...props}>
+      {segments.map((segment, index) => {
+        if (segment.kind === "mention") {
+          return (
+            <MentionTag
+              key={`${segment.type}-${segment.id}-${index}`}
+              label={segment.label}
+              type={segment.type}
+            />
+          )
+        }
+        return <span key={`text-${index}`}>{segment.value}</span>
+      })}
+    </p>
+  )
+}
+
 export const MessageResponse = memo(
-  ({ className, ...props }: MessageResponseProps) => (
-    <Streamdown
-      className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
-      plugins={streamdownPlugins}
-      {...props}
-    />
-  ),
+  ({
+    className,
+    children,
+    allowedTags,
+    components,
+    literalTagContent,
+    ...props
+  }: MessageResponseProps) => {
+    const content =
+      typeof children === "string" ? mentionsToMarkup(children) : children
+
+    return (
+      <Streamdown
+        className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
+        plugins={streamdownPlugins}
+        allowedTags={{ ...messageAllowedTags, ...allowedTags }}
+        literalTagContent={[...messageLiteralTagContent, ...(literalTagContent ?? [])]}
+        components={{ ...messageStreamdownComponents, ...components }}
+        {...props}
+      >
+        {content}
+      </Streamdown>
+    )
+  },
   (prevProps, nextProps) =>
     prevProps.children === nextProps.children &&
     nextProps.isAnimating === prevProps.isAnimating

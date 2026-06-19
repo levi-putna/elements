@@ -11,11 +11,13 @@ import {
   MessageAction,
   MessageActions,
   MessageContent,
+  MessageMentionText,
   MessageResponse,
 } from "@/components/ui/message"
 import {
   PromptInput,
   PromptInputFooter,
+  PromptInputMentionEditor,
   PromptInputSelect,
   PromptInputSelectContent,
   PromptInputSelectItem,
@@ -23,105 +25,71 @@ import {
   PromptInputSelectValue,
   PromptInputSpeech,
   PromptInputSubmit,
-  PromptInputTextarea,
   PromptInputTools,
   type PromptInputMessage,
 } from "@/components/ui/prompt-input"
-import { cn } from "@/lib/utils"
+import {
+  ASSISTANT_MODELS,
+  DEFAULT_ASSISTANT_MODEL,
+} from "@/agents/_lib/models"
+import type { AssistantUIMessage } from "@/agents/types"
+import { cn, assetPath } from "@/lib/utils"
+import {
+  deriveConversationTitleFallback,
+  NEW_CONVERSATION_TITLE,
+} from "@/lib/conversation-title"
+import { DraftEmailCard, DraftEmailCardLoading } from "@/tools/email-draft/draft-email-card"
+import type { EmailDraft } from "@/tools/email-draft/types"
+import { SchemeSetupCard } from "@/tools/scheme-setup/scheme-setup-card"
+import type { SchemeSetupPreview } from "@/tools/scheme-setup/types"
+import { RandomNumberCard } from "@/tools/random-number/random-number-card"
+import type { RandomNumberResult } from "@/tools/random-number/types"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import type { ChatStatus } from "ai"
+import { useChat } from "@ai-sdk/react"
+import {
+  DefaultChatTransport,
+  lastAssistantMessageIsCompleteWithApprovalResponses,
+  type ChatStatus,
+} from "ai"
 import { CheckIcon, CopyIcon, PlusIcon, RefreshCcwIcon, SparklesIcon } from "lucide-react"
-import { nanoid } from "nanoid"
 import Link from "next/link"
-import { useCallback, useRef, useState } from "react"
-
-type ChatRole = "user" | "assistant"
-
-interface ChatMessage {
-  id: string
-  role: ChatRole
-  text: string
-}
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
 
 const SUGGESTIONS = [
-  "What can this assistant do?",
-  "Show me a markdown example",
-  "Write a haiku about strata living",
-  "Explain how the Conversation component works",
+  "Generate a random number between 1 and 100",
+  "Draft an email welcoming the committee of Marina Heights (SP 4821)",
+  "Set up a new scheme from SP4821_Registration.pdf",
+  "What can you help me with as a strata manager?",
 ]
 
-const THIN_SUGGESTIONS = ["What can you do?", "Markdown example"]
-
-const MODELS = [
-  { value: "opus", label: "Claude Opus 4.8" },
-  { value: "sonnet", label: "Claude Sonnet 4.6" },
-  { value: "haiku", label: "Claude Haiku 4.5" },
+const THIN_SUGGESTIONS = [
+  "Random number 1–100",
+  "What can you do?",
 ]
 
 /**
- * Picks a canned, markdown-rich reply based on the prompt and conversation so far.
+ * Returns a readable chat error message (avoids dumping HTML error pages into the UI).
  */
-function mockReply(prompt: string, history: ChatMessage[]): string {
-  const text = prompt.toLowerCase()
-  const turn = history.filter((m) => m.role === "user").length
-
-  if (text.includes("markdown") || text.includes("example")) {
-    return `Here's a quick tour of the markdown this assistant can render:
-
-## Headings keep their hierarchy
-
-- **Bold**, *italic*, and \`inline code\`
-- Ordered and unordered lists
-- Links like [the docs](/elements)
-
-\`\`\`ts
-function greet(name: string) {
-  return \`Hello, \${name}!\`;
+function formatChatError({ message }: { message: string }): string {
+  if (message.trimStart().startsWith("<!DOCTYPE") || message.trimStart().startsWith("<html")) {
+    return "Could not reach the chat API. Check that the dev server is running and AI_GATEWAY_API_KEY is set in .env.local."
+  }
+  return message
 }
-\`\`\`
 
-> Block quotes work too, handy for callouts.
-
-All of it streams in token by token, just like a real model response.`
-  }
-
-  if (text.includes("haiku")) {
-    return `Sure, a haiku for strata living:
-
-> Shared walls, single roof,
-> a hundred quiet neighbours
-> split one winter bill.`
-  }
-
-  if (text.includes("conversation") && text.includes("component")) {
-    return `The **Conversation** component is a scroll container built on \`use-stick-to-bottom\`.
-
-1. It **auto-scrolls** to the newest message as replies stream in.
-2. When you scroll up, a **scroll-to-bottom** button appears (\`ConversationScrollButton\`).
-3. \`ConversationContent\` is the inner flex column — set the gap between messages there.
-4. \`ConversationEmptyState\` renders the placeholder you saw before this chat started.
-
-This page wires it to \`PromptInput\` and \`Message\` to form a full assistant layout.`
-  }
-
-  if (text.includes("what can") || text.includes("do?") || turn <= 1) {
-    return `I'm a **mocked assistant** demonstrating the Elements AI components working together:
-
-- **PromptInput** — the composer at the bottom (try Shift+Enter for a newline)
-- **Conversation** — the scrolling message list, pinned to the latest reply
-- **Message** — these chat bubbles, with streamed markdown responses
-
-I don't call a real model, so my answers are canned — but the layout, streaming, and interactions are the real thing. Ask for a *"markdown example"* to see formatting in action.`
-  }
-
-  return `You said: "${prompt}".
-
-This is a self-contained demo, so I'm echoing rather than reasoning — but in a real build you'd swap \`mockReply\` for the Vercel AI SDK's \`useChat\` and a model provider. That's message #${turn} in our conversation.`
+/**
+ * Extracts plain text from a UI message for copy and regenerate actions.
+ */
+function getMessageText({ message }: { message: AssistantUIMessage }): string {
+  return message.parts
+    .filter((part) => part.type === "text")
+    .map((part) => part.text)
+    .join("\n")
 }
 
 export interface AssistantPreviewProps {
@@ -131,65 +99,54 @@ export interface AssistantPreviewProps {
   thin?: boolean
   /** Show a link back to the assistant docs (full-screen preview only). */
   showDocsLink?: boolean
+  /** Optional actions rendered in the header beside New chat (for example a back link). */
+  headerActions?: ReactNode
+  /** Title from a selected sidebar session (shown until a new title is generated). */
+  sessionTitle?: string
+  /** Called when the user starts a new chat from the header. */
+  onNewChat?: () => void
   className?: string
 }
 
 /**
- * Interactive assistant layout preview for the documentation site.
+ * Interactive Cowork layout preview wired to the Vercel AI Gateway.
  */
 export function AssistantPreview({
   fullScreen = false,
   thin = false,
   showDocsLink = fullScreen,
+  headerActions,
+  sessionTitle,
+  onNewChat,
   className,
 }: AssistantPreviewProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [status, setStatus] = useState<ChatStatus>("ready")
   const [copiedId, setCopiedId] = useState<string | null>(null)
-  const [model, setModel] = useState("opus")
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [model, setModel] = useState<string>(DEFAULT_ASSISTANT_MODEL)
+  const [generatedTitle, setGeneratedTitle] = useState<string | null>(null)
+  const [isGeneratingTitle, setIsGeneratingTitle] = useState(false)
 
-  const stopStreaming = useCallback(() => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current)
-      timerRef.current = null
-    }
-    setStatus("ready")
-  }, [])
+  const transport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        api: assetPath("/api/chat/"),
+        body: { model },
+      }),
+    [model]
+  )
 
-  const streamReply = useCallback((fullText: string) => {
-    const assistantId = nanoid()
-    setMessages((prev) => [...prev, { id: assistantId, role: "assistant", text: "" }])
-    setStatus("streaming")
-
-    let index = 0
-    timerRef.current = setInterval(() => {
-      index = Math.min(index + 3, fullText.length)
-      const slice = fullText.slice(0, index)
-      setMessages((prev) =>
-        prev.map((m) => (m.id === assistantId ? { ...m, text: slice } : m))
-      )
-      if (index >= fullText.length && timerRef.current) {
-        clearInterval(timerRef.current)
-        timerRef.current = null
-        setStatus("ready")
-      }
-    }, 16)
-  }, [])
+  const { messages, sendMessage, status, stop, setMessages, regenerate, error, addToolApprovalResponse } =
+    useChat<AssistantUIMessage>({
+      transport,
+      sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithApprovalResponses,
+    })
 
   const send = useCallback(
     (text: string) => {
       const trimmed = text.trim()
       if (!trimmed || status === "streaming" || status === "submitted") return
-
-      const userMessage: ChatMessage = { id: nanoid(), role: "user", text: trimmed }
-      const history = [...messages, userMessage]
-      const reply = mockReply(trimmed, history)
-      setMessages(history)
-      setStatus("submitted")
-      window.setTimeout(() => streamReply(reply), 120)
+      void sendMessage({ text: trimmed })
     },
-    [messages, status, streamReply]
+    [sendMessage, status]
   )
 
   const handleSubmit = useCallback(
@@ -199,32 +156,95 @@ export function AssistantPreview({
     [send]
   )
 
-  const handleCopy = useCallback((message: ChatMessage) => {
-    navigator.clipboard?.writeText(message.text)
+  const handleCopy = useCallback((message: AssistantUIMessage) => {
+    navigator.clipboard?.writeText(getMessageText({ message }))
     setCopiedId(message.id)
     setTimeout(() => setCopiedId((id) => (id === message.id ? null : id)), 1500)
   }, [])
 
-  const regenerate = useCallback(() => {
-    if (status === "streaming" || status === "submitted") return
-    const lastUser = [...messages].reverse().find((m) => m.role === "user")
-    if (!lastUser) return
-    const trimmed =
-      messages[messages.length - 1]?.role === "assistant" ? messages.slice(0, -1) : messages
-    const reply = mockReply(lastUser.text, trimmed)
-    setMessages(trimmed)
-    setStatus("submitted")
-    window.setTimeout(() => streamReply(reply), 120)
-  }, [messages, status, streamReply])
-
   const newChat = useCallback(() => {
-    stopStreaming()
+    stop()
     setMessages([])
-  }, [stopStreaming])
+    setGeneratedTitle(null)
+    setIsGeneratingTitle(false)
+    onNewChat?.()
+  }, [onNewChat, setMessages, stop])
+
+  const firstUserMessage = useMemo(
+    () => messages.find((message) => message.role === "user"),
+    [messages]
+  )
+
+  const firstUserMessageText = firstUserMessage
+    ? getMessageText({ message: firstUserMessage })
+    : ""
+
+  /** Generates a title once the first user message is available. */
+  useEffect(() => {
+    if (generatedTitle || isGeneratingTitle || !firstUserMessageText.trim()) {
+      return
+    }
+
+    let cancelled = false
+
+    const generateTitle = async () => {
+      setIsGeneratingTitle(true)
+
+      try {
+        const response = await fetch(assetPath("/api/chat/title/"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: firstUserMessageText }),
+        })
+
+        const payload = (await response.json()) as { title?: string; error?: string }
+
+        if (cancelled) {
+          return
+        }
+
+        if (response.ok && payload.title?.trim()) {
+          setGeneratedTitle(payload.title.trim())
+          return
+        }
+
+        setGeneratedTitle(
+          deriveConversationTitleFallback({ message: firstUserMessageText })
+        )
+      } catch {
+        if (!cancelled) {
+          setGeneratedTitle(
+            deriveConversationTitleFallback({ message: firstUserMessageText })
+          )
+        }
+      } finally {
+        if (!cancelled) {
+          setIsGeneratingTitle(false)
+        }
+      }
+    }
+
+    void generateTitle()
+
+    return () => {
+      cancelled = true
+    }
+  }, [firstUserMessageText, generatedTitle, isGeneratingTitle])
+
+  /** Clears a generated title when switching to another sidebar session. */
+  useEffect(() => {
+    setGeneratedTitle(null)
+    setIsGeneratingTitle(false)
+  }, [sessionTitle])
+
+  const resolvedTitle = generatedTitle ?? sessionTitle ?? null
+  const displayTitle = resolvedTitle ?? NEW_CONVERSATION_TITLE
+  const isPlaceholderTitle = !resolvedTitle
 
   const isBusy = status === "streaming" || status === "submitted"
   const lastMessage = messages.at(-1)
   const suggestions = thin ? THIN_SUGGESTIONS : SUGGESTIONS
+  const chatStatus = status as ChatStatus
 
   return (
     <div
@@ -235,11 +255,11 @@ export function AssistantPreview({
         className
       )}
     >
-      {/* Header */}
+      {/* Header: h-14 aligns with AppSidebarHeader and AppHeader */}
       <header
         className={cn(
-          "flex shrink-0 items-center justify-between border-b border-border",
-          thin ? "px-3 py-2" : "px-4 py-3"
+          "flex h-14 shrink-0 items-center justify-between border-b border-border bg-white",
+          thin ? "px-3" : "px-4"
         )}
       >
         <div className="flex min-w-0 items-center gap-2">
@@ -249,16 +269,12 @@ export function AssistantPreview({
               thin ? "size-6" : "size-7"
             )}
           >
-            <SparklesIcon className={thin ? "size-3.5" : "size-4"} />
+            <SparklesIcon className={thin ? "size-3.5" : "size-4"} aria-hidden="true" />
           </div>
-          <div className={cn("min-w-0 leading-tight", thin && "truncate")}>
-            <p className="text-sm font-semibold text-foreground">Assistant</p>
-            {!thin && (
-              <p className="text-xs text-muted-foreground">Elements demo · mocked replies</p>
-            )}
-          </div>
+          <p className="truncate text-sm font-semibold text-foreground">Cowork</p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
+          {headerActions}
           {thin ? (
             <TooltipProvider>
               <Tooltip>
@@ -268,9 +284,9 @@ export function AssistantPreview({
                       type="button"
                       onClick={newChat}
                       aria-label="New chat"
-                      className="inline-flex size-8 items-center justify-center rounded-sm border border-border text-foreground transition-colors hover:bg-muted"
+                      className="inline-flex size-7 items-center justify-center rounded-sm border border-border text-foreground transition-colors hover:bg-muted"
                     >
-                      <PlusIcon className="size-4" />
+                      <PlusIcon className="size-3.5" />
                     </button>
                   }
                 />
@@ -281,9 +297,9 @@ export function AssistantPreview({
             <button
               type="button"
               onClick={newChat}
-              className="inline-flex items-center gap-1.5 rounded-sm border border-border px-2.5 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+              className="inline-flex h-7 items-center gap-1.5 rounded-sm border border-border px-2.5 text-xs font-medium text-foreground transition-colors hover:bg-muted"
             >
-              <PlusIcon className="size-3.5" />
+              <PlusIcon className="size-3.5" aria-hidden="true" />
               New chat
             </button>
           )}
@@ -297,6 +313,23 @@ export function AssistantPreview({
           )}
         </div>
       </header>
+
+      {/* Conversation title */}
+      <div
+        className={cn(
+          "shrink-0 border-b border-border bg-white",
+          thin ? "px-3 py-2" : "px-4 py-2.5"
+        )}
+      >
+        <h1
+          className={cn(
+            "truncate text-sm font-medium",
+            isPlaceholderTitle ? "text-muted-foreground" : "text-foreground"
+          )}
+        >
+          {displayTitle}
+        </h1>
+      </div>
 
       {/* Conversation */}
       <Conversation className="flex-1">
@@ -325,8 +358,8 @@ export function AssistantPreview({
                   <h3 className="font-medium text-sm">How can I help?</h3>
                   <p className="text-muted-foreground text-sm">
                     {thin
-                      ? "Ask below or pick a starter:"
-                      : "Ask anything below, or start with one of these:"}
+                      ? "Ask below or pick a starter. Use # for schemes and @ for entities."
+                      : "Ask about schemes, draft emails, or set up new plans. Type # for schemes and @ for entities."}
                   </p>
                 </div>
                 <div
@@ -355,17 +388,132 @@ export function AssistantPreview({
             messages.map((message) => (
               <Message
                 key={message.id}
-                from={message.role}
+                from={message.role === "user" ? "user" : "assistant"}
                 className={thin ? "max-w-full gap-1.5" : undefined}
               >
-                <MessageContent className={thin ? "text-xs" : undefined}>
-                  <MessageResponse
-                    isAnimating={status === "streaming" && message.id === lastMessage?.id}
-                  >
-                    {message.text}
-                  </MessageResponse>
+                <MessageContent className={cn("space-y-3", thin && "text-xs")}>
+                  {message.parts.map((part, index) => {
+                    if (part.type === "text") {
+                      if (message.role === "user") {
+                        return (
+                          <MessageMentionText key={`${message.id}-text-${index}`}>
+                            {part.text}
+                          </MessageMentionText>
+                        )
+                      }
+
+                      return (
+                        <MessageResponse
+                          key={`${message.id}-text-${index}`}
+                          isAnimating={
+                            status === "streaming" &&
+                            message.id === lastMessage?.id &&
+                            index === message.parts.length - 1
+                          }
+                        >
+                          {part.text}
+                        </MessageResponse>
+                      )
+                    }
+
+                    if (part.type === "tool-randomNumber") {
+                      const input = part.input as { min?: number; max?: number } | undefined
+
+                      return (
+                        <RandomNumberCard
+                          key={`${message.id}-random-${part.toolCallId}`}
+                          min={input?.min ?? 0}
+                          max={input?.max ?? 0}
+                          state={part.state}
+                          output={
+                            part.state === "output-available"
+                              ? (part.output as RandomNumberResult)
+                              : undefined
+                          }
+                          errorText={
+                            part.state === "output-error" ? part.errorText : undefined
+                          }
+                          onApprove={
+                            part.state === "approval-requested" && part.approval
+                              ? () =>
+                                  void addToolApprovalResponse({
+                                    id: part.approval.id,
+                                    approved: true,
+                                  })
+                              : undefined
+                          }
+                          onDeny={
+                            part.state === "approval-requested" && part.approval
+                              ? () =>
+                                  void addToolApprovalResponse({
+                                    id: part.approval.id,
+                                    approved: false,
+                                  })
+                              : undefined
+                          }
+                        />
+                      )
+                    }
+
+                    if (part.type === "tool-draftEmail") {
+                      if (part.state === "output-available" && part.output) {
+                        return (
+                          <DraftEmailCard
+                            key={`${message.id}-draft-${part.toolCallId}`}
+                            draft={part.output as EmailDraft & { status?: "ready" | "sent" }}
+                          />
+                        )
+                      }
+
+                      if (part.state === "output-error") {
+                        return (
+                          <DraftEmailCardLoading
+                            key={`${message.id}-draft-error-${part.toolCallId}`}
+                            error
+                            message={part.errorText ?? "Could not draft email."}
+                          />
+                        )
+                      }
+
+                      return (
+                        <DraftEmailCardLoading
+                          key={`${message.id}-draft-loading-${part.toolCallId}`}
+                        />
+                      )
+                    }
+
+                    if (
+                      part.type === "tool-setupScheme" &&
+                      part.state === "output-available" &&
+                      part.output
+                    ) {
+                      return (
+                        <SchemeSetupCard
+                          key={`${message.id}-scheme-${part.toolCallId}`}
+                          preview={
+                            part.output as SchemeSetupPreview & {
+                              reviewStatus?: "pending" | "approved" | "rejected"
+                            }
+                          }
+                        />
+                      )
+                    }
+
+                    if (part.type === "tool-setupScheme") {
+                      return (
+                        <p
+                          key={`${message.id}-loading-${part.toolCallId}`}
+                          className="text-sm text-muted-foreground"
+                        >
+                          Preparing preview…
+                        </p>
+                      )
+                    }
+
+                    return null
+                  })}
                 </MessageContent>
-                {message.role === "assistant" && message.text && !thin && (
+                {message.role === "assistant" && getMessageText({ message }) && !thin && (
                   <MessageActions className="opacity-0 transition-opacity group-hover:opacity-100">
                     <MessageAction
                       tooltip={copiedId === message.id ? "Copied" : "Copy"}
@@ -378,7 +526,10 @@ export function AssistantPreview({
                       )}
                     </MessageAction>
                     {message.id === lastMessage?.id && !isBusy && (
-                      <MessageAction tooltip="Regenerate" onClick={regenerate}>
+                      <MessageAction
+                        tooltip="Regenerate"
+                        onClick={() => void regenerate({ messageId: message.id })}
+                      >
                         <RefreshCcwIcon className="size-4" />
                       </MessageAction>
                     )}
@@ -394,9 +545,18 @@ export function AssistantPreview({
       {/* Composer */}
       <div className={cn("shrink-0", thin ? "px-3 pb-3" : "px-4 pb-4")}>
         <div className={cn("mx-auto w-full", !thin && "max-w-3xl")}>
+          {error && (
+            <p className="mb-2 rounded-sm border border-destructive/30 bg-destructive/5 px-3 py-2 text-xs text-destructive">
+              {formatChatError({ message: error.message })}
+            </p>
+          )}
           <PromptInput onSubmit={handleSubmit}>
-            <PromptInputTextarea
-              placeholder={thin ? "Ask anything…" : "Message the assistant…"}
+            <PromptInputMentionEditor
+              placeholder={
+                thin
+                  ? "Ask anything… # schemes · @ entities"
+                  : "Message Cowork… # schemes · @ entities"
+              }
             />
             <PromptInputFooter className={thin ? "justify-end" : undefined}>
               {!thin && (
@@ -407,11 +567,11 @@ export function AssistantPreview({
                   >
                     <PromptInputSelectTrigger>
                       <PromptInputSelectValue>
-                        {MODELS.find((m) => m.value === model)?.label}
+                        {ASSISTANT_MODELS.find((m) => m.value === model)?.label}
                       </PromptInputSelectValue>
                     </PromptInputSelectTrigger>
                     <PromptInputSelectContent>
-                      {MODELS.map((m) => (
+                      {ASSISTANT_MODELS.map((m) => (
                         <PromptInputSelectItem key={m.value} value={m.value}>
                           {m.label}
                         </PromptInputSelectItem>
@@ -421,13 +581,14 @@ export function AssistantPreview({
                   <PromptInputSpeech />
                 </PromptInputTools>
               )}
-              <PromptInputSubmit status={status} onStop={stopStreaming} />
+              <PromptInputSubmit status={chatStatus} onStop={stop} />
             </PromptInputFooter>
           </PromptInput>
           {fullScreen && (
             <p className="mt-2 text-center text-xs text-muted-foreground">
-              Responses are mocked for this demo. Swap <code className="font-mono">mockReply</code>{" "}
-              for <code className="font-mono">useChat</code> to go live.
+              Powered by the Vercel AI Gateway. Set{" "}
+              <code className="font-mono">AI_GATEWAY_API_KEY</code> in{" "}
+              <code className="font-mono">.env.local</code>.
             </p>
           )}
         </div>
