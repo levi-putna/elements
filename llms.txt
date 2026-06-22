@@ -7,8 +7,10 @@
 ## Elements
 
 ### actions
+- [agent-action](registry/agent-action/agent-action.md): Trigger an AI agent to handle a workflow task with a pre-written prompt
 - [button](registry/button/button.md): Trigger an action (submit, confirm, CTA)
 ### data-display
+- [audio-player](registry/audio-player/audio-player.md): Play a strata meeting or voice recording with scrubbing, skip controls, and jump-to-timestamp sync
 - [stat](registry/stat/stat.md): Show a headline KPI number with a trend
 ### layout
 - [widget](registry/widget/widget.md): Frame a dashboard panel or list of summary rows

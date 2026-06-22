@@ -266,6 +266,10 @@ const PIECES = [
     "PromptInput",
     "Pinned composer with model selector, speech input, attachments, and submit/stop controls.",
   ],
+  [
+    "ConversationTodoBar",
+    "Optional collapsible plan bar above the message list. Hidden until a todo list exists; shows the latest plan with step status and history navigation.",
+  ],
 ];
 
 /**
@@ -322,12 +326,48 @@ export default function AssistantPage() {
           Live preview
         </h2>
         <p className="text-sm text-ink-muted mb-5 leading-relaxed">
-          Send a message, try a suggestion chip, or ask for a &quot;markdown example&quot; to see
-          streamed formatting. Replies are mocked; the layout and interactions match a production
-          Cowork built from the primitives below.
+          Send a message, try a suggestion chip, or ask for a plan (for example &quot;Create a plan
+          for preparing the Harbour View AGM&quot;) to see the conversation todo bar and in-chat plan
+          notice. Replies use the Vercel AI Gateway when{" "}
+          <code className="font-mono text-xs bg-background px-1 py-0.5 rounded-sm">
+            AI_GATEWAY_API_KEY
+          </code>{" "}
+          is set.
         </p>
         <div className="rounded-sm border border-border overflow-hidden">
           <AssistantPreview />
+        </div>
+      </section>
+
+      {/* Conversation todo bar */}
+      <section className="mb-10 pt-10 border-t border-border">
+        <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted mb-2">
+          Conversation todo bar
+        </h2>
+        <p className="text-sm text-ink-muted mb-4 leading-relaxed">
+          When Cowork creates a plan for a multi-step workflow, a collapsible bar appears above
+          the message list. The bar stays hidden until a plan exists. The header always shows the
+          plan title and completion count (for example &quot;3 of 7&quot;). Expand to see each step
+          with status: complete, in progress, or pending. If the session has earlier plans, use
+          the history controls at the bottom of the bar; the latest plan is selected by default.
+          An in-chat notice confirms when a plan was created.
+        </p>
+        <div className="rounded-sm border border-border overflow-hidden">
+          {[
+            ["Hidden by default", "No bar until createTodoList returns a plan for the session."],
+            ["Collapsible header", "Title plus completion count; chevron toggles the step list."],
+            ["Step status", "Complete (check), in progress (spinner), pending (empty circle)."],
+            ["Plan history", "Previous plans stay available; latest plan is shown first."],
+            ["In-chat notice", "TodoCreatedCard in the thread when a plan is created."],
+          ].map(([label, desc]) => (
+            <div
+              key={label}
+              className="flex flex-col gap-1 border-b border-border px-4 py-3 last:border-0 sm:flex-row sm:gap-4"
+            >
+              <span className="text-sm font-medium text-foreground shrink-0 sm:w-40">{label}</span>
+              <span className="text-sm text-ink-muted">{desc}</span>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "audio-player",
+  "type": "registry:ui",
+  "description": "A composable audio recording player with a real amplitude waveform, 15-second skip controls, canvas scrubbing aligned to playback, and inline or bottom-docked placement for meeting transcript review.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "registry/audio-player/audio-player.tsx",
+      "target": "components/ui/audio-player.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

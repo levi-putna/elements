@@ -6,6 +6,7 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ui/conversation"
+import { ConversationTodoBar } from "@/components/ui/conversation-todo-bar"
 import {
   Message,
   MessageAction,
@@ -54,6 +55,9 @@ import { SchemeSetupCard } from "@/tools/scheme-setup/scheme-setup-card"
 import type { SchemeSetupPreview } from "@/tools/scheme-setup/types"
 import { RandomNumberCard } from "@/tools/random-number/random-number-card"
 import type { RandomNumberResult } from "@/tools/random-number/types"
+import { TodoCreatedCard } from "@/tools/todo-list/todo-created-card"
+import type { CreateTodoListResult } from "@/tools/todo-list/types"
+import { extractConversationTodoLists } from "@/lib/conversation-todos"
 import {
   Tooltip,
   TooltipContent,
@@ -69,18 +73,18 @@ import {
 } from "ai"
 import { CheckIcon, CopyIcon, PlusIcon, RefreshCcwIcon, SparklesIcon } from "lucide-react"
 import Link from "next/link"
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 
 const SUGGESTIONS = [
   "What's on my calendar this week?",
   "Schedule a committee meeting for Harbour View Towers next Tuesday",
-  "Show me calendar events for Northbridge Estate",
+  "Create a plan for preparing the Harbour View AGM",
   "Draft an email welcoming the committee of Marina Heights (SP 4821)",
 ]
 
 const THIN_SUGGESTIONS = [
   "Check my calendar",
-  "Schedule a meeting",
+  "Create an AGM prep plan",
 ]
 
 /**
@@ -123,6 +127,10 @@ export interface AssistantPreviewProps {
   sessionTitle?: string
   /** Called when the user starts a new chat from the header. */
   onNewChat?: () => void
+  /** When set, sends this message once on mount (for AgentAction handoff). */
+  initialPrompt?: string
+  /** Called after initialPrompt has been submitted. */
+  onInitialPromptSent?: () => void
   /** When true, renders the sidebar toggle (for use inside AppShell). */
   showSidebarTrigger?: boolean
   className?: string
@@ -138,6 +146,8 @@ export function AssistantPreview({
   headerActions,
   sessionTitle,
   onNewChat,
+  initialPrompt,
+  onInitialPromptSent,
   showSidebarTrigger = false,
   className,
 }: AssistantPreviewProps) {
@@ -145,6 +155,7 @@ export function AssistantPreview({
   const [model, setModel] = useState<string>(DEFAULT_ASSISTANT_MODEL)
   const [generatedTitle, setGeneratedTitle] = useState<string | null>(null)
   const [isGeneratingTitle, setIsGeneratingTitle] = useState(false)
+  const initialPromptSentRef = useRef(false)
 
   const transport = useMemo(
     () =>
@@ -176,6 +187,17 @@ export function AssistantPreview({
     },
     [send]
   )
+
+  /** Sends a queued prompt from AgentAction without requiring user input. */
+  useEffect(() => {
+    if (!initialPrompt?.trim() || initialPromptSentRef.current) {
+      return
+    }
+
+    initialPromptSentRef.current = true
+    send(initialPrompt)
+    onInitialPromptSent?.()
+  }, [initialPrompt, onInitialPromptSent, send])
 
   const handleCopy = useCallback((message: AssistantUIMessage) => {
     navigator.clipboard?.writeText(getMessageText({ message }))
@@ -266,6 +288,10 @@ export function AssistantPreview({
   const lastMessage = messages.at(-1)
   const suggestions = thin ? THIN_SUGGESTIONS : SUGGESTIONS
   const chatStatus = status as ChatStatus
+  const todoLists = useMemo(
+    () => extractConversationTodoLists({ messages }),
+    [messages]
+  )
 
   return (
     <div
@@ -353,6 +379,11 @@ export function AssistantPreview({
           )}
         </div>
       </header>
+
+      {/* Plan bar: visible when the session has todo lists */}
+      {todoLists.length > 0 ? (
+        <ConversationTodoBar lists={todoLists} thin={thin} />
+      ) : null}
 
       {/* Conversation */}
       <Conversation className="flex-1">
@@ -558,6 +589,20 @@ export function AssistantPreview({
                         <CheckCalendarCardLoading
                           key={`${message.id}-calendar-loading-${part.toolCallId}`}
                           className="w-full"
+                        />
+                      )
+                    }
+
+                    if (
+                      part.type === "tool-createTodoList" &&
+                      part.state === "output-available" &&
+                      part.output
+                    ) {
+                      return (
+                        <TodoCreatedCard
+                          key={`${message.id}-todo-${part.toolCallId}`}
+                          className="w-full"
+                          plan={part.output as CreateTodoListResult}
                         />
                       )
                     }

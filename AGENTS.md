@@ -46,7 +46,9 @@ This file is the entry point for AI agents building Instant Strata UI.
 <!-- BEGIN:element-index -->
 | Element | Category | Use when | Docs |
 |---|---|---|---|
+| `agent-action` | actions | Trigger an AI agent to handle a workflow task with a pre-written prompt | [docs](registry/agent-action/agent-action.md) |
 | `button` | actions | Trigger an action (submit, confirm, CTA) | [docs](registry/button/button.md) |
+| `audio-player` | data-display | Play a strata meeting or voice recording with scrubbing, skip controls, and jump-to-timestamp sync | [docs](registry/audio-player/audio-player.md) |
 | `stat` | data-display | Show a headline KPI number with a trend | [docs](registry/stat/stat.md) |
 | `widget` | layout | Frame a dashboard panel or list of summary rows | [docs](registry/widget/widget.md) |
 <!-- END:element-index -->

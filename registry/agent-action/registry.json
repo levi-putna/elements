@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "agent-action",
+  "type": "registry:ui",
+  "description": "A call-to-action element that launches an AI agent with a stored preset prompt; stores the full prompt internally and shows only a friendly title and description to the user.",
+  "dependencies": [
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "utils"
+  ],
+  "files": [
+    {
+      "path": "registry/agent-action/agent-action.tsx",
+      "target": "components/ui/agent-action.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}

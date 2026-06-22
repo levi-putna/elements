@@ -8,6 +8,7 @@ import { checkCalendarTool } from "@/tools/check-calendar/tool"
 import { createMeetingTool } from "@/tools/create-meeting/tool"
 import { randomNumberTool } from "@/tools/random-number/tool"
 import { createSetupSchemeTool } from "@/tools/scheme-setup/tool"
+import { createTodoListTool } from "@/tools/todo-list/tool"
 import { ToolLoopAgent } from "ai"
 import { dirname } from "node:path"
 import { fileURLToPath } from "node:url"
@@ -27,6 +28,7 @@ export function createAssistantAgent({ model }: { model: AssistantModelId }) {
       randomNumber: randomNumberTool,
       checkCalendar: checkCalendarTool,
       createMeeting: createMeetingTool,
+      createTodoList: createTodoListTool,
     },
   })
 }

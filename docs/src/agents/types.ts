@@ -1,4 +1,4 @@
 import type { UIMessage } from "ai"
 
-/** UI message shape for the Cowork chat (tool parts: draftEmail, setupScheme, randomNumber). */
+/** UI message shape for the Cowork chat (tool parts: draftEmail, setupScheme, randomNumber, createTodoList). */
 export type AssistantUIMessage = UIMessage

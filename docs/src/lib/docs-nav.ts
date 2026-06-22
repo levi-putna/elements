@@ -72,10 +72,15 @@ export const docsNavGroups: DocsNavGroup[] = [
     label: "AI",
     items: [
       { href: "/components/assistant", label: "Cowork" },
+      { href: "/components/agent-action", label: "Agent Action" },
       { href: "/components/prompt-input", label: "Prompt Input" },
       { href: "/components/conversation", label: "Conversation" },
       { href: "/components/message", label: "Message" },
     ],
+  },
+  {
+    label: "Audio",
+    items: [{ href: "/components/audio-player", label: "Audio Player" }],
   },
   {
     label: "Application",
@@ -87,6 +92,7 @@ export const docsNavGroups: DocsNavGroup[] = [
       { href: "/components/lot", label: "Lot" },
       { href: "/components/owner", label: "Owner" },
       { href: "/components/task", label: "Task" },
+      { href: "/components/data-table", label: "Data Table" },
       { href: "/components/widgets", label: "Widgets" },
       { href: "/components/authentication", label: "Authentication" },
     ],

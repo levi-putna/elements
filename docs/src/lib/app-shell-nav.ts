@@ -70,6 +70,58 @@ export const APP_SHELL_NAV: NavGroup[] = [
 ]
 
 /**
+ * Page-aware nav for the preview shell. Active item reflects the current
+ * preview page; href is "#" for all items so the preview intercepts via
+ * the onClick handler on the SidebarMenuButton render prop.
+ *
+ * Note: the SidebarNav component does not expose onClick handlers on items,
+ * so navigation is driven by the preview content area. This function sets
+ * the correct `isActive` flag so the sidebar visually tracks the page.
+ */
+export function getAppShellNav({
+  page,
+  onNavigate,
+}: {
+  page: { kind: string }
+  onNavigate: (title: string) => void
+}): NavGroup[] {
+  const isDashboard = page.kind === "dashboard"
+  const isProperty = page.kind === "properties" || page.kind === "property" || page.kind === "owner"
+
+  return [
+    {
+      items: [
+        {
+          title: "Dashboard",
+          href: "#",
+          icon: LayoutDashboard,
+          isActive: isDashboard,
+          onClick: () => onNavigate("Dashboard"),
+        },
+        { title: "Inbox", href: "#", icon: MessageSquare },
+        { title: "Issues", href: "#", icon: AlertCircle },
+        { title: "Meetings", href: "#", icon: Calendar },
+        { title: "Tasks", href: "#", icon: ClipboardList },
+        {
+          title: "Property",
+          href: "#",
+          icon: Building2,
+          isActive: isProperty,
+          onClick: () => onNavigate("Property"),
+        },
+        { title: "Contacts", href: "#", icon: Users },
+        {
+          title: "Settings",
+          href: "#",
+          icon: Settings,
+          panel: APP_SETTINGS_PANEL,
+        },
+      ],
+    },
+  ]
+}
+
+/**
  * Sample entity rows for sidebar search in the app layout demo and preview.
  * These are not shown in the main nav; they appear when searching.
  */

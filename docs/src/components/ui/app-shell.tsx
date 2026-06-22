@@ -59,6 +59,12 @@ export interface NavItem {
   icon?: React.ElementType
   /** Marks the active route. */
   isActive?: boolean
+  /**
+   * Optional click handler. When provided the item renders as a button
+   * rather than an anchor so in-app preview navigation can be driven by
+   * React state instead of URL changes.
+   */
+  onClick?: () => void
   /** Optional inline collapsible sub-navigation (expands in place). */
   items?: NavSubItem[]
   /**
@@ -871,18 +877,31 @@ function SidebarNavItem({
     )
   }
 
-  // Plain link.
+  // Plain link: render as a button when an onClick handler is present,
+  // otherwise as an anchor so standard href navigation still works.
   if (!item.items?.length) {
     return (
       <SidebarMenuItem>
-        <SidebarMenuButton
-          isActive={item.isActive}
-          tooltip={item.title}
-          render={<a href={item.href} />}
-        >
-          {Icon && <Icon />}
-          <span>{item.title}</span>
-        </SidebarMenuButton>
+        {item.onClick ? (
+          <SidebarMenuButton
+            type="button"
+            isActive={item.isActive}
+            tooltip={item.title}
+            onClick={item.onClick}
+          >
+            {Icon && <Icon />}
+            <span>{item.title}</span>
+          </SidebarMenuButton>
+        ) : (
+          <SidebarMenuButton
+            isActive={item.isActive}
+            tooltip={item.title}
+            render={<a href={item.href} />}
+          >
+            {Icon && <Icon />}
+            <span>{item.title}</span>
+          </SidebarMenuButton>
+        )}
       </SidebarMenuItem>
     )
   }
