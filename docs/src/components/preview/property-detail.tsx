@@ -1314,7 +1314,7 @@ function OwnersRollTab({ propertyId, onOwnerSelect }: OwnersRollTabProps) {
     setHiddenCols((prev) => prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key])
   }
 
-  const anyFilters = search.trim() || conditions.some((c) => c.value)
+  const anyFilters = Boolean(search.trim()) || conditions.some((c) => c.value)
 
   const lotRows = React.useMemo(
     () => getPreviewLotRowsForProperty({ propertyId }),
@@ -3273,7 +3273,7 @@ function MeetingsTab() {
     [allEntries, search, conditions, sortField, sortDir]
   )
 
-  const anyFilters = search.trim() || conditions.some((condition) => condition.value)
+  const anyFilters = Boolean(search.trim()) || conditions.some((condition) => condition.value)
 
   const actionEntries = React.useMemo(
     () =>
@@ -3674,7 +3674,7 @@ function MaintenanceTab() {
     setHiddenCols((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]))
   }
 
-  const anyFilters = search.trim() || conditions.some((c) => c.value)
+  const anyFilters = Boolean(search.trim()) || conditions.some((c) => c.value)
 
   const filtered = React.useMemo(() => {
     let rows = HVT_MAINTENANCE
@@ -4230,7 +4230,7 @@ function DocumentsTab() {
     setHiddenCols((prev) => (prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]))
   }
 
-  const anyFilters = search.trim() || conditions.some((c) => c.value)
+  const anyFilters = Boolean(search.trim()) || conditions.some((c) => c.value)
 
   const filteredDocs = React.useMemo(() => {
     let rows = HVT_DOCUMENTS
@@ -4629,7 +4629,7 @@ function IssuesTab() {
     setHiddenCols((prev) => prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key])
   }
 
-  const anyFilters = issueSearch.trim() || conditions.some((c) => c.value)
+  const anyFilters = Boolean(issueSearch.trim()) || conditions.some((c) => c.value)
 
   const filtered = React.useMemo(() => {
     let rows = HVT_ISSUES

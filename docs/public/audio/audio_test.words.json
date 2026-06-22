@@ -1,0 +1,68 @@
+{
+  "words": [
+    { "word": "Welcome", "start": 0, "end": 347 },
+    { "word": "to", "start": 347, "end": 440 },
+    { "word": "Instant", "start": 440, "end": 760 },
+    { "word": "Strata.", "start": 760, "end": 1300 },
+    { "word": "We're", "start": 1307, "end": 1648 },
+    { "word": "glad", "start": 1648, "end": 1860 },
+    { "word": "you're", "start": 1860, "end": 2032 },
+    { "word": "here.", "start": 2032, "end": 2560 },
+    { "word": "Instant", "start": 2560, "end": 3160 },
+    { "word": "Strata", "start": 3160, "end": 3573 },
+    { "word": "is", "start": 3573, "end": 3716 },
+    { "word": "designed", "start": 3716, "end": 4027 },
+    { "word": "to", "start": 4027, "end": 4112 },
+    { "word": "make", "start": 4112, "end": 4300 },
+    { "word": "strata", "start": 4300, "end": 4676 },
+    { "word": "management", "start": 4676, "end": 5086 },
+    { "word": "simple,", "start": 5086, "end": 5733 },
+    { "word": "transparent,", "start": 5733, "end": 6520 },
+    { "word": "and", "start": 6520, "end": 6697 },
+    { "word": "stress-free", "start": 6697, "end": 7380 },
+    { "word": "giving", "start": 7783, "end": 7960 },
+    { "word": "you", "start": 7960, "end": 8116 },
+    { "word": "everything", "start": 8116, "end": 8500 },
+    { "word": "you", "start": 8500, "end": 8624 },
+    { "word": "need,", "start": 8624, "end": 9160 },
+    { "word": "right", "start": 9160, "end": 9413 },
+    { "word": "at", "start": 9413, "end": 9552 },
+    { "word": "your", "start": 9552, "end": 9731 },
+    { "word": "fingertips.", "start": 9731, "end": 10660 },
+    { "word": "If", "start": 10693, "end": 10980 },
+    { "word": "you're", "start": 10980, "end": 11150 },
+    { "word": "hearing", "start": 11150, "end": 11424 },
+    { "word": "this,", "start": 11424, "end": 11872 },
+    { "word": "your", "start": 11872, "end": 12053 },
+    { "word": "audio", "start": 12053, "end": 12373 },
+    { "word": "is", "start": 12373, "end": 12520 },
+    { "word": "working", "start": 12520, "end": 12856 },
+    { "word": "perfectly.", "start": 12856, "end": 13720 },
+    { "word": "Let's", "start": 13720, "end": 13940 },
+    { "word": "get", "start": 13940, "end": 14050 },
+    { "word": "started.", "start": 14050, "end": 14640 }
+  ],
+  "breaks": [
+    {
+      "id": "opening",
+      "label": "Call to order",
+      "speaker": "David Okonkwo",
+      "role": "Chair",
+      "afterWordIndex": 7
+    },
+    {
+      "id": "overview",
+      "label": "Platform overview",
+      "speaker": "Sarah Mitchell",
+      "role": "Strata manager",
+      "afterWordIndex": 28
+    },
+    {
+      "id": "confirmation",
+      "label": "Audio check",
+      "speaker": "James Okonkwo",
+      "role": "Lot 1",
+      "afterWordIndex": 40
+    }
+  ]
+}

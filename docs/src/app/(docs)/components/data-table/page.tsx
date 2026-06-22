@@ -161,6 +161,17 @@ const SORTABLE_FIELDS = [
   { field: "status",  label: "Status" },
 ]
 
+/** Returns the value used for sorting a scheme row by the given field key. */
+function schemeSortValue({ row, field }: { row: SchemeRow; field: string }): string | number {
+  switch (field) {
+    case "name":   return row.name
+    case "lots":   return row.lots
+    case "state":  return row.state
+    case "status": return row.status
+    default:       return ""
+  }
+}
+
 interface FilterCondition {
   id: string
   field: FilterField
@@ -636,7 +647,7 @@ function FilteredSchemesTable() {
     )
   }
 
-  const anyFilters = search.trim() || conditions.some((c) => c.value)
+  const anyFilters = Boolean(search.trim()) || conditions.some((c) => c.value)
 
   const filtered = React.useMemo(() => {
     let rows = SCHEMES
@@ -661,8 +672,8 @@ function FilteredSchemesTable() {
     }
     return [...rows].sort((a, b) => {
       if (!sortField) return 0
-      const aVal = sortField === "lots" ? a.lots : (a as Record<string, string | number>)[sortField] as string
-      const bVal = sortField === "lots" ? b.lots : (b as Record<string, string | number>)[sortField] as string
+      const aVal = schemeSortValue({ row: a, field: sortField })
+      const bVal = schemeSortValue({ row: b, field: sortField })
       const cmp = typeof aVal === "number"
         ? aVal - (bVal as number)
         : String(aVal).localeCompare(String(bVal))
@@ -984,7 +995,7 @@ const USAGE_COMPOUND = `import {
   DataTableToolbarActions,
 } from "@/components/ui/data-table"
 
-const anyFilters = search.trim() || conditions.some(c => c.value)
+const anyFilters = Boolean(search.trim()) || conditions.some(c => c.value)
 
 <DataTable
   columns={COLS}

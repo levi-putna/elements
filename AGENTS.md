@@ -50,6 +50,7 @@ This file is the entry point for AI agents building Instant Strata UI.
 | `button` | actions | Trigger an action (submit, confirm, CTA) | [docs](registry/button/button.md) |
 | `audio-player` | data-display | Play a strata meeting or voice recording with scrubbing, skip controls, and jump-to-timestamp sync | [docs](registry/audio-player/audio-player.md) |
 | `stat` | data-display | Show a headline KPI number with a trend | [docs](registry/stat/stat.md) |
+| `transcript-viewer` | data-display | Show word-by-word transcript text synced to AudioPlayerProvider playback | [docs](registry/transcript-viewer/transcript-viewer.md) |
 | `widget` | layout | Frame a dashboard panel or list of summary rows | [docs](registry/widget/widget.md) |
 <!-- END:element-index -->
 

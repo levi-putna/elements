@@ -80,7 +80,10 @@ export const docsNavGroups: DocsNavGroup[] = [
   },
   {
     label: "Audio",
-    items: [{ href: "/components/audio-player", label: "Audio Player" }],
+    items: [
+      { href: "/components/audio-player", label: "Audio Player" },
+      { href: "/components/transcript-viewer", label: "Transcript Viewer" },
+    ],
   },
   {
     label: "Application",

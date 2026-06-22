@@ -8,7 +8,7 @@ registryDependencies: [utils]
 install: npx shadcn add https://raw.githubusercontent.com/levi-putna/elements/main/registry/audio-player/registry.json
 import: import { AudioPlayerProvider, AudioPlayerBar, useAudioPlayer, useAudioPlayerSeek } from "@/components/ui/audio-player"
 keywords: [audio, recording, playback, waveform, transcript, meeting, agm, minutes, player, seek, timeline]
-related: [document, widget, tabs]
+related: [document, widget, tabs, transcript-viewer]
 use_when: Play a strata meeting or voice recording with scrubbing, skip controls, and jump-to-timestamp sync
 ---
 

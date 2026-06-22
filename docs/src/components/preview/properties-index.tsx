@@ -689,7 +689,7 @@ export function PropertiesIndex({ onPropertySelect }: PropertiesIndexProps) {
     setSortDir("asc")
   }
 
-  const anyFilters = search.trim() || conditions.some((condition) => condition.value)
+  const anyFilters = Boolean(search.trim()) || conditions.some((condition) => condition.value)
 
   const filtered = React.useMemo(() => {
     let rows = PORTFOLIO_PROPERTIES

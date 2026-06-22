@@ -11,6 +11,11 @@ import {
   CircleIcon,
   LoaderCircleIcon,
 } from "lucide-react"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 import { useCallback, useEffect, useMemo, useState } from "react"
 
 export interface ConversationTodoBarProps {
@@ -78,6 +83,7 @@ const STATUS_LABELS: Record<TodoItemStatus, string> = {
 
 /**
  * Collapsible plan bar shown above the conversation when todo lists exist.
+ * Defaults to collapsed; step detail opens in a popover so the message list is not pushed down.
  * Shows the latest plan by default; older plans are reachable via history controls.
  */
 export function ConversationTodoBar({
@@ -85,15 +91,14 @@ export function ConversationTodoBar({
   thin = false,
   className,
 }: ConversationTodoBarProps) {
-  const [expanded, setExpanded] = useState(true)
+  const [open, setOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const latestIndex = lists.length - 1
 
-  /** Jump to the newest plan when one is added. */
+  /** Jump to the newest plan when one is added; keep the bar collapsed. */
   useEffect(() => {
     setSelectedIndex(latestIndex)
-    setExpanded(true)
   }, [latestIndex, lists.at(-1)?.id])
 
   const activeList = lists[selectedIndex]
@@ -102,10 +107,6 @@ export function ConversationTodoBar({
     () => (activeList ? countTodoProgress({ items: activeList.items }) : { complete: 0, total: 0 }),
     [activeList]
   )
-
-  const toggleExpanded = useCallback(() => {
-    setExpanded((value) => !value)
-  }, [])
 
   const showPrevious = useCallback(() => {
     setSelectedIndex((index) => Math.max(0, index - 1))
@@ -123,147 +124,160 @@ export function ConversationTodoBar({
   const progressLabel = `${progress.complete} of ${progress.total}`
 
   return (
-    <div
-      className={cn(
-        "shrink-0 border-b border-border bg-white",
-        className
-      )}
-    >
-      {/* Header: always visible, acts as collapse trigger */}
-      <button
-        type="button"
-        onClick={toggleExpanded}
-        aria-expanded={expanded}
+    <Popover open={open} onOpenChange={setOpen}>
+      <div
         className={cn(
-          "flex w-full items-center gap-2 text-left transition-colors hover:bg-muted/40",
-          thin ? "px-3 py-2" : "px-4 py-2.5"
+          "shrink-0 border-b border-border bg-white",
+          className
         )}
       >
-        <ChevronDownIcon
-          className={cn(
-            "size-4 shrink-0 text-muted-foreground transition-transform",
-            !expanded && "-rotate-90"
-          )}
-          aria-hidden="true"
-        />
-
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          <span
-            className={cn(
-              "truncate font-medium text-foreground",
-              thin ? "text-xs" : "text-sm"
-            )}
-          >
-            {activeList.title}
-          </span>
-          {hasHistory && !expanded ? (
-            <span className="shrink-0 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-              Plan {selectedIndex + 1}/{lists.length}
-            </span>
-          ) : null}
-        </div>
-
-        {/* Collapsed progress summary */}
-        <span
-          className={cn(
-            "shrink-0 tabular-nums text-muted-foreground",
-            thin ? "text-[11px]" : "text-xs"
-          )}
-        >
-          {progressLabel}
-        </span>
-      </button>
-
-      {/* Expanded body */}
-      {expanded ? (
-        <div className={cn("border-t border-border/60", thin ? "px-3 pb-2.5 pt-2" : "px-4 pb-3 pt-2.5")}>
-          {/* Progress bar */}
-          <div className="mb-2.5 flex items-center gap-2">
-            <div
-              className="h-1 min-w-0 flex-1 overflow-hidden rounded-sm bg-muted"
-              role="progressbar"
-              aria-valuenow={progress.complete}
-              aria-valuemin={0}
-              aria-valuemax={progress.total}
-              aria-label={`${progress.complete} of ${progress.total} steps complete`}
-            >
-              <div
-                className="h-full rounded-sm bg-[#043F2E] transition-[width] duration-300"
-                style={{
-                  width: progress.total > 0 ? `${(progress.complete / progress.total) * 100}%` : "0%",
-                }}
-              />
-            </div>
-            <span className={cn("shrink-0 tabular-nums text-muted-foreground", thin ? "text-[10px]" : "text-xs")}>
-              {progressLabel} complete
-            </span>
-          </div>
-
-          {/* Item list */}
-          <ul className={cn("space-y-1", thin && "space-y-0.5")} aria-label={`Steps for ${activeList.title}`}>
-            {activeList.items.map((item) => (
-              <li
-                key={item.id}
-                className={cn(
-                  "flex items-start gap-2 rounded-sm px-1 py-0.5",
-                  item.status === "in_progress" && "bg-[#EEF2E3]/70"
-                )}
-              >
-                <TodoStatusIndicator status={item.status} thin={thin} />
-                <span className="min-w-0 flex-1">
-                  <span
-                    className={cn(
-                      "block leading-snug",
-                      thin ? "text-xs" : "text-sm",
-                      item.status === "complete" && "text-muted-foreground line-through",
-                      item.status === "in_progress" && "font-medium text-foreground",
-                      item.status === "pending" && "text-foreground"
-                    )}
-                  >
-                    {item.label}
-                  </span>
-                  <span className="sr-only">{STATUS_LABELS[item.status]}</span>
-                </span>
-              </li>
-            ))}
-          </ul>
-
-          {/* Historical plan navigation */}
-          {hasHistory ? (
-            <div
+        {/* Header: always visible, opens the plan popover */}
+        <PopoverTrigger
+          render={
+            <button
+              type="button"
+              aria-expanded={open}
               className={cn(
-                "mt-2.5 flex items-center justify-between gap-2 border-t border-border/60 pt-2",
-                thin && "mt-2 pt-1.5"
+                "flex w-full items-center gap-2 text-left transition-colors hover:bg-muted/40",
+                thin ? "px-3 py-2" : "px-4 py-2.5"
+              )}
+            />
+          }
+        >
+          <ChevronDownIcon
+            className={cn(
+              "size-4 shrink-0 text-muted-foreground transition-transform",
+              !open && "-rotate-90"
+            )}
+            aria-hidden="true"
+          />
+
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <span
+              className={cn(
+                "truncate font-medium text-foreground",
+                thin ? "text-xs" : "text-sm"
               )}
             >
-              <p className={cn("text-muted-foreground", thin ? "text-[10px]" : "text-xs")}>
-                Plan {selectedIndex + 1} of {lists.length}
-                {selectedIndex < latestIndex ? " · earlier plan" : " · current plan"}
-              </p>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={showPrevious}
-                  disabled={selectedIndex === 0}
-                  aria-label="Previous plan"
-                  className="inline-flex size-6 items-center justify-center rounded-sm border border-border text-foreground transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40"
-                >
-                  <ChevronLeftIcon className="size-3.5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={showNext}
-                  disabled={selectedIndex === latestIndex}
-                  aria-label="Next plan"
-                  className="inline-flex size-6 items-center justify-center rounded-sm border border-border text-foreground transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40"
-                >
-                  <ChevronRightIcon className="size-3.5" />
-                </button>
+              {activeList.title}
+            </span>
+            {hasHistory && !open ? (
+              <span className="shrink-0 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                Plan {selectedIndex + 1}/{lists.length}
+              </span>
+            ) : null}
+          </div>
+
+          {/* Collapsed progress summary */}
+          <span
+            className={cn(
+              "shrink-0 tabular-nums text-muted-foreground",
+              thin ? "text-[11px]" : "text-xs"
+            )}
+          >
+            {progressLabel}
+          </span>
+        </PopoverTrigger>
+
+        {/* Plan detail: popover overlay so conversation content stays put */}
+        <PopoverContent
+          side="bottom"
+          sideOffset={0}
+          align="start"
+          className={cn(
+            "w-(--anchor-width) overflow-y-auto rounded-none border-x-0 border-t-0 p-0 shadow-md ring-0",
+            thin ? "max-h-64" : "max-h-80"
+          )}
+        >
+          <div className={cn(thin ? "px-3 pb-2.5 pt-2" : "px-4 pb-3 pt-2.5")}>
+            {/* Progress bar */}
+            <div className="mb-2.5 flex items-center gap-2">
+              <div
+                className="h-1 min-w-0 flex-1 overflow-hidden rounded-sm bg-muted"
+                role="progressbar"
+                aria-valuenow={progress.complete}
+                aria-valuemin={0}
+                aria-valuemax={progress.total}
+                aria-label={`${progress.complete} of ${progress.total} steps complete`}
+              >
+                <div
+                  className="h-full rounded-sm bg-[#043F2E] transition-[width] duration-300"
+                  style={{
+                    width: progress.total > 0 ? `${(progress.complete / progress.total) * 100}%` : "0%",
+                  }}
+                />
               </div>
+              <span className={cn("shrink-0 tabular-nums text-muted-foreground", thin ? "text-[10px]" : "text-xs")}>
+                {progressLabel} complete
+              </span>
             </div>
-          ) : null}
-        </div>
-      ) : null}
-    </div>
+
+            {/* Item list */}
+            <ul className={cn("space-y-1", thin && "space-y-0.5")} aria-label={`Steps for ${activeList.title}`}>
+              {activeList.items.map((item) => (
+                <li
+                  key={item.id}
+                  className={cn(
+                    "flex items-start gap-2 rounded-sm px-1 py-0.5",
+                    item.status === "in_progress" && "bg-[#EEF2E3]/70"
+                  )}
+                >
+                  <TodoStatusIndicator status={item.status} thin={thin} />
+                  <span className="min-w-0 flex-1">
+                    <span
+                      className={cn(
+                        "block leading-snug",
+                        thin ? "text-xs" : "text-sm",
+                        item.status === "complete" && "text-muted-foreground line-through",
+                        item.status === "in_progress" && "font-medium text-foreground",
+                        item.status === "pending" && "text-foreground"
+                      )}
+                    >
+                      {item.label}
+                    </span>
+                    <span className="sr-only">{STATUS_LABELS[item.status]}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            {/* Historical plan navigation */}
+            {hasHistory ? (
+              <div
+                className={cn(
+                  "mt-2.5 flex items-center justify-between gap-2 border-t border-border/60 pt-2",
+                  thin && "mt-2 pt-1.5"
+                )}
+              >
+                <p className={cn("text-muted-foreground", thin ? "text-[10px]" : "text-xs")}>
+                  Plan {selectedIndex + 1} of {lists.length}
+                  {selectedIndex < latestIndex ? " · earlier plan" : " · current plan"}
+                </p>
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={showPrevious}
+                    disabled={selectedIndex === 0}
+                    aria-label="Previous plan"
+                    className="inline-flex size-6 items-center justify-center rounded-sm border border-border text-foreground transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    <ChevronLeftIcon className="size-3.5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={showNext}
+                    disabled={selectedIndex === latestIndex}
+                    aria-label="Next plan"
+                    className="inline-flex size-6 items-center justify-center rounded-sm border border-border text-foreground transition-colors hover:bg-muted disabled:pointer-events-none disabled:opacity-40"
+                  >
+                    <ChevronRightIcon className="size-3.5" />
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </PopoverContent>
+      </div>
+    </Popover>
   )
 }

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "transcript-viewer",
+  "type": "registry:ui",
+  "description": "Word-by-word or timeline transcript display synced to AudioPlayerProvider playback, with click-to-seek and optional segment breakpoints.",
+  "dependencies": [],
+  "registryDependencies": [
+    "utils",
+    "audio-player"
+  ],
+  "files": [
+    {
+      "path": "registry/transcript-viewer/transcript-viewer.tsx",
+      "target": "components/ui/transcript-viewer.tsx",
+      "type": "registry:ui"
+    }
+  ]
+}
